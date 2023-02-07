@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><link rel="stylesheet" type="text/css" href="css/style.css"/>
+<title>Propuesta Fourdrez</title>
+<meta charset="UTF-8">
+</head>
+<body>
+<h1>Fourdrez</h1>
+
+<p>Hola, <span th:text="${nombre}">Pepito</span></p>
+
+<p>Fourdrez es un juego de ajedrez en línea para 4 jugadores. En este juego los jugadores
+    podrán iniciar sesión en su cuenta y unirse a una partida o crear un partida nueva.
+    Si el jugador crea una partida, en ese momento otros jugadores pueden unirse a la partida
+    hasta un máximo de 4.
+    El juego se iniciará cuando el jugador pulse en el botón de comenzar, introduciendo IAs en vez
+    de jugadores según sea necesario.
+    Las normas serán las mismas que las del ajedrez para 4 jugadores, se desarrollará por turnos,
+    moviendo cada jugador una pieza en su turno. Para mover una pieza los jugadores podrán pulsar sobre ella,
+    mostrando unas casillas resaltadas, donde esa pieza puede moverse. Si el jugador pulsa en una casilla resaltada
+    la pieza se moverá a esa casilla.
+    La partida terminará cuando solo queden piezas de uno de los 4 jugadores, mostrando una pantalla de victoria con un botón para volver al menú principal.
+
+    Habrá dos roles de usuario:
+    - Administrador: encargado de administrar la página web y eliminar usuarios.
+    - Jugadores: pueden crear partidas de ajedrez y unirse a partidas ya existentes.
+</p>
+<img src="imgs\quees.png" width="700" height="600"/>
+<p>
+    Página de descripción general del juego con los objetivos principales.
+</p>
+<img src="imgs\comojugar.png" width="700" height="600"/>
+<p>
+    Describe cómo se juega, con los controles principales.
+</p>
+<img src="imgs\records.png" width="700" height="600"/>
+<p>
+    Scoreboard con un top de los usuarios registrados que han conseguido una mejor puntuación.
+</p>
+<img src="imgs\iniciasesion.png" width="700" height="600"/>
+<p>
+    Página a la que se accede al pulsar el botón de iniciar sesión o cuando un usuario pulsa en el botón de jugar
+    sin haber iniciado sesión. Permite al usuario iniciar sesión en su cuenta, ya sea un jugador o el administrador.
+</p>
+<img src="imgs\registrarse.png" width="700" height="600"/>
+<p>
+    Página a la que se accede al pulsar el botón de Registrarse. Permite crear un nuevo usuario de tipo jugador.
+</p>
+<img src="imgs\jugar.png" width="700" height="600"/>
+<p>
+    Página que contiene el juego a la que pueden acceder los jugadores al haber iniciado sesión.
+</p>
+<img src="imgs\administrador.png" width="700" height="600"/>
+<p>
+    Página accesible cuando inicia sesión una cuenta de administrador desde la que se pueden eliminar cuentas de usuario registradas.
+</p>
+
+</body>
+</html>
