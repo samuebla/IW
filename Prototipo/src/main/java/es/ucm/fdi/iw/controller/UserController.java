@@ -114,6 +114,12 @@ public class UserController {
         return "user";
     }
 
+	//DEBUGGING PARA TESTEAR Y FUNCIONA (Poner en el navegador /user/htp)
+	@GetMapping("/htp")
+    public String comojugar(Model model) {
+        return "comojugar";
+    }
+
     /**
      * Alter or create a user
      */
