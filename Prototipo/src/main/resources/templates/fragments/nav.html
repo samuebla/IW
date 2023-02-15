@@ -9,13 +9,13 @@
 
     <!-- barra de navegación bootstrap 5 -->
     <header th:fragment="nav">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
+                nombre del sitio; es un enlace que lleva a la página ppal
                 <a class="navbar-brand" th:href="@{/}" href="/">
-                    <!-- <img th:src="@{/img/logo.png}" src="/img/logo.png" alt="logo IW" width="32" height="32" class="d-inline-block align-text-top"> IW 2021-22 -->
+                    <img th:src="@{/img/logo.png}" src="/img/logo.png" alt="logo IW" width="32" height="32" class="d-inline-block align-text-top"> IW 2021-22
                 </a>
-                <!-- menu hamburguesa si no cabe todo -->
+                menu hamburguesa si no cabe todo
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <th:block th:if="${session.u}">
-                        <!-- Prueba -->
+                        Prueba
                         <table style="width:100%;text-align:center;border:1px solid black">
                             <tr>
                                 <th>¡Juega YA!</th>
@@ -65,12 +65,11 @@
                         <li class="nav-item mx-2">
                             <a class="nav-link" th:href="@{/login}" href="/login">Login</a>
                         </li>
-                        <!--/*
+                         
                                 Esto es un comentario "thymeleaf" - no se verá en el HTML
                                 El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
                                     (ver StartupConfig.java para ver cómo se lee de la configuración
                                     y luego se escribe a ${application.debug})
-                            */-->
                         <li class="nav-item debug align-self-center" th:if="${application.debug}">
                             <form class="d-flex" th:action="@{/login}" method="post">
                                 <input type="hidden" name="username" value="a">
@@ -88,6 +87,41 @@
                     </th:block>
 
                 </div>
+            </div>
+        </nav> -->
+
+        <!-- Meto un prefab hecho de bootstrap -->
+        <nav class="navbar bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <table style="width:100%;text-align:center">
+                    <tr>
+                        <th><a class="nav-link" href="#">¡Juega YA!</a></th>
+                        <th style="width: 70%;"><a class="navbar-brand">
+                                <img src="/img/logo.png" alt="Logo" width="30" height="24"
+                                    class="d-inline-block align-text-top">
+                                FOURDREZ</a></th>
+                        <th><a class="nav-link active" aria-current="page" href="#">login</a></th>
+                    </tr>
+                    <tr>
+                        <td><a class="nav-link" href="#">¿Qué es?</a></td>
+                        <td><a class="nav-link" href="#">Cómo jugar</a></td>
+                        <td><a class="nav-link" href="#">Records</a></td>
+                    </tr>
+                </table>
+                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> -->
+                <!-- <div class="collapse navbar-collapse" id="navbarNav">
+                 <ul class="navbar-nav">
+       
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                  </li>
+                </ul> -->
             </div>
         </nav>
     </header>
