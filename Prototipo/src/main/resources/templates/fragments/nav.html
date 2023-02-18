@@ -95,12 +95,12 @@
             <div class="container-fluid">
                 <table style="width:100%;text-align:center">
                     <tr>
-                        <th><a class="nav-link" href="#">¡Juega YA!</a></th>
+                        <th><a class="nav-link" th:if="${session.u}" href="#">¡Juega YA!</a></th>
                         <th style="width: 70%;"><a class="navbar-brand">
                                 <img src="/img/logo.png" alt="Logo" width="30" height="24"
                                     class="d-inline-block align-text-top">
                                 FOURDREZ</a></th>
-                        <th><a class="nav-link active" aria-current="page" href="#">login</a></th>
+                        <th><a class="nav-link active" th:unless="${session.u}" aria-current="page" href="@{/login/}">login</a></th>
                     </tr>
                     <tr>
                         <td><a class="nav-link" href="#" th:href="@{/}">¿Qué es?</a></td>
