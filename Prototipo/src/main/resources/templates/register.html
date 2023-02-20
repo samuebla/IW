@@ -64,7 +64,7 @@
     <main class="flex-shrink-0">
         <div class="container">
             <form class="form-signin" method="post" th:action="@{/login}">
-                <h2 class="form-signin-heading" style="text-align: center;">Iniciar sesión</h2>
+                <h2 class="form-signin-heading" style="text-align: center;">Regístrate</h2>
                 <p th:if="${#request.getQueryString() == 'error'}" class="error">
                     Error en nombre de usuario o contraseña
                 </p>
@@ -73,12 +73,20 @@
                     <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required">
                 </p>
                 <p>
+                    <label for="email" class="visually-hidden">Correo</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Correo" required="required">
+                </p>
+                <p>
                     <label for="password" class="visually-hidden">Contraseña</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required">
                 </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
-                <p style="text-align: center;">o</p>
+                <p>
+                    <label for="repeatpassword" class="visually-hidden">Repetir contraseña</label>
+                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control" placeholder="Contraseña" required="required">
+                </p>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Regístrate</button>
+                <p style="text-align: center;">o</p>
+                <button class="btn btn-lg btn-primary btn-block" type="login">Iniciar sesión</button>
             </form>
         </div>
     </main>
