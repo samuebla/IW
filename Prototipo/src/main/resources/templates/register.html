@@ -4,58 +4,6 @@
 <head>
     <th:block th:replace="fragments/head :: header" />
     <title>Fourdrez</title>
-
-    <style>
-        form {
-            margin: auto;
-            max-width: 600px;
-            padding: 20px;
-          }
-          
-          /* Style the form fields */
-          label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-          }
-          
-          input[type="text"],
-          input[type="email"],
-          input[type="password"] {
-            border: 1px solid #ccc;
-            border-radius: 100px;
-            box-sizing: border-box;
-            font-size: 16px;
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-          }
-          
-          /* Style the submit button */
-          button[type="submit"],
-          button[type="login"] {
-            background-color: #ffb5f9;
-            border: none;
-            border-radius: 100px;
-            color: black;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 10px;
-            width: 100%;
-          }
-          
-          button[type="submit"]:hover,
-          button[type="login"]:hover {
-            background-color: #be7eb9;
-          }
-          
-          /* Style form errors */
-          .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-          }
-    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -63,30 +11,82 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <form class="form-signin" method="post" th:action="@{/login}">
+            <form class="form-signin" method="post" th:action="@{/login}" style="margin: auto;
+            max-width: 600px;
+            padding: 20px;">
                 <h2 class="form-signin-heading" style="text-align: center;">Regístrate</h2>
-                <p th:if="${#request.getQueryString() == 'error'}" class="error">
+                <p th:if="${#request.getQueryString() == 'error'}" class="error" style="color: red;
+                font-size: 14px;
+                margin-bottom: 10px;">
                     Error en nombre de usuario o contraseña
                 </p>
                 <p>
-                    <label for="username" class="visually-hidden">Usuario</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required">
+                    <label for="username" class="visually-hidden" style="display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required" style="border: 1px solid #ccc;
+                    border-radius: 100px;
+                    box-sizing: border-box;
+                    font-size: 16px;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    width: 100%;">
                 </p>
                 <p>
-                    <label for="email" class="visually-hidden">Correo</label>
-                    <input type="text" id="email" name="email" class="form-control" placeholder="Correo" required="required">
+                    <label for="email" class="visually-hidden" style="display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;">Correo</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Correo" required="required" style="border: 1px solid #ccc;
+                    border-radius: 100px;
+                    box-sizing: border-box;
+                    font-size: 16px;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    width: 100%;">
                 </p>
                 <p>
-                    <label for="password" class="visually-hidden">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required">
+                    <label for="password" class="visually-hidden" style="display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required" style="border: 1px solid #ccc;
+                    border-radius: 100px;
+                    box-sizing: border-box;
+                    font-size: 16px;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    width: 100%;">
                 </p>
                 <p>
-                    <label for="repeatpassword" class="visually-hidden">Repetir contraseña</label>
-                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control" placeholder="Contraseña" required="required">
+                    <label for="repeatpassword" class="visually-hidden" style="display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;">Repetir contraseña</label>
+                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control" placeholder="Contraseña" required="required" style="border: 1px solid #ccc;
+                    border-radius: 100px;
+                    box-sizing: border-box;
+                    font-size: 16px;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    width: 100%;">
                 </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Regístrate</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #ffb5f9;
+                border: none;
+                border-radius: 100px;
+                color: black;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 10px;
+                width: 100%;" onmouseover="this.style.backgroundColor='#be7eb9';"
+                onmouseout="this.style.backgroundColor='#ffb5f9';">Regístrate</button>
                 <p style="text-align: center;">o</p>
-                <button class="btn btn-lg btn-primary btn-block" type="login">Iniciar sesión</button>
+                <button class="btn btn-lg btn-primary btn-block" type="login" style="background-color: #ffb5f9;
+                border: none;
+                border-radius: 100px;
+                color: black;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 10px;
+                width: 100%;" onmouseover="this.style.backgroundColor='#be7eb9';"
+                onmouseout="this.style.backgroundColor='#ffb5f9';">Iniciar sesión</button>
             </form>
         </div>
     </main>
