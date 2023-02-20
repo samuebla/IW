@@ -18,8 +18,8 @@ public class AdminController {
 
 	private static final Logger log = LogManager.getLogger(AdminController.class);
 
-	@GetMapping("/")
-    public String index(Model model) {
+	@GetMapping("/admin")
+    public String admin(Model model) {
         return "admin";
     }
 }

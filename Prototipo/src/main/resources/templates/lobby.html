@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>Fourdrez Admin</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    
+
+    <main class="flex-shrink-0">
+        <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
+
+            <!-- Lista de usuarios en la lobby -->
+            <div style="flex: 1; padding: 10px;box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 25%;">
+
+                <div style="display: flex; justify-content: space-between; padding: 10px;">
+                    <div style="width: 20px; height: 20px; background-color: #ccc; 
+                                border: 1px solid #666; vertical-align: middle;"></div>
+                    <h5>Usuario A</h5>
+                    <h5 style="color: red;">Reportar</h5>
+                </div>
+                
+
+                <div style="display: flex; justify-content: space-between; padding: 10px;">
+                    <div style="width: 20px; height: 20px; background-color: #ccc; 
+                                border: 1px solid #666; vertical-align: middle;"></div>
+                    <h5>Usuario B</h5>
+                    <h5 style="color: red;">Reportar</h5>
+                </div>
+
+
+                <div style="display: flex; justify-content: space-between; padding: 10px;">
+                    <div style="width: 20px; height: 20px; background-color: #ccc; 
+                                border: 1px solid #666; vertical-align: middle;"></div>
+                    <h5>Usuario C</h5>
+                    <h5 style="color: red;">Reportar</h5>
+                </div>
+
+                
+            </div>
+
+
+            <!-- CHAT -->
+            <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 50%; display: 
+                        flex; flex-direction: column; height: 100%;
+                        justify-content: flex-end; align-items: center;">
+
+
+                <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario A : Lorem Ipsum</p>
+                
+                <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario B : Lorem Ipsum</p>
+
+                <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario C : Lorem Ipsum</p>        
+
+
+                <input type="text" placeholder="Escribe un mensaje..."  style=" width: 100%; box-sizing: border-box; text-align: center;
+                                                padding: 20px; border: 5px solid #000; border-radius: 10px; ">
+                                               
+            </div>
+
+
+
+
+            <!-- Reglas y boton de listo -->
+            <div style="flex: 1; box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 25%; position: relative; display: flex; flex-direction: column; text-align: center; " >
+
+                <h1 style="padding:10px">REGLAS</h1>
+                <p>Cronometro : 2mins</p>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Natus laboriosam hic delectus cum in dolorem et error! Eum sequi inventore sit temporibus, esse excepturi expedita aliquam explicabo. Placeat, voluptatum perferendis!</p>
+
+
+
+                <input type="button" value="LISTO" style="background-color: beige; width: 100%; box-sizing: border-box; text-align: center;
+                                                padding: 20px; border: 5px solid #000; border-radius: 10px; position: absolute; bottom:0;">
+
+            </div>
+
+
+
+
+            <!-- <h1 class="mt-5">Administración</h1> -->
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>
