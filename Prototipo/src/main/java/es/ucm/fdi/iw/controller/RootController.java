@@ -14,6 +14,11 @@ public class RootController {
 
     private static final Logger log = LogManager.getLogger(RootController.class);
 
+    @GetMapping("/partida")
+    public String partida(Model model){
+        return "partida";
+    }
+    
     @GetMapping("/lobby")
     public String lobby(Model model){
         return "lobby";
