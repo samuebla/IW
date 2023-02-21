@@ -7,138 +7,47 @@
 
 <body class="d-flex flex-column h-100">
 
-    <!-- barra de navegación bootstrap 5 -->
     <header th:fragment="nav">
-        <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                nombre del sitio; es un enlace que lleva a la página ppal
-                <a class="navbar-brand" th:href="@{/}" href="/">
-                    <img th:src="@{/img/logo.png}" src="/img/logo.png" alt="logo IW" width="32" height="32" class="d-inline-block align-text-top"> IW 2021-22
-                </a>
-                menu hamburguesa si no cabe todo
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <th:block th:if="${session.u}">
-                        Prueba
-                        <table style="width:100%;text-align:center;border:1px solid black">
-                            <tr>
-                                <th>¡Juega YA!</th>
-                                <th style="width: 70%;">FOURDREZ</th>
-                                <th>login</th>
-                            </tr>
-                            <tr>
-                                <td>¿Qué es?</td>
-                                <td>Cómo jugar</td>
-                                <td>Records</td>
-                              </tr>
-                        </table>
-
-                        <li class="nav-item mx-3">
-                            <a class="nav-link" th:if="${session.u.hasRole('ADMIN')}"
-                                th:href="@{/admin/}">Administrar</a>
-                        </li>
-
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" th:href="@{/user/{id}(id=${session.u.id})}">
-                                <img class="iwthumb rounded" th:src="@{/user/{id}/pic(id=${session.u.id})}">
-                                <span th:text="${session.u.username}">Pepe</span>
-                            </a>
-                        </li>
-                        <li class="nav-item align-self-center me-4">
-                            <button type="button" class="btn btn-outline-primary btn-sm position-relative">
-                                ✉️ <span id="nav-unread"
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">+99
-                                    <span class="visually-hidden">unread messages</span></span>
-                            </button>
-                        </li>
-                        <li class="nav-item align-self-center">
-                            <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="btn btn-outline-secondary btn-sm">logout</button>
-                            </form>
-                        </li>
-                    </th:block>
-                    <th:block th:unless="${session.u}">
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" th:href="@{/login}" href="/login">Login</a>
-                        </li>
-                         
-                                Esto es un comentario "thymeleaf" - no se verá en el HTML
-                                El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
-                                    (ver StartupConfig.java para ver cómo se lee de la configuración
-                                    y luego se escribe a ${application.debug})
-                        <li class="nav-item debug align-self-center" th:if="${application.debug}">
-                            <form class="d-flex" th:action="@{/login}" method="post">
-                                <input type="hidden" name="username" value="a">
-                                <input type="hidden" name="password" value="aa">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">a</button>
-                            </form>
-                        </li>
-                        <li class="nav-item debug align-self-center" th:if="${application.debug}">
-                            <form class="d-flex" th:action="@{/login}" method="post">
-                                <input type="hidden" name="username" value="b">
-                                <input type="hidden" name="password" value="aa">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">b</button>
-                            </form>
-                        </li>
-                    </th:block>
-
+        <nav class="navbar bg-dark" data-bs-theme="dark">
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="d-flex">
+                    <div th:if="${session.u != null}">
+                        <div th:if="${session.u.hasRole('ADMIN')}" >
+                            <a class="nav-link" th:href="@{/admin/administrar}">Administrar</a>
+                        </div>
+                        <div th:unless="${session.u.hasRole('ADMIN')}" >
+                            <a class="nav-link" th:href="@{/lobby}">¡Juega YA!</a>
+                        </div>
+                    </div>
+                    <div th:unless="${session.u != null}">
+                        <div></div>
+                    </div>
+                    <div class="text-center">
+                        <a class="navbar-brand">
+                            <img src="/img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                            FOURDREZ
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <a class="nav-link active" th:unless="${session.u}" aria-current="page" href="@{/login/}">login</a>
                 </div>
             </div>
-        </nav> -->
-
-        <!-- Meto un prefab hecho de bootstrap -->
-        <nav class="navbar bg-dark" data-bs-theme="dark">
-            <div class="container-fluid">
-                <table style="width:100%;text-align:center">
-                    <tr>
-                        <th:block th:if="${session.u != null}">
-                            <th th:if="${session.u.hasRole('ADMIN')}" >
-                                <a class="nav-link"  th:href="@{/admin/administrar}">Administrar</a>
-                            </th>
-                            <th th:unless="${session.u.hasRole('ADMIN')}" >
-                                <a class="nav-link" th:href="@{/lobby}">¡Juega YA!</a>
-                            </th>
-                        </th:block>
-
-                        <th:block th:unless="${session.u != null}">
-                            <th>
-                                
-                            </th>
-                        </th:block>
-                        
-                        <th style="width: 70%;"><a class="navbar-brand">
-                                <img src="/img/logo.png" alt="Logo" width="30" height="24"
-                                    class="d-inline-block align-text-top">
-                                FOURDREZ</a></th>
-                        <th><a class="nav-link active" th:unless="${session.u}" aria-current="page" href="@{/login/}">login</a></th>
-                    </tr>
-                    <tr>
-                        <td><a class="nav-link" href="#" th:href="@{/}">¿Qué es?</a></td>
-                        <td><a class="nav-link" href="#" th:href="@{/comojugar/}">Cómo jugar</a></td>
-                        <td><a class="nav-link" href="#" th:href="@{/records/}">Records</a></td>
-                    </tr>
-                </table>
-                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button> -->
-                <!-- <div class="collapse navbar-collapse" id="navbarNav">
-                 <ul class="navbar-nav">
-       
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
-                  </li>
-                </ul> -->
+            <div class="container-fluid d-flex justify-content-center">
+                <div>
+                    <a class="nav-link" href="#" th:href="@{/}">¿Qué es?</a>
+                </div>
+                <div>
+                    <a class="nav-link" href="#" th:href="@{/comojugar/}">Cómo jugar</a>
+                </div>
+                <div>
+                    <a class="nav-link" href="#" th:href="@{/records/}">Records</a>
+                </div>
             </div>
         </nav>
-    </header>
+    </header>   
+    
+    
 </body>
 
 </html>
