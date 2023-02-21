@@ -63,7 +63,7 @@
 
 
                 <input type="text" placeholder="Escribe un mensaje..."  style=" width: 100%; box-sizing: border-box; text-align: center;
-                                                padding: 20px; border: 5px solid #000; border-radius: 10px; ">
+                                                padding: 20px; border: 5px solid #000; border-radius: 10px; "></input>
                                                
             </div>
 
@@ -80,8 +80,17 @@
 
 
 
-                <input type="button" value="LISTO" style="background-color: beige; width: 100%; box-sizing: border-box; text-align: center;
-                                                padding: 20px; border: 5px solid #000; border-radius: 10px; position: absolute; bottom:0;">
+                <a th:href="@{/partida}" style="background-color: beige; width: 100%; box-sizing: border-box; text-align: center;
+                                                padding: 20px; border: 5px solid #000; border-radius: 10px; position: absolute; bottom:0; text-decoration: none; color: black">LISTO
+                                                <!-- <a class="link" th:href="@{/partida}">
+
+                                                </a> -->
+                                            </a>
+                <!-- <script>
+                    function irAJuego(){
+                        window.location.href = "localhost:8080/comojugar.html"
+                    }
+                </script> -->
 
             </div>
 

@@ -126,6 +126,11 @@ public class UserController {
 		return "lobby";
 	}
 
+	@GetMapping("/partida")
+	public String partida(Model model) {
+		return "partida";
+	}
+
 	/**
 	 * Alter or create a user
 	 */
