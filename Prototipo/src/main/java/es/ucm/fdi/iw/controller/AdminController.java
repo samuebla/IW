@@ -8,18 +8,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *  Site administration.
+ * Site administration.
  *
- *  Access to this end-point is authenticated - see SecurityConfig
+ * Access to this end-point is authenticated - see SecurityConfig
  */
 @Controller
 @RequestMapping("admin")
 public class AdminController {
 
-	private static final Logger log = LogManager.getLogger(AdminController.class);
+    private static final Logger log = LogManager.getLogger(AdminController.class);
 
-	@GetMapping("/admin")
-    public String admin(Model model) {
-        return "admin";
+    @GetMapping("/")
+    public String index(Model model) {
+        return "index";
+    }
+
+    @GetMapping("/admin/administrar")
+    public String administrar(Model model) {
+        return "administrar";
     }
 }

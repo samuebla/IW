@@ -121,6 +121,11 @@ public class UserController {
 		return "comojugar";
 	}
 
+	@GetMapping("/lobby")
+	public String lobby(Model model) {
+		return "lobby";
+	}
+
 	/**
 	 * Alter or create a user
 	 */
