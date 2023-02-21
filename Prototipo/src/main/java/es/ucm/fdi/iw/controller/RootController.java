@@ -18,7 +18,7 @@ public class RootController {
     public String partida(Model model){
         return "partida";
     }
-    
+
     @GetMapping("/lobby")
     public String lobby(Model model){
         return "lobby";

@@ -23,6 +23,15 @@ public class AdminController {
         return "administrar";
     }
 
+    @GetMapping("/listausuarios")
+    public String listausuarios(Model model) {
+        return "listausuarios";
+    }
+    @GetMapping("/perfilusuariox")
+    public String perfilusuariox(Model model) {
+        return "perfilusuariox";
+    }
+
     @GetMapping("/")
     public String index(Model model) {
         return "index";
