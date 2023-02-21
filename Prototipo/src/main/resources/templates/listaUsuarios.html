@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>Fourdrez Lobby</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+
+
+    <main class="flex-shrink-0">
+        <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
+
+            <div style="flex: 1; padding: 10px;box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 20%;">
+
+
+            </div>
+
+
+            <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 60%; height: 100%; align-items: center; display: flex; 
+                        flex-direction: column;">
+
+                <div
+                    style="flex-basis: 20%; border: 5px solid #000; width: 100%; border-radius: 10px; 
+                            align-items: center; display: flex;">
+                    <h4 style="width: 100%; text-align: center;">Lista de usuarios</h4>
+                </div>
+
+
+                <div style="display: flex; flex-basis: 80%; font-size: 20px;">
+                    <table style="border: 5px solid #000; margin: auto; text-align: center;">
+
+                        <tr>
+                            <th style="border: 5px solid #000; padding: 10px;">Usuario</th>
+                            <th style="border: 5px solid #000; padding: 10px;">Partidas jugadas</th>
+                            <th style="border: 5px solid #000; padding: 10px;">Denuncias</th>
+                            <th style="border: 5px solid #000; padding: 10px;">Echar</th>
+                        </tr>
+
+                        <tr>
+                            <th style="border: 5px solid #000;color: aqua; padding: 10px;">Usuario A</th>
+                            <th style="border: 5px solid #000; padding: 10px;">105</th>
+                            <th style="border: 5px solid #000; padding: 10px;">2</th>
+                            <th style="border: 5px solid #000; color: #f00; padding: 10px;">Echar</th>
+                        </tr>
+
+                        <tr>
+                            <th style="border: 5px solid #000; color: aqua;padding: 10px;">Usuario B</th>
+                            <th style="border: 5px solid #000; padding: 10px;">10</th>
+                            <th style="border: 5px solid #000; padding: 10px;">0</th>
+                            <th style="border: 5px solid #000; color: #f00; padding: 10px;">Echar</th>
+                        </tr>
+
+                        <tr>
+                            <th style="border: 5px solid #000;color: aqua; padding: 10px;">Usuario C</th>
+                            <th style="border: 5px solid #000; padding: 10px;">15</th>
+                            <th style="border: 5px solid #000; padding: 10px;">4</th>
+                            <th style="border: 5px solid #000; color: #f00; padding: 10px;">Echar</th>
+                        </tr>
+
+                        <tr>
+                            <th style="border: 5px solid #000; color: aqua;padding: 10px;">Usuario D</th>
+                            <th style="border: 5px solid #000; padding: 10px;">10000</th>
+                            <th style="border: 5px solid #000; padding: 10px;">99</th>
+                            <th style="border: 5px solid #000; color: #f00; padding: 10px;">Echar</th>
+                        </tr>
+
+
+                    </table>
+
+
+                </div>
+
+
+
+                <!-- <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario A : Lorem Ipsum</p>
+                
+                <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario B : Lorem Ipsum</p>
+
+                <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">Usuario C : Lorem Ipsum</p>        
+
+
+                <input type="text" placeholder="Escribe un mensaje..."  style=" width: 100%; box-sizing: border-box; text-align: center;
+                                                padding: 20px; border: 5px solid #000; border-radius: 10px; "> -->
+
+            </div>
+
+
+
+
+            <div
+                style="flex: 1; box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 20%; position: relative; display: flex; flex-direction: column; text-align: center; ">
+
+
+            </div>
+
+
+
+
+            <!-- <h1 class="mt-5">Administración</h1> -->
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>
