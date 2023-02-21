@@ -95,11 +95,20 @@
             <div class="container-fluid">
                 <table style="width:100%;text-align:center">
                     <tr>
-                        
-                        <a th:if="${session.u}">
-                            <th><a class="nav-link" th:unless="${session.u.hasRole('ADMIN')}" th:href="@{/lobby}">¡Juega YA!</a></th>
-                            <th><a class="nav-link"  th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/administrar}">Administrar</a></th>
-                        </a>
+                        <th:block th:if="${session.u != null}">
+                            <th th:if="${session.u.hasRole('ADMIN')}" >
+                                <a class="nav-link"  th:href="@{/admin/administrar}">Administrar</a>
+                            </th>
+                            <th th:unless="${session.u.hasRole('ADMIN')}" >
+                                <a class="nav-link" th:href="@{/lobby}">¡Juega YA!</a>
+                            </th>
+                        </th:block>
+
+                        <th:block th:unless="${session.u != null}">
+                            <th>
+                                
+                            </th>
+                        </th:block>
                         
                         <th style="width: 70%;"><a class="navbar-brand">
                                 <img src="/img/logo.png" alt="Logo" width="30" height="24"

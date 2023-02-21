@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>Fourdrez Lista Usuarios</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container" >
+            <h1 class="mt-5" style="text-align:center;">Lista de usuarios</h1>
+
+            <table style="border-collapse: collapse;
+            width: 100%;
+            max-width:1000px;
+            margin-left: auto;
+            margin-right: auto;">
+                <tr>
+                    <th style="border: 1px solid #dddddd;
+                    text-align: center;
+                    padding: 8px;">Usuario</th>
+                    <th style="border: 1px solid #dddddd;
+                    text-align: center;
+                    padding: 8px;">Informes recibidos</th>
+                </tr>
+                <tr style="background-color: #dddddd;">
+                    <td style="border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}" style="width:100%">UsuarioA</a></td>
+                    <td style="border: 1px solid #dddddd;
+                    text-align: center;
+                    padding: 8px;">1</td>
+                    <td style="border: 1px solid #dddddd;
+                    text-align: right;
+                    padding: 8px;
+                    background-color: #ff7083;"><button style="width:100%">Echar</button></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}"  style="width:100%">UsuarioB</a></td>
+                    <td style="border: 1px solid #dddddd;
+                    text-align: center;
+                    padding: 8px;">1</td>
+                    <td style="border: 1px solid #dddddd;
+                    text-align: right;
+                    padding: 8px;
+                    background-color: #ff7083;"><button style="width:100%">Echar</button></td>
+                </tr>
+            </table>
+            
+        </div>
+        
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>
