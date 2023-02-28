@@ -44,18 +44,16 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = false)
     private String password;
 
-    private String firstName;
-    private String lastName;
-
     private boolean enabled;
     private String roles; // split by ',' to separate roles
 
-	@OneToMany
-	@JoinColumn(name = "sender_id")
-	private List<Message> sent = new ArrayList<>();
-	@OneToMany
-	@JoinColumn(name = "recipient_id")	
-	private List<Message> received = new ArrayList<>();		
+    @OneToMany
+    private List<Partida> historial;
+
+    private List<Denuncia> denuncias;	
+
+    @ManyToMany
+    private List<Message> received;
 
     /**
      * Checks whether this user has a given role.
@@ -72,13 +70,11 @@ public class User implements Transferable<User.Transfer> {
     public static class Transfer {
 		private long id;
         private String username;
-		private int totalReceived;
-		private int totalSent;
     }
 
 	@Override
     public Transfer toTransfer() {
-		return new Transfer(id,	username, received.size(), sent.size());
+		return new Transfer(id,	username);
 	}
 	
 	@Override

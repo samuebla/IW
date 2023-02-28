@@ -38,6 +38,7 @@ public class Message implements Transferable<Message.Transfer> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
     @SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
+
 	@ManyToOne
 	private User sender;
 	@ManyToOne
