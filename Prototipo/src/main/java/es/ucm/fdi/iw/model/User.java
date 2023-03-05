@@ -33,8 +33,8 @@ public class User implements Transferable<User.Transfer> {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
-    @SequenceGenerator(name = "gen", sequenceName = "gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_gen")
+    @SequenceGenerator(name = "user_gen", sequenceName = "user_gen")
     private long id;
 
     @Column(nullable = false, unique = true)
@@ -42,24 +42,15 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = false)
     private String password;
 
-    private String firstName;
-    private String lastName;
-
     private boolean enabled;
     private String roles; // split by ',' to separate roles
 
-    // private List<Partida> historial;
+    @ManyToMany
+    private List<Partida> historial;
 
     @OneToMany(targetEntity = Denuncia.class)
     @JoinColumn(name = "denuncia_id")
     private List<Denuncia> denuncias = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "sender_id")
-    private List<Message> sent = new ArrayList<>();
-    @OneToMany
-    @JoinColumn(name = "recipient_id")
-    private List<Message> received = new ArrayList<>();
 
     /**
      * Checks whether this user has a given role.
@@ -77,13 +68,11 @@ public class User implements Transferable<User.Transfer> {
     public static class Transfer {
         private long id;
         private String username;
-        private int totalReceived;
-        private int totalSent;
     }
 
     @Override
     public Transfer toTransfer() {
-        return new Transfer(id, username, received.size(), sent.size());
+        return new Transfer(id, username);
     }
 
     @Override

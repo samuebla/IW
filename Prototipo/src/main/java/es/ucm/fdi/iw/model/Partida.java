@@ -1,32 +1,20 @@
 package es.ucm.fdi.iw.model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Column;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A message that users can send each other.
+ * Una partida donde los jugadores juegan o una partida pasada
  *
  */
 @Entity
@@ -34,8 +22,8 @@ import java.util.List;
 public class Partida {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ojo")
-	@SequenceGenerator(name = "ojo", sequenceName = "ojo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "partida_gen")
+	@SequenceGenerator(name = "partida_gen", sequenceName = "partida_gen")
 	private long id;
 
 	private enum States {
@@ -46,7 +34,7 @@ public class Partida {
 	States currentState;
 
 	@OneToMany
-	List<Short> tablero = new ArrayList<>();
+	List<ShortJPA> tablero = new ArrayList<>();
 
 	@OneToMany
 	List<Message> received = new ArrayList<>();

@@ -173,8 +173,6 @@ public class UserController {
 			}
 		}
 		target.setUsername(edited.getUsername());
-		target.setFirstName(edited.getFirstName());
-		target.setLastName(edited.getLastName());
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
@@ -248,19 +246,22 @@ public class UserController {
 		return "{\"status\":\"photo uploaded correctly\"}";
 	}
 
-	/**
-	 * Returns JSON with all received messages
-	 */
-	@GetMapping(path = "received", produces = "application/json")
-	@Transactional // para no recibir resultados inconsistentes
-	@ResponseBody // para indicar que no devuelve vista, sino un objeto (jsonizado)
-	public List<Message.Transfer> retrieveMessages(HttpSession session) {
-		long userId = ((User) session.getAttribute("u")).getId();
-		User u = entityManager.find(User.class, userId);
-		log.info("Generating message list for user {} ({} messages)",
-				u.getUsername(), u.getReceived().size());
-		return u.getReceived().stream().map(Transferable::toTransfer).collect(Collectors.toList());
-	}
+	// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	// /**
+	// * Returns JSON with all received messages
+	// */
+	// @GetMapping(path = "received", produces = "application/json")
+	// @Transactional // para no recibir resultados inconsistentes
+	// @ResponseBody // para indicar que no devuelve vista, sino un objeto
+	// (jsonizado)
+	// public List<Message.Transfer> retrieveMessages(HttpSession session) {
+	// long userId = ((User) session.getAttribute("u")).getId();
+	// User u = entityManager.find(User.class, userId);
+	// log.info("Generating message list for user {} ({} messages)",
+	// u.getUsername(), u.getReceived().size());
+	// return
+	// u.getReceived().stream().map(Transferable::toTransfer).collect(Collectors.toList());
+	// }
 
 	/**
 	 * Returns JSON with count of unread messages
