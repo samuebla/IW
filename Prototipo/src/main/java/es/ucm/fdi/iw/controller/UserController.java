@@ -173,6 +173,8 @@ public class UserController {
 			}
 		}
 		target.setUsername(edited.getUsername());
+		target.setFirstName(edited.getFirstName());
+		target.setLastName(edited.getLastName());
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
