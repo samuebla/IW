@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Fourdrez Probar Lobbies</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container" >
+            <h1 class="mt-5" style="text-align:center;">Lobbies</h1>
+
+            <table style="border-collapse: collapse;
+            width: 100%;
+            max-width:1000px;
+            margin-left: auto;
+            margin-right: auto;">
+                <tr>
+                    <th>Lobbies</th>
+                    <th>Crear</th>
+                </tr>
+                <tr style="background-color: #dddddd;">
+                    <td>Lobby1</td>
+                    <td><button  th:href="@{/lobby}">CrearPartida</button></td>
+                </tr>
+                <tr>
+                    <td>Lobby1</td>
+                    <td><button  th:href="@{/lobby}">CrearPartida</button></td>
+                </tr>
+            </table>
+            
+        </div>
+        
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>

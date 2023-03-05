@@ -131,6 +131,11 @@ public class UserController {
 		return "partida";
 	}
 
+	@GetMapping("/probarlobbys")
+	public String probarlobbys(Model model) {
+		return "probarlobbys";
+	}
+
 	/**
 	 * Alter or create a user
 	 */
