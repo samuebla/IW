@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.apache.logging.log4j.LogManager;
@@ -31,11 +32,12 @@ import lombok.AllArgsConstructor;
 public class Denuncia {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "denuncia")
-	@SequenceGenerator(name = "denuncia", sequenceName = "denuncia")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "agua")
+	@SequenceGenerator(name = "agua", sequenceName = "agua")
 	private long id;
 
-	// Partida partida;
+	@ManyToOne
+	Partida partida;
 
 	@ManyToOne
 	User user;

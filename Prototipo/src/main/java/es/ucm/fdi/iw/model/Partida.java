@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,61 +32,33 @@ import java.util.List;
 @Entity
 @Data
 public class Partida {
-	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "gen")
-    @SequenceGenerator(name = "gen", sequenceName = "gen")
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ojo")
+	@SequenceGenerator(name = "ojo", sequenceName = "ojo")
 	private long id;
 
-    private enum States { Lobby, OnGame, Finished }
+	private enum States {
+		Lobby, OnGame, Finished
+	}
 
-    @Column(nullable=false)
-    String currentState;
+	@Column(nullable = false)
+	States currentState;
 
-    List<Short> tablero;
+	@OneToMany
+	List<Short> tablero = new ArrayList<>();
 
-    @OneToMany
-    List<Message> received;
+	@OneToMany
+	List<Message> received = new ArrayList<>();
 
-    @ManyToMany
-    List<Jugador> jugadores;
+	@OneToMany
+	List<Jugador> jugadores = new ArrayList<>();
 
-    int tiempoTotal;
+	int tiempoTotal;
 
-    int incrementoTiempoPorTurno;
+	int incrementoTiempoPorTurno;
 
-    enum coloresEquipos { Rojo, Azul, Verde, Amarillo }
-	
-	// /**
-	//  * Objeto para persistir a/de JSON
-	//  * @author mfreire
-	//  */
-    // @Getter
-    // @AllArgsConstructor
-	// public static class Transfer {
-	// 	private String from;
-	// 	private String to;
-	// 	private String sent;
-	// 	private String received;
-	// 	private String text;
-	// 	long id;
-	// 	public Transfer(Partida p) {
-	// 		this.from = m.getSender().getUsername();
-	// 		this.to = m.getRecipient().getUsername();
-	// 		this.sent = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateSent());
-	// 		this.received = m.getDateRead() == null ?
-	// 				null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateRead());
-	// 		this.text = m.getText();
-	// 		this.id = m.getId();
-	// 	}
-	// }
-
-	// @Override
-	// public Transfer toTransfer() {
-	// 	return new Transfer(sender.getUsername(), recipient.getUsername(), 
-	// 		DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
-	// 		dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
-	// 		text, id
-    //     );
-    // }
+	enum ColoresEquipos {
+		Rojo, Azul, Verde, Amarillo
+	}
 }

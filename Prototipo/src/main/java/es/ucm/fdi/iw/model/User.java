@@ -50,7 +50,7 @@ public class User implements Transferable<User.Transfer> {
 
     // private List<Partida> historial;
 
-    @OneToMany
+    @OneToMany(targetEntity = Denuncia.class)
     @JoinColumn(name = "denuncia_id")
     private List<Denuncia> denuncias = new ArrayList<>();
 
