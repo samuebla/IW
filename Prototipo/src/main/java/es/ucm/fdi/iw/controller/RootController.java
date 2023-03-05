@@ -15,15 +15,20 @@ public class RootController {
     private static final Logger log = LogManager.getLogger(RootController.class);
 
     @GetMapping("/partida")
-    public String partida(Model model){
+    public String partida(Model model) {
         return "partida";
     }
 
     @GetMapping("/lobby")
-    public String lobby(Model model){
+    public String lobby(Model model) {
         return "lobby";
     }
-    
+
+    @GetMapping("/probarlobbys")
+    public String probarlobbys(Model model) {
+        return "probarlobbys";
+    }
+
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
