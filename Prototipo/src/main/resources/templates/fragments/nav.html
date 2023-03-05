@@ -17,7 +17,7 @@
                             <a class="nav-link" th:href="@{/admin/administrar}">Administrar</a>
                         </div>
                         <div th:unless="${session.u.hasRole('ADMIN')}" >
-                            <a class="nav-link" th:href="@{/lobby}">¡Juega YA!</a>
+                            <a class="nav-link" th:href="@{/probarlobbys}">¡Juega YA!</a>
                         </div>
                     </div>
                     <div th:unless="${session.u != null}">
