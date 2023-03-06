@@ -18,8 +18,8 @@ import lombok.Data;
 public class Denuncia {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "denuncia_gen")
-	@SequenceGenerator(name = "denuncia_gen", sequenceName = "denuncia_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+    @SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
 	@ManyToOne

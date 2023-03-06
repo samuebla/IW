@@ -77,7 +77,7 @@
 			<version>${karate.version}</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<testResources>

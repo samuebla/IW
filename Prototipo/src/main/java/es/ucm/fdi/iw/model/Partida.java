@@ -22,8 +22,8 @@ import java.util.List;
 public class Partida {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "partida_gen")
-	@SequenceGenerator(name = "partida_gen", sequenceName = "partida_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+    @SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
 	private enum States {
@@ -33,8 +33,7 @@ public class Partida {
 	@Column(nullable = false)
 	States currentState;
 
-	@OneToMany
-	List<ShortJPA> tablero = new ArrayList<>();
+	String tablero;
 
 	@OneToMany
 	List<Message> received = new ArrayList<>();
