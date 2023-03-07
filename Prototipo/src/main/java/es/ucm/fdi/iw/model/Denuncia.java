@@ -26,5 +26,8 @@ public class Denuncia {
 	Partida partida;
 
 	@ManyToOne
-	User user;
+	User denunciante;
+
+	@ManyToOne
+	User denunciado;
 }
