@@ -32,6 +32,9 @@
                 </div>
                 <div>
                     <a class="nav-link active" th:unless="${session.u}" aria-current="page" href="@{/login/}">login</a>
+                    <form th:if="${session.u}" th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">logout</button>
+                    </form>
                 </div>
             </div>
             <div class="container-fluid d-flex justify-content-center">
