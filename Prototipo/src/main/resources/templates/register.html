@@ -89,9 +89,16 @@
                 function validateForm() {
                     var password = document.getElementById("password").value;
                     var repeatPassword = document.getElementById("repeatpassword").value;
+                    var email = document.getElementById("email").value;
+                    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
                     if (password != repeatPassword) {
                         alert("Las contraseñas no coinciden.");
+                        return false;
+                    }
+
+                    if (!emailRegex.test(email)) {
+                        alert("Ingrese un correo válido.");
                         return false;
                     }
 
