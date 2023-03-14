@@ -14,7 +14,7 @@
         <div class="container">
             <form class="form-signin" method="post" th:action="@{/login}" style="margin: auto;
             max-width: 600px;
-            padding: 20px;">
+            padding: 20px;" onsubmit="return validateForm();">
                 <h2 class="form-signin-heading" style="text-align: center;">Regístrate</h2>
                 <p th:if="${#request.getQueryString() == 'error'}" class="error" style="color: red;
                 font-size: 14px;
@@ -25,7 +25,8 @@
                     <label for="username" class="visually-hidden" style="display: block;
                     font-weight: bold;
                     margin-bottom: 5px;">Usuario</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required" style="border: 1px solid #ccc;
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario"
+                        required="required" style="border: 1px solid #ccc;
                     border-radius: 100px;
                     box-sizing: border-box;
                     font-size: 16px;
@@ -37,7 +38,8 @@
                     <label for="email" class="visually-hidden" style="display: block;
                     font-weight: bold;
                     margin-bottom: 5px;">Correo</label>
-                    <input type="text" id="email" name="email" class="form-control" placeholder="Correo" required="required" style="border: 1px solid #ccc;
+                    <input type="text" id="email" name="email" class="form-control" placeholder="Correo"
+                        required="required" style="border: 1px solid #ccc;
                     border-radius: 100px;
                     box-sizing: border-box;
                     font-size: 16px;
@@ -49,7 +51,8 @@
                     <label for="password" class="visually-hidden" style="display: block;
                     font-weight: bold;
                     margin-bottom: 5px;">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required" style="border: 1px solid #ccc;
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña"
+                        required="required" style="border: 1px solid #ccc;
                     border-radius: 100px;
                     box-sizing: border-box;
                     font-size: 16px;
@@ -61,7 +64,8 @@
                     <label for="repeatpassword" class="visually-hidden" style="display: block;
                     font-weight: bold;
                     margin-bottom: 5px;">Repetir contraseña</label>
-                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control" placeholder="Repetir contraseña" required="required" style="border: 1px solid #ccc;
+                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control"
+                        placeholder="Repetir contraseña" required="required" style="border: 1px solid #ccc;
                     border-radius: 100px;
                     box-sizing: border-box;
                     font-size: 16px;
@@ -77,8 +81,24 @@
                 font-size: 16px;
                 padding: 10px;
                 width: 100%;" onmouseover="this.style.backgroundColor='#be7eb9';"
-                onmouseout="this.style.backgroundColor='#ffb5f9';">Regístrate</button>
+                    onmouseout="this.style.backgroundColor='#ffb5f9';">Regístrate</button>
             </form>
+
+            <!-- Con esto se asegura que la contraseña sea la misma en ambas cajas -->
+            <script>
+                function validateForm() {
+                    var password = document.getElementById("password").value;
+                    var repeatPassword = document.getElementById("repeatpassword").value;
+
+                    if (password != repeatPassword) {
+                        alert("Las contraseñas no coinciden.");
+                        return false;
+                    }
+
+                    return true;
+                }
+            </script>
+
         </div>
     </main>
 
