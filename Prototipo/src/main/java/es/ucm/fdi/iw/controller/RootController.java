@@ -49,7 +49,7 @@ public class RootController {
         return "comojugar";
     }
 
-    @GetMapping("/records")
+    @GetMapping("/api/records")
     public String records(Model model) {
         return "records";
     }
