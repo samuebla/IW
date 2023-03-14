@@ -54,6 +54,11 @@ public class RootController {
         return "records";
     }
 
+    @GetMapping("/api/register")
+    public String register(Model model) {
+        return "register";
+    }
+
     @GetMapping("/")
     public String index(Model model, HttpSession session) {
         User u = (User)session.getAttribute("u");
