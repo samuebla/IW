@@ -24,15 +24,16 @@
                     <th>Crear</th>
                 </tr>
                 <tr style="background-color: #dddddd;">
-                    <td>Lobby1</td>
-                    <td><form th:action="@{/lobby}" method="get">
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Crear partida 1</button>
+                    <td>Nueva partida</td>
+                    <td><form th:action="@{/partida}" method="post">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Crear partida</button>
                     </form></td>
                 </tr>
-                <tr>
+                <tr th:each="p: ${partidas}">
                     <td>Lobby1</td>
-                    <td><form th:action="@{/lobby}" method="get">
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Crear partida 2</button>
+                    <td><form th:action="@{/joinp}" method="post">
+                        Partida <span th:text="${p.id}"></span>
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
                     </form></td>
                 </tr>
             </table>

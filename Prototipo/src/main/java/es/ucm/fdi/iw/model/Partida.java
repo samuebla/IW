@@ -22,16 +22,16 @@ import java.util.List;
 public class Partida {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
-    @SequenceGenerator(name = "gen", sequenceName = "gen")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+	@SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
-	private enum States {
+	public enum State {
 		Lobby, OnGame, Finished
 	}
 
 	@Column(nullable = false)
-	States currentState;
+	State currentState;
 
 	String tablero;
 

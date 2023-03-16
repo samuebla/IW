@@ -27,6 +27,7 @@ public class AdminController {
     public String listausuarios(Model model) {
         return "listausuarios";
     }
+
     @GetMapping("/perfilusuariox")
     public String perfilusuariox(Model model) {
         return "perfilusuariox";

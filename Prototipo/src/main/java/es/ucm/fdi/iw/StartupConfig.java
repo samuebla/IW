@@ -18,21 +18,21 @@ import java.text.SimpleDateFormat;
  */
 @Component
 public class StartupConfig {
-	
+
 	private static final Logger log = LogManager.getLogger(StartupConfig.class);
-	
+
 	@Autowired
 	private Environment env;
 
 	@Autowired
 	private ServletContext context;
-	
+
 	@EventListener(ContextRefreshedEvent.class)
 	public void contextRefreshedEvent() {
 		String debugProperty = env.getProperty("es.ucm.fdi.debug");
-		context.setAttribute("debug", debugProperty != null 
+		context.setAttribute("debug", debugProperty != null
 				&& Boolean.parseBoolean(debugProperty.toLowerCase()));
-		log.info("Setting global debug property to {}", 
+		log.info("Setting global debug property to {}",
 				context.getAttribute("debug"));
 	}
 }

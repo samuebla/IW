@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
  * Access to this end-point is authenticated.
  */
 @Controller()
-@RequestMapping("user")
+@RequestMapping("user") // todas las urls de abajo empiezan por "user"
 public class UserController {
 
 	private static final Logger log = LogManager.getLogger(UserController.class);

@@ -34,8 +34,8 @@ public class Message implements Transferable<Message.Transfer> {
 	private static Logger log = LogManager.getLogger(Message.class);
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
-    @SequenceGenerator(name = "gen", sequenceName = "gen")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+	@SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
 	@ManyToOne
