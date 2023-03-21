@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "Message.countUnread", query = "SELECT COUNT(m) FROM Message m "
-				+ "WHERE m.recipient.id = :userId AND m.dateRead = null")
+				+ "WHERE m.partida.id = :partidaId AND m.dateRead = null")
 })
 @Data
 public class Message implements Transferable<Message.Transfer> {
@@ -41,7 +41,7 @@ public class Message implements Transferable<Message.Transfer> {
 	@ManyToOne
 	private User sender;
 	@ManyToOne
-	private User recipient;
+	private Partida partida;
 	private String text;
 
 	private LocalDateTime dateSent;
@@ -56,7 +56,7 @@ public class Message implements Transferable<Message.Transfer> {
 	@AllArgsConstructor
 	public static class Transfer {
 		private String from;
-		private String to;
+		private long to;
 		private String sent;
 		private String received;
 		private String text;
@@ -64,7 +64,7 @@ public class Message implements Transferable<Message.Transfer> {
 
 		public Transfer(Message m) {
 			this.from = m.getSender().getUsername();
-			this.to = m.getRecipient().getUsername();
+			this.to = m.getPartida().getId();
 			this.sent = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateSent());
 			this.received = m.getDateRead() == null ? null
 					: DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateRead());
@@ -75,7 +75,7 @@ public class Message implements Transferable<Message.Transfer> {
 
 	@Override
 	public Transfer toTransfer() {
-		return new Transfer(sender.getUsername(), recipient.getUsername(),
+		return new Transfer(sender.getUsername(), partida.getId(),
 				DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
 				dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
 				text, id);

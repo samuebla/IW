@@ -289,6 +289,7 @@ public class UserController {
 	 * @param o  JSON-ized message, similar to {"message": "text goes here"}
 	 * @throws JsonProcessingException
 	 */
+/*
 	@PostMapping("/{id}/msg")
 	@ResponseBody
 	@Transactional
@@ -304,7 +305,7 @@ public class UserController {
 
 		// construye mensaje, lo guarda en BD
 		Message m = new Message();
-		m.setRecipient(u);
+		m.setPartida(u);
 		m.setSender(sender);
 		m.setDateSent(LocalDateTime.now());
 		m.setText(text);
@@ -320,7 +321,7 @@ public class UserController {
 		 * rootNode.put("text", text);
 		 * rootNode.put("id", m.getId());
 		 * String json = mapper.writeValueAsString(rootNode);
-		 */
+		 *//*
 		// persiste objeto a json usando Jackson
 		String json = mapper.writeValueAsString(m.toTransfer());
 
@@ -328,5 +329,5 @@ public class UserController {
 
 		messagingTemplate.convertAndSend("/user/" + u.getUsername() + "/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
-	}
+	}*/
 }

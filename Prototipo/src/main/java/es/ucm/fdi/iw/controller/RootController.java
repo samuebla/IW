@@ -48,6 +48,13 @@ public class RootController {
         return "partida";
     }
 
+    private Jugador jugadorBasura(long id) {
+        Jugador j = new Jugador();
+        j.setUser(entityManager.find(User.class, id));
+        return j;
+    }
+
+
     @Transactional
     @PostMapping("/partida")
     public String nuevaPartida(Model model, HttpSession session) {
@@ -59,10 +66,13 @@ public class RootController {
         Jugador j = new Jugador();
         j.setUser(u);
         p.getJugadores().add(j);
+        p.getJugadores().add(jugadorBasura(3));
+        p.getJugadores().add(jugadorBasura(4));
+        p.getJugadores().add(jugadorBasura(5));
+        for (Jugador o : p.getJugadores()) entityManager.persist(o);
         entityManager.persist(p);
-        entityManager.persist(j);
-
         entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
+        
         model.addAttribute("partida", p);
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -77,6 +87,8 @@ public class RootController {
         Partida p = entityManager.find(Partida.class, id);
 
         model.addAttribute("partida", p);
+        //model.addAttribute("jugadores", p.getJugadores());
+
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
         if (u.getId() == p.getJugadores().get(0).getUser().getId()) {

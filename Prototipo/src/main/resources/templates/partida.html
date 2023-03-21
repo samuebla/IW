@@ -16,22 +16,22 @@
         <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
 
 
-        <div th:if="${partida != null}">
-           <!-- partida valida -->
-           <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
-           <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
-                Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}"/>
-                Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"/>
-                <button type="submit">Cambiar configuracion</button>
-           </form>
+            <div th:if="${partida != null}">
+                <!-- partida valida -->
+                <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
+                <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
+                    Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" />
+                    Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" />
+                    <button type="submit">Cambiar configuracion</button>
+                </form>
 
-        </div>
-        <div th:unless="${partida != null}">
-            <h1  th:text="'Partida Rara'">Partida 123</h1>
-            <form method="POST" th:action="@{/partida}">
-                <button type="submit">Crear partida nueva</button>
-            </form>
-        </div>
+            </div>
+            <div th:unless="${partida != null}">
+                <h1 th:text="'Partida Rara'">Partida 123</h1>
+                <form method="POST" th:action="@{/partida}">
+                    <button type="submit">Crear partida nueva</button>
+                </form>
+            </div>
 
 
             <!-- Lista de usuarios en la lobby y chat -->
@@ -39,26 +39,26 @@
                         border-radius: 10px; flex-basis: 20%; display: flex; flex-direction: column;">
 
 
+
+
+                <!-- <tr th:each="p: ${partidas.id.j}">
+                    <td>Lobby1</td>
+                    <td>
+                        <form th:action="@{/partida/{id}(id=${p.id})}" method="get">
+                            Partida <span th:text="${p.id}"></span>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
+                        </form>
+                    </td>
+                </tr> -->
+
                 <!-- Usuarios -->
                 <div
                     style="flex: 1; width: 100%; box-sizing: border-box; border-radius: 10px; border: 5px solid #000; flex-basis: 25%;">
-                    <div style="display: flex; justify-content: space-between; padding: 10px;">
-                        <h5>Usuario A</h5>
+                    <div th:each="j: ${partida.jugadores}" style="display: flex; justify-content: space-between; padding: 10px;">
+                        <h5 th:text="${j.user.id}">Usuario A</h5>
+
                         <h5 style="color: red;">Reportar</h5>
                     </div>
-
-
-                    <div style="display: flex; justify-content: space-between; padding: 10px;">
-                        <h5>Usuario B</h5>
-                        <h5 style="color: red;">Reportar</h5>
-                    </div>
-
-
-                    <div style="display: flex; justify-content: space-between; padding: 10px;">
-                        <h5>Usuario C</h5>
-                        <h5 style="color: red;">Reportar</h5>
-                    </div>
-
                 </div>
 
                 <!--CHAT-->
