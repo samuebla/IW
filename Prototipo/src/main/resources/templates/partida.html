@@ -5,6 +5,7 @@
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Fourdrez Lobby</title>
+    <script th:src="@{/js/game/phaser.min.js}"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -90,7 +91,8 @@
             <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
                         border-radius: 10px; flex-basis: 80%;align-items: center;">
 
-                <img style="width: 100%; height: 100%;" src="https://picsum.photos/809/500">
+                <canvas id="juego"></canvas>
+                <script th:src="@{/js/game/game.js}" type="module"></script>
 
             </div>
 
