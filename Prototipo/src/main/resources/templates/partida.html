@@ -5,6 +5,7 @@
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Fourdrez Lobby</title>
+    <script th:src="@{/js/game/phaser.min.js}"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -16,22 +17,22 @@
         <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
 
 
-        <div th:if="${partida != null}">
-           <!-- partida valida -->
-           <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
-           <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
-                Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}"/>
-                Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"/>
-                <button type="submit">Cambiar configuracion</button>
-           </form>
+            <div th:if="${partida != null}">
+                <!-- partida valida -->
+                <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
+                <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
+                    Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" />
+                    Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" />
+                    <button type="submit">Cambiar configuracion</button>
+                </form>
 
-        </div>
-        <div th:unless="${partida != null}">
-            <h1  th:text="'Partida Rara'">Partida 123</h1>
-            <form method="POST" th:action="@{/partida}">
-                <button type="submit">Crear partida nueva</button>
-            </form>
-        </div>
+            </div>
+            <div th:unless="${partida != null}">
+                <h1 th:text="'Partida Rara'">Partida 123</h1>
+                <form method="POST" th:action="@{/partida}">
+                    <button type="submit">Crear partida nueva</button>
+                </form>
+            </div>
 
 
             <!-- Lista de usuarios en la lobby y chat -->
@@ -90,7 +91,8 @@
             <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
                         border-radius: 10px; flex-basis: 80%;align-items: center;">
 
-                <img style="width: 100%; height: 100%;" src="https://picsum.photos/809/500">
+                <canvas id="juego"></canvas>
+                <script th:src="@{/js/game/game.js}" type="module"></script>
 
             </div>
 
