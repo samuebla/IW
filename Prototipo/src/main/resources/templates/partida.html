@@ -55,8 +55,9 @@
                 <!-- Usuarios -->
                 <div
                     style="flex: 1; width: 100%; box-sizing: border-box; border-radius: 10px; border: 5px solid #000; flex-basis: 25%;">
-                    <div th:each="j: ${partida.jugadores}" style="display: flex; justify-content: space-between; padding: 10px;">
-                        <h5 th:text="${j.user.id}">Usuario A</h5>
+                    <div th:each="j: ${partida.jugadores}"
+                        style="display: flex; justify-content: space-between; padding: 10px;">
+                        <h5 th:text="${j.user.username}">Usuario A</h5>
 
                         <h5 style="color: red;">Reportar</h5>
                     </div>
@@ -69,19 +70,15 @@
                         justify-content: flex-end; align-items: center;">
 
 
-                    <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
-                        padding: 10px;">Usuario A : Lorem Ipsum</p>
-
-                    <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
-                        padding: 10px;">Usuario B : Lorem Ipsum</p>
-
-                    <p style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
-                        padding: 10px;">Usuario C : Lorem Ipsum</p>
-
+                    <div th:each="m: ${messages}" 
+                        style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">
+                    <!-- <h5 th:text="${m.sender}"> </h5> -->
+                        <h5 th:text="${m.text}">Texto de prueba</h5>
+                    </div>
 
                     <input type="text" placeholder="Escribe un mensaje..." style=" width: 100%; box-sizing: border-box; text-align: center;
                                                 padding: 20px; border: 5px solid #000; border-radius: 10px; ">
-
                 </div>
 
             </div>

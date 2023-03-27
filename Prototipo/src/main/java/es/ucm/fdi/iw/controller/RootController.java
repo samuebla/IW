@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import es.ucm.fdi.iw.model.Jugador;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 
@@ -44,6 +45,7 @@ public class RootController {
 
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+        model.addAttribute("messages", p.getReceived());
 
         return "partida";
     }
@@ -74,7 +76,8 @@ public class RootController {
         entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
         
         model.addAttribute("partida", p);
-        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());     
+        model.addAttribute("messages", p.getReceived());
 
         return "partida";
     } // normalmente, el flush se haría (automáticamente) aquí, al acabarse la
@@ -95,6 +98,8 @@ public class RootController {
             // soy el jefe!
             p.setTiempoTotal(tiempoTotal);
         }
+
+        model.addAttribute("messages", p.getReceived());
 
         return "partida";
     }
