@@ -18,6 +18,16 @@ export default class Boot extends Phaser.Scene {
             frameHeight: 16
         });
 
+        this.load.spritesheet("blue_pieces", "blue_pieces.png", {
+            frameWidth: 16,
+            frameHeight: 16
+        });
+
+        this.load.spritesheet("red_pieces", "red_pieces.png", {
+            frameWidth: 16,
+            frameHeight: 16
+        });
+
         this.load.image("board", "board.png");
     }
 
