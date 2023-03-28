@@ -151,7 +151,6 @@ public class RootController {
     public String probarlobbys(Model model) {
         model.addAttribute("partidas",
                 entityManager.createQuery("select p from Partida p").getResultList());
-
         return "probarlobbys";
     }
 

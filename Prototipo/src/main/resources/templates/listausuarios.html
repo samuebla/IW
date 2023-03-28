@@ -32,10 +32,10 @@
                     
                     <td style="border: 1px solid #dddddd;
                     text-align: left;
-                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}" style="width:100%">UsuarioA</a></td>
+                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}" style="width:100%"><span th:text="${u.username}"></span></a></td>
                     <td style="border: 1px solid #dddddd;
                     text-align: center;
-                    padding: 8px;">1</td>
+                    padding: 8px;"><span th:text="${#lists.size(u.denuncias)}"></span></td>
                     <td style="border: 1px solid #dddddd;
                     text-align: right;
                     padding: 8px;
