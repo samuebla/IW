@@ -4,8 +4,8 @@ import fourdrez from './scenes/fourdrez.js';
 let config = {
     type: Phaser.CANVAS,
     canvas: document.getElementById("juego"),
-    width: 1000,
-    height: 1000,
+    width: 256,
+    height: 256,
     backgroundColor: "#dadaad",
     scale: {
         mode: Phaser.Scale.FIT,
