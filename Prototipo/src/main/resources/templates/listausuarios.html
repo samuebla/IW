@@ -27,7 +27,9 @@
                     text-align: center;
                     padding: 8px;">Informes recibidos</th>
                 </tr>
-                <tr style="background-color: #dddddd;">
+
+                <tr th:each="u: ${usuarios}" style="background-color: #dddddd;">
+                    
                     <td style="border: 1px solid #dddddd;
                     text-align: left;
                     padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}" style="width:100%">UsuarioA</a></td>
@@ -39,22 +41,8 @@
                     padding: 8px;
                     background-color: #ff7083;"><button style="width:100%">Echar</button></td>
                 </tr>
-                <tr>
-                    <td style="border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuariox}"  style="width:100%">UsuarioB</a></td>
-                    <td style="border: 1px solid #dddddd;
-                    text-align: center;
-                    padding: 8px;">1</td>
-                    <td style="border: 1px solid #dddddd;
-                    text-align: right;
-                    padding: 8px;
-                    background-color: #ff7083;"><button style="width:100%">Echar</button></td>
-                </tr>
             </table>
-            
         </div>
-        
     </main>
 
     <th:block th:replace="fragments/footer.html :: footer" />

@@ -53,13 +53,18 @@
                 </tr> -->
 
                 <!-- Usuarios -->
+                <!-- AAA TODO CAMBIAR QUE NO PUEDAS REPORTARTE SI ERES EL MISMO USUARIO  -->
                 <div
                     style="flex: 1; width: 100%; box-sizing: border-box; border-radius: 10px; border: 5px solid #000; flex-basis: 25%;">
                     <div th:each="j: ${partida.jugadores}"
                         style="display: flex; justify-content: space-between; padding: 10px;">
                         <h5 th:text="${j.user.username}">Usuario A</h5>
+                        <form method="POST" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                            <input type="hidden" name="id_denunciado" th:value="${j.user.id}" />
+                            <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
 
-                        <h5 style="color: red;">Reportar</h5>
+                            <button type="submit"><img src="/img/redflag.png"></button>
+                        </form>
                     </div>
                 </div>
 
@@ -70,10 +75,9 @@
                         justify-content: flex-end; align-items: center;">
 
 
-                    <div th:each="m: ${messages}" 
-                        style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                    <div th:each="m: ${messages}" style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
                         padding: 10px;">
-                    <!-- <h5 th:text="${m.sender}"> </h5> -->
+                        <!-- <h5 th:text="${m.sender}"> </h5> -->
                         <h5 th:text="${m.text}">Texto de prueba</h5>
                     </div>
 

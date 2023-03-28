@@ -3,6 +3,8 @@ package es.ucm.fdi.iw.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import es.ucm.fdi.iw.model.Denuncia;
 import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
@@ -42,7 +45,6 @@ public class RootController {
     public String partida(@PathVariable long id, Model model, HttpSession session) {
         Partida p = entityManager.find(Partida.class, id);
         model.addAttribute("partida", p);
-
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
         model.addAttribute("messages", p.getReceived());
@@ -55,7 +57,6 @@ public class RootController {
         j.setUser(entityManager.find(User.class, id));
         return j;
     }
-
 
     @Transactional
     @PostMapping("/partida")
@@ -71,12 +72,13 @@ public class RootController {
         p.getJugadores().add(jugadorBasura(3));
         p.getJugadores().add(jugadorBasura(4));
         p.getJugadores().add(jugadorBasura(5));
-        for (Jugador o : p.getJugadores()) entityManager.persist(o);
+        for (Jugador o : p.getJugadores())
+            entityManager.persist(o);
         entityManager.persist(p);
         entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
-        
+
         model.addAttribute("partida", p);
-        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());     
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
         model.addAttribute("messages", p.getReceived());
 
         return "partida";
@@ -90,7 +92,7 @@ public class RootController {
         Partida p = entityManager.find(Partida.class, id);
 
         model.addAttribute("partida", p);
-        //model.addAttribute("jugadores", p.getJugadores());
+        // model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -100,6 +102,42 @@ public class RootController {
         }
 
         model.addAttribute("messages", p.getReceived());
+
+        return "partida";
+    }
+
+    @Transactional
+    @PostMapping("/partida/{id}/reportar")
+    public String reportUser(@PathVariable long id, Model model, HttpSession session, @RequestParam long id_denunciado,
+            @RequestParam long id_denunciante) {
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        model.addAttribute("partida", p);
+        model.addAttribute("jugadores", p.getJugadores());
+
+        // if (u.getId() == p.getJugadores().get(0).getUser().getId()) {
+        // // soy el jefe!
+        // p.setTiempoTotal(tiempoTotal);
+        // }
+
+        model.addAttribute("messages", p.getReceived());
+
+        //Para evitar que no te denuncies a ti mismo?
+        if (id_denunciado != id_denunciante) {
+            // Reportar al usuario indicado
+            User reportedUser = entityManager.find(User.class, id_denunciado);
+            User reportingUser = entityManager.find(User.class, id_denunciante);
+            Denuncia newDenuncia = new Denuncia();
+            newDenuncia.setPartida(p);
+            newDenuncia.setDenunciado(reportedUser);
+            newDenuncia.setDenunciante(reportingUser);
+            reportedUser.getDenuncias().add(newDenuncia);
+
+            entityManager.persist(newDenuncia);
+            entityManager.flush();
+        }
 
         return "partida";
     }
