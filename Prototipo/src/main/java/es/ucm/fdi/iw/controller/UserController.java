@@ -116,10 +116,10 @@ public class UserController {
 	}
 
 	// DEBUGGING PARA TESTEAR Y FUNCIONA (Poner en el navegador /user/htp)
-	@GetMapping("/htp")
-	public String comojugar(Model model) {
-		return "comojugar";
-	}
+	// @GetMapping("/htp")
+	// public String comojugar(Model model) {
+	// 	return "comojugar";
+	// }
 
 	@GetMapping("/lobby")
 	public String lobby(Model model) {

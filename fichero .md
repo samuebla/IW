@@ -1,11 +1,12 @@
 # IW
 Falta por implementar:
-Que el admin vea el numero de reports de cada persona y los usuarios creados
-Mostrar los records de los usuarios
+Que el admin vea el numero de reports de cada persona y los usuarios creados(HECHO)
+Mostrar los records de los usuarios (Crear clase records nueva y hacer un query como con los usuarios?)
 Mejorar la estética de toda la página (quitar el lorem ipsum, ajustar tamaños etc)
 Implementar el sistema de mensajes in-game
 Prototipo final del juego
 Cambio de configuración de la partida antes de empezarlo
+MOVER TODOS LAS COSAS ESTÉTICAS A UN .CSS
 
 
 Está implementado:
