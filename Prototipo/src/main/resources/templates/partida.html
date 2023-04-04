@@ -59,17 +59,16 @@
                     <div th:each="j: ${partida.jugadores}"
                         style="display: flex; justify-content: space-between; padding: 10px;">
                         <h5 th:text="${j.user.username}">Usuario A</h5>
-                        <form method="POST" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                        <form method="POST" th:if="${j.user.id!=user.id}" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
                             <input type="hidden" name="id_denunciado" th:value="${j.user.id}" />
                             <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
-
                             <button type="submit"><img src="/img/redflag.png"></button>
                         </form>
                     </div>
                 </div>
 
                 <!--CHAT-->
-                <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
+                <!-- <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
                         border-radius: 10px; flex-basis: 80%; display: 
                         flex; flex-direction: column; height: 100%;
                         justify-content: flex-end; align-items: center;">
@@ -77,13 +76,29 @@
 
                     <div th:each="m: ${messages}" style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
                         padding: 10px;">
-                        <!-- <h5 th:text="${m.sender}"> </h5> -->
-                        <h5 th:text="${m.text}">Texto de prueba</h5>
+                        <p th:text="${m.sender.username}"> </p>
+                        <p th:text="${m.text}">Texto de prueba</p>
                     </div>
 
-                    <input type="text" placeholder="Escribe un mensaje..." style=" width: 100%; box-sizing: border-box; text-align: center;
-                                                padding: 20px; border: 5px solid #000; border-radius: 10px; ">
+                    <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
+                        <input type="text" name="text" placeholder="Escribe un mensaje..." style=" width: 100%; box-sizing: border-box; text-align: center;
+                        padding: 20px; border: 5px solid #000; border-radius: 10px; ">
+                    </form>
+                    
+                </div> -->
+
+                <div style="flex: 1; box-sizing: border-box; border: 5px solid #000; border-radius: 10px; flex-basis: 80%; display: flex; flex-direction: column; height: 70%;">
+                    <div style="overflow: auto;">
+                        <div th:each="m: ${messages}" style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                            <p th:text="${m.sender.username}"> </p>
+                            <p th:text="${m.text}">Texto de prueba</p>
+                        </div>
+                    </div>
+                    <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
+                        <input type="text" name="text" placeholder="Escribe un mensaje..." style="width: 100%; box-sizing: border-box; text-align: center; padding: 20px; border: 5px solid #000; border-radius: 10px;">
+                    </form>
                 </div>
+                
 
             </div>
 

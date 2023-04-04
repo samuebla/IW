@@ -38,6 +38,7 @@ public class Message implements Transferable<Message.Transfer> {
 	@SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
+	// AAA NO ME FIO REVISAR CREO QUE ES MANYTOMANY
 	@ManyToOne
 	private User sender;
 	@ManyToOne
