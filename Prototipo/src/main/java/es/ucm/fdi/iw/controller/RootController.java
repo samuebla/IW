@@ -70,8 +70,8 @@ public class RootController {
         j.setUser(u);
         p.getJugadores().add(j);
         p.getJugadores().add(jugadorBasura(3));
-        p.getJugadores().add(jugadorBasura(4));
-        p.getJugadores().add(jugadorBasura(5));
+        // p.getJugadores().add(jugadorBasura(4));
+        // p.getJugadores().add(jugadorBasura(5));
         for (Jugador o : p.getJugadores())
             entityManager.persist(o);
         entityManager.persist(p);
@@ -107,6 +107,56 @@ public class RootController {
     }
 
     @Transactional
+    @PostMapping("/partida/{id}/newuser")
+    public String newUserToLobby(@PathVariable long id, Model model, HttpSession session) {
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+
+        model.addAttribute("partida", p);
+        model.addAttribute("numPlayers", p.getJugadores().size());
+
+        boolean ingame = false;
+
+        // Comprobamos si el usuario ya estaba dentro del lobby
+        for (Jugador o : p.getJugadores())
+            if (o.getUser().getId() == u.getId())
+                ingame = true;
+
+        // Si el lobby está lleno y yo no participo...
+        if (ingame == false && p.getJugadores().size() == 4) {
+            // No puede unirse a la partida
+            model.addAttribute("partidas",
+                    entityManager.createQuery("select p from Partida p").getResultList());
+            model.addAttribute("fullLobby", true);
+            // Y te hecha a los lobbies
+            return "probarlobbys";
+        }
+        // Si no estas dentro pero hay espacio...
+        else if (ingame == false) {
+            // Te añade a la partida
+            Jugador j = new Jugador();
+            j.setUser(u);
+            p.getJugadores().add(j);
+            entityManager.persist(j);
+            entityManager.persist(p);
+            entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
+        }
+
+        // model.addAttribute("jugadores", p.getJugadores());
+
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        // if (u.getId() == p.getJugadores().get(0).getUser().getId()) {
+        // // soy el jefe!
+        // p.setTiempoTotal(tiempoTotal);
+        // }
+
+        model.addAttribute("messages", p.getReceived());
+
+        return "partida";
+    }
+
+    @Transactional
     @PostMapping("/partida/{id}/reportar")
     public String reportUser(@PathVariable long id, Model model, HttpSession session, @RequestParam long id_denunciado,
             @RequestParam long id_denunciante) {
@@ -124,7 +174,7 @@ public class RootController {
 
         model.addAttribute("messages", p.getReceived());
 
-        //Para evitar que no te denuncies a ti mismo?
+        // Para evitar que no te denuncies a ti mismo?
         if (id_denunciado != id_denunciante) {
             // Reportar al usuario indicado
             User reportedUser = entityManager.find(User.class, id_denunciado);
@@ -151,6 +201,8 @@ public class RootController {
     public String probarlobbys(Model model) {
         model.addAttribute("partidas",
                 entityManager.createQuery("select p from Partida p").getResultList());
+        model.addAttribute("fullLobby", false);
+
         return "probarlobbys";
     }
 

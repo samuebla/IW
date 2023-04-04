@@ -7,7 +7,7 @@ Implementar el sistema de mensajes in-game
 Prototipo final del juego
 Cambio de configuración de la partida antes de empezarlo
 MOVER TODOS LAS COSAS ESTÉTICAS A UN .CSS
-
+Que empiece en estado lobby y que otra peña pueda meterse a la partida, el boton de ready y esas vainas
 
 Está implementado:
 Página con navegación,vistas y cabecera

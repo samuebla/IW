@@ -11,7 +11,9 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
-        <div class="container" >
+        <div class="container">
+            <!-- TODO HACERLO ROJO -->
+            <h4 style="text-align:center;" th:if="${fullLobby}">El lobby al que has intentado entrar está lleno</h4>
             <h1 class="mt-5" style="text-align:center;">Lobbies</h1>
 
             <table style="border-collapse: collapse;
@@ -20,26 +22,37 @@
             margin-left: auto;
             margin-right: auto;">
                 <tr>
+                    
                     <th>Lobbies</th>
                     <th>Crear</th>
+                    <th>Num. Jugadores</th>
                 </tr>
                 <tr style="background-color: #dddddd;">
                     <td>Nueva partida</td>
-                    <td><form th:action="@{/partida}" method="post">
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Crear partida</button>
-                    </form></td>
+                    <td>
+                        <form th:action="@{/partida}" method="post">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Crear partida</button>
+                        </form>
+                    </td>
+                    <td></td>
                 </tr>
-                <tr th:each="p: ${partidas}">
-                    <td>Lobby1</td>
-                    <td><form th:action="@{/partida/{id}(id=${p.id})}" method="get">
+                <tr th:each="p,iter : ${partidas}">
+                    <td th:text="${'Lobby ' + iter.count}">Lobby1</td>
+                    <td>
                         Partida <span th:text="${p.id}"></span>
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
-                    </form></td>
+
+                    </td>
+                    <td>
+                        <form th:action="@{/partida/{id}/newuser(id=${p.id})}" method="post">
+                           <span th:text="${#lists.size(p.jugadores) + '/4'}"> 0/0</span>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
+                        </form>
+                    </td>
                 </tr>
             </table>
-            
+
         </div>
-        
+
     </main>
 
     <th:block th:replace="fragments/footer.html :: footer" />
