@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.model.User;
 
@@ -41,9 +43,13 @@ public class AdminController {
         return "listausuarios";
     }
 
-    @GetMapping("/perfilusuariox")
-    public String perfilusuariox(Model model) {
-        return "perfilusuariox";
+    @GetMapping("/perfilusuario/{id}")
+    public String perfilusuariox(@PathVariable long id,Model model) {
+        //Buscamos el usuario
+        User u = entityManager.find(User.class, id);
+        model.addAttribute("user", u);
+
+        return "perfilusuario";
     }
 
     @GetMapping("/")

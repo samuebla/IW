@@ -47,6 +47,7 @@ public class RootController {
         model.addAttribute("partida", p);
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+        model.addAttribute("user", u);
         model.addAttribute("messages", p.getReceived());
 
         return "partida";
@@ -62,6 +63,8 @@ public class RootController {
     @PostMapping("/partida")
     public String nuevaPartida(Model model, HttpSession session) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+
+        model.addAttribute("user", u);
 
         Partida p = new Partida();
         p.setCurrentState(Partida.State.Lobby);
@@ -92,6 +95,7 @@ public class RootController {
         Partida p = entityManager.find(Partida.class, id);
 
         model.addAttribute("partida", p);
+        model.addAttribute("user", u);
         // model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
@@ -107,11 +111,39 @@ public class RootController {
     }
 
     @Transactional
+    @PostMapping("/partida/{id}/mensaje")
+    public String sendMessage(@PathVariable long id, Model model, HttpSession session, @RequestParam String text) {
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+
+        model.addAttribute("partida", p);
+        model.addAttribute("user", u);
+        // model.addAttribute("jugadores", p.getJugadores());
+
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        Message newMsg = new Message();
+        newMsg.setText(text);
+        newMsg.setPartida(p);
+        newMsg.setSender(u);
+    
+        p.getReceived().add(newMsg);
+        entityManager.persist(newMsg);
+        entityManager.persist(p);
+        entityManager.flush();
+        
+        model.addAttribute("messages", p.getReceived());
+
+        return "partida";
+    }
+
+    @Transactional
     @PostMapping("/partida/{id}/newuser")
     public String newUserToLobby(@PathVariable long id, Model model, HttpSession session) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
 
+        model.addAttribute("user", u);
         model.addAttribute("partida", p);
         model.addAttribute("numPlayers", p.getJugadores().size());
 
@@ -164,6 +196,7 @@ public class RootController {
         Partida p = entityManager.find(Partida.class, id);
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
+        model.addAttribute("user", u);
         model.addAttribute("partida", p);
         model.addAttribute("jugadores", p.getJugadores());
 
