@@ -19,7 +19,7 @@ export default class Fourdrez extends Phaser.Scene {
 
         const nPlayers = 4;
         const nPieces = 16;
-        const offset = (nPlayers * nPieces) + 8;
+        const offset = (nPlayers * nPieces);
 
         const spriteMap = [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 3, 4, 5, 3, 1, 2];
 
@@ -28,16 +28,16 @@ export default class Fourdrez extends Phaser.Scene {
                 let sprite;
 
                 if (i === 0)
-                    sprite = this.add.sprite(offset + ((j % 8) * 16), 38, "black_pieces", spriteMap[j]);
+                    sprite = this.add.sprite(offset + ((j % 8) * 18), 8 + (20 * (j < 8 ? 1 : 0)), "black_pieces", spriteMap[j]);
 
                 else if (i === 1)
-                    sprite = this.add.sprite(offset + ((j % 8) * 16), 256 - 41, "white_pieces", spriteMap[j]);
+                    sprite = this.add.sprite(offset + ((j % 8) * 18), (256 - 28) + (20 * (j < 8 ? 0 : 1)), "white_pieces", spriteMap[j]);
 
                 else if (i === 2)
-                    sprite = this.add.sprite(40, offset + ((j % 8) * 16), "red_pieces", spriteMap[j]);
+                    sprite = this.add.sprite(8 + (20 * (j < 8 ? 1 : 0)), offset + ((j % 8) * 18), "red_pieces", spriteMap[j]);
 
                 else if (i === 3)
-                    sprite = this.add.sprite(256 - 41, offset + ((j % 8) * 16), "blue_pieces", spriteMap[j]);
+                    sprite = this.add.sprite((256 - 28) + (20 * (j < 8 ? 0 : 1)), offset + ((j % 8) * 18), "blue_pieces", spriteMap[j]);
 
 
                 sprite.setInteractive();
