@@ -10,6 +10,9 @@ export default class Fourdrez extends Phaser.Scene {
     }
 
     create() {
+        this.movingPiece = false;
+        this.pieceToMove = null;
+
         let x = 0;
         let y = 0;
         let size = this.sys.game.canvas.width;
@@ -24,6 +27,7 @@ export default class Fourdrez extends Phaser.Scene {
         const spriteMap = [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 3, 4, 5, 3, 1, 2];
 
         for (let i = 0; i < nPlayers; i++) {
+            this.players[i] = new Player(this);
             for (let j = 0; j < nPieces; j++) {
                 let sprite;
 
@@ -43,16 +47,19 @@ export default class Fourdrez extends Phaser.Scene {
                 sprite.setInteractive();
 
                 //sprite.setScale()
-                sprite.on('pointerdown', function (pointer) {
-                    console.log("Clicked");
+                sprite.on('pointerdown', (pointer) => {
+                    if(!this.players[0].movingPiece){
+                        this.players[0].movingPiece = true;
+                        this.players[0].pieceToMove = sprite;
+                    }
                 });
 
-                sprite.on('pointerover', function (pointer) {
+                sprite.on('pointerover', (pointer) => {
                     sprite.setScale(1.5);
                     sprite.setDepth(1);
                 });
 
-                sprite.on('pointerout', function (pointer) {
+                sprite.on('pointerout', (pointer) => {
                     sprite.setScale(1);
                 });
             }
@@ -84,6 +91,7 @@ class Tablero {
     createTablero() {
         let black = 0x000000;
         let white = 0xffffff;
+        
 
         for (let j = 0; j < this.columnas; j++) {
             this.changeColor(white, black);
@@ -121,5 +129,30 @@ class Casilla extends Phaser.GameObjects.Rectangle {
         super(scene, x, y, width, height, fillColor);
         scene.add.existing(this);
         this.setOrigin(0, 0);
+
+        this.setInteractive();
+        this.on('pointerdown', (pointer) => {
+            if(scene.players[0].movingPiece){
+                scene.players[0].pieceToMove.x = x + 8;
+                scene.players[0].pieceToMove.y = y + 8;
+                scene.players[0].movingPiece = false;
+            }
+        });
+
+        this.on('pointerover', (pointer) => {
+            this.fillColor = 0x6a6a6a;
+        });
+
+        this.on('pointerout', (pointer) => {
+            this.fillColor = fillColor;
+        });
+    }
+}
+
+class Player{
+    constructor(scene){
+        this.scene = scene;
+        this.movingPiece = false;
+        this.pieceToMove = null;
     }
 }
