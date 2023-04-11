@@ -7,6 +7,7 @@ export default class Fourdrez extends Phaser.Scene {
     preload() {
         this.players = [];
         this.board = [];
+        this.turn = 0;
     }
 
     create() {
@@ -31,39 +32,21 @@ export default class Fourdrez extends Phaser.Scene {
             for (let j = 0; j < nPieces; j++) {
                 let sprite;
 
-                if (i === 0)
-                    sprite = this.add.sprite(offset + ((j % 8) * 18), 8 + (20 * (j < 8 ? 1 : 0)), "black_pieces", spriteMap[j]);
+                if (i === 2)
+                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite(offset + ((j % 8) * 18), 8 + (20 * (j < 8 ? 1 : 0)), "black_pieces", spriteMap[j]), 0);
+
+                else if (i === 0)
+                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite(offset + ((j % 8) * 18), (256 - 28) + (20 * (j < 8 ? 0 : 1)), "white_pieces", spriteMap[j]), 0);
 
                 else if (i === 1)
-                    sprite = this.add.sprite(offset + ((j % 8) * 18), (256 - 28) + (20 * (j < 8 ? 0 : 1)), "white_pieces", spriteMap[j]);
-
-                else if (i === 2)
-                    sprite = this.add.sprite(8 + (20 * (j < 8 ? 1 : 0)), offset + ((j % 8) * 18), "red_pieces", spriteMap[j]);
+                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite(8 + (20 * (j < 8 ? 1 : 0)), offset + ((j % 8) * 18), "red_pieces", spriteMap[j]), 0);
 
                 else if (i === 3)
-                    sprite = this.add.sprite((256 - 28) + (20 * (j < 8 ? 0 : 1)), offset + ((j % 8) * 18), "blue_pieces", spriteMap[j]);
-
-
-                sprite.setInteractive();
-
-                //sprite.setScale()
-                sprite.on('pointerdown', (pointer) => {
-                    if(!this.players[0].movingPiece){
-                        this.players[0].movingPiece = true;
-                        this.players[0].pieceToMove = sprite;
-                    }
-                });
-
-                sprite.on('pointerover', (pointer) => {
-                    sprite.setScale(1.5);
-                    sprite.setDepth(1);
-                });
-
-                sprite.on('pointerout', (pointer) => {
-                    sprite.setScale(1);
-                });
+                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite((256 - 28) + (20 * (j < 8 ? 0 : 1)), offset + ((j % 8) * 18), "blue_pieces", spriteMap[j]), 0);
             }
         }
+
+        this.players[this.turn].interactPieces();
 
     }
 
@@ -129,18 +112,35 @@ class Casilla extends Phaser.GameObjects.Rectangle {
         super(scene, x, y, width, height, fillColor);
         scene.add.existing(this);
         this.setOrigin(0, 0);
+        this.pieza = null;
 
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
-            if(scene.players[0].movingPiece){
-                scene.players[0].pieceToMove.x = x + 8;
-                scene.players[0].pieceToMove.y = y + 8;
-                scene.players[0].movingPiece = false;
+            if(scene.players[scene.turn].movingPiece){
+                scene.players[scene.turn].disablePieces();
+                if(this.pieza !== null){
+                    this.pieza.destroy();
+                    this.pieza = scene.players[scene.turn].pieceToMove;
+                }
+                else{
+                    this.pieza = scene.players[scene.turn].pieceToMove;
+                }
+
+                scene.players[scene.turn].pieceToMove.x = x + 8;
+                scene.players[scene.turn].pieceToMove.y = y + 8;
+                scene.players[scene.turn].movingPiece = false;
+
+                if(scene.turn + 1 > 3) scene.turn = 0;
+                else scene.turn++;
+
+                scene.players[scene.turn].interactPieces();
             }
         });
 
         this.on('pointerover', (pointer) => {
-            this.fillColor = 0x6a6a6a;
+            if(scene.players[scene.turn].movingPiece){
+                this.fillColor = 0x6a6a6a;
+            }
         });
 
         this.on('pointerout', (pointer) => {
@@ -154,5 +154,47 @@ class Player{
         this.scene = scene;
         this.movingPiece = false;
         this.pieceToMove = null;
+        this.piezas = new Array(16);
+    }
+
+    interactPieces(){
+        for(let i of this.piezas){
+            if(i.sprite && i.sprite.active && i.sprite.visible)
+                i.sprite.setInteractive();
+        }
+    }
+
+    disablePieces(){
+        for(let i of this.piezas){
+            if(i.sprite && i.sprite.active && i.sprite.visible)
+                i.sprite.disableInteractive();
+        }
+    }
+}
+
+class Pieza{
+    constructor(scene, s, t){
+        this.scene = scene;
+        this.tipo = t;
+        this.sprite = s;
+        this.sprite.setInteractive();
+
+        this.sprite.on('pointerdown', (pointer) => {
+            if(!scene.players[scene.turn].movingPiece){
+                scene.players[scene.turn].movingPiece = true;
+                scene.players[scene.turn].pieceToMove = this.sprite;
+            }
+            
+        }).disableInteractive();
+
+        this.sprite.on('pointerover', (pointer) => {
+            this.sprite.setScale(1.5);
+            this.sprite.setDepth(1);
+            
+        }).disableInteractive();
+
+        this.sprite.on('pointerout', (pointer) => {
+            this.sprite.setScale(1);
+        }).disableInteractive();
     }
 }
