@@ -59,7 +59,8 @@
                     <div th:each="j: ${partida.jugadores}"
                         style="display: flex; justify-content: space-between; padding: 10px;">
                         <h5 th:text="${j.user.username}">Usuario A</h5>
-                        <form method="POST" th:if="${j.user.id!=user.id}" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                        <form method="POST" th:if="${j.user.id!=user.id}"
+                            th:action="@{/partida/{id}/reportar(id=${partida.id})}">
                             <input type="hidden" name="id_denunciado" th:value="${j.user.id}" />
                             <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
                             <button type="submit"><img src="/img/redflag.png"></button>
@@ -87,18 +88,49 @@
                     
                 </div> -->
 
-                <div style="flex: 1; box-sizing: border-box; border: 5px solid #000; border-radius: 10px; flex-basis: 80%; display: flex; flex-direction: column; height: 70%;">
-                    <div style="overflow: auto;">
-                        <div th:each="m: ${messages}" style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                <div
+                    style="flex: 1; box-sizing: border-box; border: 5px solid #000; border-radius: 10px; flex-basis: 80%; display: flex; flex-direction: column; height: 70%;">
+                    <div style="overflow: auto;" id="chat">
+                        <div th:each="m: ${messages}"
+                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
                             <p th:text="${m.sender.username}"> </p>
                             <p th:text="${m.text}">Texto de prueba</p>
                         </div>
                     </div>
                     <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
-                        <input type="text" name="text" placeholder="Escribe un mensaje..." style="width: 100%; box-sizing: border-box; text-align: center; padding: 20px; border: 5px solid #000; border-radius: 10px;">
+                        <input type="text" id="sendMessage" name="text" placeholder="Escribe un mensaje..."
+                            style="width: 100%; box-sizing: border-box; text-align: center; padding: 20px; border: 5px solid #000; border-radius: 10px;">
                     </form>
                 </div>
-                
+
+                <script>
+                    let inputMuyBonito = document.getElementById("sendMessage");
+
+                    inputMuyBonito.parentNode.onsubmit = (e) => {
+                        e.preventDefault();
+                        console.log("ENTRO AQUI");
+                        go(inputMuyBonito.parentNode.action, 'POST', {
+                            message: inputMuyBonito.value
+                        })
+                            .then(d => {
+                                console.log("SE HA ENVIADO EL MENSAJE");
+                                const html = `<div
+                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                            <p th:text="yo"> </p>
+                            <p th:text="${inputMuyBonito.value}">Texto de prueba</p>
+                        </div>`;
+                                const target = document.querySelector("#chat");
+                                target.innerHTML += html;
+                            })
+                            .catch(e => console.log(e))
+                    }
+                    // function sendMessage(message,sender){
+                    //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
+                    //     .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
+                    //     .catch(e=>console.log(e))
+                    // }
+                </script>
+
 
             </div>
 

@@ -3,6 +3,7 @@ package es.ucm.fdi.iw.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.io.Console;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,15 +12,20 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import es.ucm.fdi.iw.model.Denuncia;
 import es.ucm.fdi.iw.model.Jugador;
@@ -40,6 +46,9 @@ public class RootController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/partida/{id}")
     public String partida(@PathVariable long id, Model model, HttpSession session) {
@@ -112,7 +121,8 @@ public class RootController {
 
     @Transactional
     @PostMapping("/partida/{id}/mensaje")
-    public String sendMessage(@PathVariable long id, Model model, HttpSession session, @RequestParam String text) {
+    @ResponseBody
+    public String sendMessage(@PathVariable long id, Model model, HttpSession session, @RequestBody JsonNode text) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
 
@@ -122,11 +132,13 @@ public class RootController {
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
+        System.out.println("HOLA ESTOY AKKA");
         Message newMsg = new Message();
-        newMsg.setText(text);
+        newMsg.setText(text.get("message").asText()); // {message: "patata"}
         newMsg.setPartida(p);
         newMsg.setSender(u);
-    
+        System.out.println("HOLA ESTOY AKKA x2");
+
         p.getReceived().add(newMsg);
         entityManager.persist(newMsg);
         entityManager.persist(p);
@@ -134,7 +146,13 @@ public class RootController {
         
         model.addAttribute("messages", p.getReceived());
 
-        return "partida";
+        //Meterlo en un topic
+        //Suscribirse al canal
+        //messagingTemplate.convertAndSend("/user/" + u.getUsername() + "/queue/updates", json);
+
+        System.out.println("HOLA ESTOY AKKA x3");
+        //CAMBIAR
+        return "{}";
     }
 
     @Transactional
