@@ -138,17 +138,18 @@ class Casilla extends Phaser.GameObjects.Rectangle {
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             if(scene.players[scene.turn].movingPiece){
+                if(this.pieza !== null){
+                    this.pieza.destroy();
+                    this.pieza = scene.players[scene.turn].pieceToMove;
+                }
+                else{
+                    this.pieza = scene.players[scene.turn].pieceToMove;
+                }
+
                 scene.players[scene.turn].pieceToMove.x = x + 8;
                 scene.players[scene.turn].pieceToMove.y = y + 8;
-                // if(this.pieza !== null){
-                //     Destroy(this.pieza);
-                //     this.pieza = scene.players[scene.turn].pieceToMove;
-                // }
-                // else{
-                //     this.pieza = scene.players[scene.turn].pieceToMove;
-                // }
-                
                 scene.players[scene.turn].movingPiece = false;
+
                 if(scene.turn + 1 > 3) scene.turn = 0;
                 else scene.turn++;
             }
