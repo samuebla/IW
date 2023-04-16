@@ -4,6 +4,7 @@
 <head>
     <title>Nav fragment - rest intentionally left empty</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.1.3.css}">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -13,10 +14,10 @@
             <div class="container-fluid d-flex justify-content-center">
                 <div class="d-flex">
                     <div th:if="${session.u != null}">
-                        <div th:if="${session.u.hasRole('ADMIN')}" >
+                        <div th:if="${session.u.hasRole('ADMIN')}">
                             <a class="nav-link" th:href="@{/admin/administrar}">Administrar</a>
                         </div>
-                        <div th:unless="${session.u.hasRole('ADMIN')}" >
+                        <div th:unless="${session.u.hasRole('ADMIN')}">
                             <form th:action="@{/probarlobbys}" method="get">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm">Lobbyes</button>
                             </form>
@@ -27,13 +28,15 @@
                     </div>
                     <div class="text-center">
                         <a class="navbar-brand" th:href="@{/}">
-                            <img src="/img/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                            <img src="/img/logo.png" alt="Logo" width="30" height="30"
+                                class="d-inline-block align-text-top">
                             FOURDREZ
                         </a>
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link active" th:unless="${session.u}" aria-current="page" th:href="@{/login/}">login</a>
+                    <a class="nav-link active" th:unless="${session.u}" aria-current="page"
+                        th:href="@{/login/}">login</a>
                     <form th:if="${session.u}" th:action="@{/logout}" method="post">
                         <button type="submit" class="btn btn-outline-secondary btn-sm">logout</button>
                     </form>
@@ -51,8 +54,9 @@
                 </div>
             </div>
         </nav>
-    </header>   
-    
-    
+    </header>
+
+
 </body>
+
 </html>

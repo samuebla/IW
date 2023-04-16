@@ -4,18 +4,19 @@
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.1.3.css}">
     <title>Fourdrez Admin</title>
 </head>
 
 <body class="d-flex flex-column h-100">
     <header th:replace="fragments/nav.html :: nav"></header>
 
-    
+
 
     <main class="flex-shrink-0">
         <div class="container">
             <h1 class="mt-5">Administración</h1>
-            <a class="link"  th:href="@{/admin/listausuarios}">Lista Usuarios</a>
+            <a class="link" th:href="@{/admin/listausuarios}">Lista Usuarios</a>
         </div>
     </main>
 

@@ -1,4 +1,10 @@
-.color1{
+.color1 {
     color: blue;
     background-color: blueviolet;
 }
+
+.blue-bg {
+    background-color: #2196F3;
+}
+
+/* comojugar.html */

@@ -4,6 +4,7 @@
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.1.3.css}">
     <title>Fourdrez Lista Usuarios</title>
 </head>
 
@@ -11,37 +12,35 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
-        <div class="container" >
-            <h1 class="mt-5" style="text-align:center;">Lista de usuarios</h1>
+        <div class="container">
+            <h1 class="mt-5 text-center">Lista de usuarios</h1>
 
-            <table style="border-collapse: collapse;
-            width: 100%;
-            max-width:1000px;
-            margin-left: auto;
-            margin-right: auto;">
-                <tr>
-                    <th style="border: 1px solid #dddddd;
-                    text-align: center;
-                    padding: 8px;">Usuario</th>
-                    <th style="border: 1px solid #dddddd;
-                    text-align: center;
-                    padding: 8px;">Informes recibidos</th>
-                </tr>
-
-                <tr th:each="u: ${usuarios}" style="background-color: #dddddd;">
-                    
-                    <td style="border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;"><a class="link" th:href="@{/admin/perfilusuario/{id}(id=${u.id})}" style="width:100%"><span th:text="${u.username}"></span></a></td>
-                    <td style="border: 1px solid #dddddd;
-                    text-align: center;
-                    padding: 8px;"><span th:text="${#lists.size(u.denuncias)}"></span></td>
-                    <td style="border: 1px solid #dddddd;
-                    text-align: right;
-                    padding: 8px;
-                    background-color: #ff7083;"><button style="width:100%">Echar</button></td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Usuario</th>
+                            <th scope="col" class="text-center">Informes recibidos</th>
+                            <th scope="col" class="text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u: ${usuarios}" class="table-light">
+                            <td>
+                                <a class="link" th:href="@{/admin/perfilusuario/{id}(id=${u.id})}">
+                                    <span th:text="${u.username}"></span>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <span th:text="${#lists.size(u.denuncias)}"></span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-danger" style="width:100%">Echar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
