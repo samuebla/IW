@@ -107,18 +107,23 @@
                 <script>
                     let inputMuyBonito = document.getElementById("sendMessage");
 
+                    let sender = config.username;
+
                     inputMuyBonito.parentNode.onsubmit = (e) => {
                         e.preventDefault();
-                        console.log("ENTRO AQUI");
+
+                        let inputMuyBonito = document.getElementById("sendMessage");
+
+                        let textToSend = inputMuyBonito.value;
+
                         go(inputMuyBonito.parentNode.action, 'POST', {
                             message: inputMuyBonito.value
                         })
                             .then(d => {
-                                console.log("SE HA ENVIADO EL MENSAJE");
                                 const html = `<div
                             style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
-                            <p th:text="yo"> </p>
-                            <p th:text="${inputMuyBonito.value}">Texto de prueba</p>
+                            <p>`+ sender + `</p>
+                            <p>` + textToSend + `</p>
                         </div>`;
                                 const target = document.querySelector("#chat");
                                 target.innerHTML += html;
