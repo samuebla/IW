@@ -6,7 +6,7 @@ export default class Fourdrez extends Phaser.Scene {
 
     preload() {
         this.players = [];
-        this.board = Array(14).fill(Array(14));
+        this.board = new Array(14);
         this.turn = 0;
     }
 
@@ -18,6 +18,10 @@ export default class Fourdrez extends Phaser.Scene {
         let y = 0;
         let size = this.sys.game.canvas.width;
         let sizeFicha = 16;
+
+        for(let i = 0; i < this.board.length; i++){
+            this.board[i] = new Array(14);
+        }
 
         new Tablero(this, x, y, size);
 
@@ -89,17 +93,18 @@ class Tablero {
         let white = 0xffffff;
         
 
+        //La parte del centro (El rectangulo)
         for (let j = 0; j < this.columnas; j++) {
             this.changeColor(white, black);
             for (let i = 3; i < this.filas - 3; i++) {
                 this.changeColor(white, black);
-                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color);
+                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color, i, j);
             }
         }
 
         for (let j = 3; j < this.columnas - 3; j++) {
             for (let i = 0; i < 3; i++) {
-                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color);
+                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color, i, j);
                 this.changeColor(white, black);
             }
         }
@@ -108,7 +113,7 @@ class Tablero {
 
         for (let j = 3; j < this.columnas - 3; j++) {
             for (let i = this.filas - 3; i < this.filas; i++) {
-                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color);
+                this.scene.board[i][j] = new Casilla(this.scene, i * this.sizeFila + this.x, j * this.sizeColumna + this.y, this.sizeFila, this.sizeColumna, this.color, i, j);
                 this.changeColor(white, black);
             }
         }
@@ -121,7 +126,7 @@ class Tablero {
 }
 
 class Casilla extends Phaser.GameObjects.Rectangle {
-    constructor(scene, x, y, width, height, fillColor) {
+    constructor(scene, x, y, width, height, fillColor, tabX, tabY) {
         super(scene, x, y, width, height, fillColor);
         scene.add.existing(this);
         this.setOrigin(0, 0);
@@ -130,12 +135,15 @@ class Casilla extends Phaser.GameObjects.Rectangle {
 
         this.possible = false;
 
+        this.xTablero = tabX;
+        this.yTablero = tabY;
+
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             if(this.possible){
                 if(scene.players[scene.turn].movingPiece){
                     scene.players[scene.turn].disablePieces();
-                    if(this.pieza.sprite !== null){
+                    if(this.pieza !== null){
                         this.pieza.sprite.destroy();
                         this.pieza = scene.players[scene.turn].pieceToMove;
                     }
@@ -149,6 +157,9 @@ class Casilla extends Phaser.GameObjects.Rectangle {
     
                     if(scene.turn + 1 > 3) scene.turn = 0;
                     else scene.turn++;
+
+                    this.pieza.tableroX = this.xTablero;
+                    this.pieza.tableroY = this.yTablero;
     
                     scene.players[scene.turn].interactPieces();
                 }
@@ -210,7 +221,7 @@ class Pieza{
     constructor(scene, s, t, e){
         this.scene = scene;
         this.tipo = t;
-        this.equipo;
+        this.equipo = e;
 
         this.tableroX;
         this.tableroY;
@@ -222,15 +233,104 @@ class Pieza{
             if(!scene.players[scene.turn].movingPiece){
                 scene.players[scene.turn].movingPiece = true;
                 scene.players[scene.turn].pieceToMove = this;
-                scene.board[this.tableroX][this.tableroY].colorPossible();
 
+                scene.board[this.tableroX][this.tableroY].pieza = null;
+
+                //Si eres el equipo blanco
                 if(scene.turn === 0){
+                    //Si es un peon...
                     if(this.tipo < 8){
-                        if(this.tableroY === 12){
-                            console.log(scene.board);
-                            console.log(this.tableroX, this.tableroY);
-                           
-                            scene.board[this.tableroX][this.tableroY].colorPossible();
+                        if(scene.board[this.tableroX][this.tableroY -1].pieza === null){
+                            if(this.tableroY === 12){
+                                scene.board[this.tableroX][this.tableroY -1].colorPossible();
+                                if(scene.board[this.tableroX][this.tableroY -2].pieza === null)
+                                    scene.board[this.tableroX][this.tableroY -2].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX][this.tableroY -1].colorPossible();
+                            }
+                        }
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX - 1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY -1].colorPossible();
+                        }
+                    }
+                }
+                // Si eres el equipo rojo
+                else if(scene.turn === 1){
+                    //Si es un peon...
+                    if(this.tipo < 8){
+                        if(scene.board[this.tableroX+1][this.tableroY].pieza === null){
+                            if(this.tableroX === 1){
+                                scene.board[this.tableroX+1][this.tableroY].colorPossible();
+                                if(scene.board[this.tableroX+2][this.tableroY].pieza === null)
+                                    scene.board[this.tableroX+2][this.tableroY].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX+1][this.tableroY].colorPossible();
+                            }
+                        }
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX+1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY +1].colorPossible();
+                        }
+                    }
+                    
+                }
+                // Si eres el equipo negro
+                else if(scene.turn === 2){
+                    //Si es un peon...
+                    if(this.tipo<8){
+                        if(scene.board[this.tableroX][this.tableroY +1].pieza === null){
+                            if(this.tableroY === 1){
+                                scene.board[this.tableroX][this.tableroY +1].colorPossible();
+                                if(scene.board[this.tableroX][this.tableroY +2].pieza === null)
+                                    scene.board[this.tableroX][this.tableroY +2].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX][this.tableroY +1].colorPossible();
+                            }
+                        }
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX - 1][this.tableroY +1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY +1].colorPossible();
+                        }
+                    }
+                    
+                }
+                // Si eres el equipo azul
+                else if(scene.turn === 3){
+                    //Si es un peon...
+                    if(this.tipo < 8){
+                        if(scene.board[this.tableroX-1][this.tableroY].pieza === null){
+                            if(this.tableroX === 12){
+                                scene.board[this.tableroX-1][this.tableroY].colorPossible();
+                                if(scene.board[this.tableroX-2][this.tableroY].pieza === null)
+                                    scene.board[this.tableroX-2][this.tableroY].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX-1][this.tableroY].colorPossible();
+                            }
+                        }
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX-1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX-1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX-1][this.tableroY +1].colorPossible();
                         }
                     }
                 }
