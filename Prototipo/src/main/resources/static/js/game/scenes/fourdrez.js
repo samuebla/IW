@@ -240,12 +240,23 @@ class Pieza{
                 if(scene.turn === 0){
                     //Si es un peon...
                     if(this.tipo < 8){
-                        if(this.tableroY === 12){
-                            scene.board[this.tableroX][this.tableroY -1].colorPossible();
-                            scene.board[this.tableroX][this.tableroY -2].colorPossible();
+                        if(scene.board[this.tableroX][this.tableroY -1].pieza === null){
+                            if(this.tableroY === 12){
+                                scene.board[this.tableroX][this.tableroY -1].colorPossible();
+                                if(scene.board[this.tableroX][this.tableroY -2].pieza === null)
+                                    scene.board[this.tableroX][this.tableroY -2].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX][this.tableroY -1].colorPossible();
+                            }
                         }
-                        else{
-                            scene.board[this.tableroX][this.tableroY -1].colorPossible();
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX - 1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY -1].colorPossible();
                         }
                     }
                 }
@@ -253,38 +264,73 @@ class Pieza{
                 else if(scene.turn === 1){
                     //Si es un peon...
                     if(this.tipo < 8){
-                        if(this.tableroX === 1){
-                            scene.board[this.tableroX + 1][this.tableroY].colorPossible();
-                            scene.board[this.tableroX + 2][this.tableroY].colorPossible();
+                        if(scene.board[this.tableroX+1][this.tableroY].pieza === null){
+                            if(this.tableroX === 1){
+                                scene.board[this.tableroX+1][this.tableroY].colorPossible();
+                                if(scene.board[this.tableroX+2][this.tableroY].pieza === null)
+                                    scene.board[this.tableroX+2][this.tableroY].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX+1][this.tableroY].colorPossible();
+                            }
                         }
-                        else{
-                            scene.board[this.tableroX + 1][this.tableroY].colorPossible();
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX+1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY +1].colorPossible();
                         }
                     }
+                    
                 }
                 // Si eres el equipo negro
                 else if(scene.turn === 2){
                     //Si es un peon...
-                    if(this.tipo < 8){
-                        if(this.tableroY === 1){
-                            scene.board[this.tableroX][this.tableroY +1].colorPossible();
-                            scene.board[this.tableroX][this.tableroY +2].colorPossible();
+                    if(this.tipo<8){
+                        if(scene.board[this.tableroX][this.tableroY +1].pieza === null){
+                            if(this.tableroY === 1){
+                                scene.board[this.tableroX][this.tableroY +1].colorPossible();
+                                if(scene.board[this.tableroX][this.tableroY +2].pieza === null)
+                                    scene.board[this.tableroX][this.tableroY +2].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX][this.tableroY +1].colorPossible();
+                            }
                         }
-                        else{
-                            scene.board[this.tableroX][this.tableroY +1].colorPossible();
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX - 1][this.tableroY +1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX+1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX+1][this.tableroY +1].colorPossible();
                         }
                     }
+                    
                 }
                 // Si eres el equipo azul
                 else if(scene.turn === 3){
                     //Si es un peon...
                     if(this.tipo < 8){
-                        if(this.tableroX === 12){
-                            scene.board[this.tableroX - 1][this.tableroY].colorPossible();
-                            scene.board[this.tableroX - 2][this.tableroY].colorPossible();
+                        if(scene.board[this.tableroX-1][this.tableroY].pieza === null){
+                            if(this.tableroX === 12){
+                                scene.board[this.tableroX-1][this.tableroY].colorPossible();
+                                if(scene.board[this.tableroX-2][this.tableroY].pieza === null)
+                                    scene.board[this.tableroX-2][this.tableroY].colorPossible();
+                            }
+                            else{
+                                scene.board[this.tableroX-1][this.tableroY].colorPossible();
+                            }
                         }
-                        else{
-                            scene.board[this.tableroX - 1][this.tableroY].colorPossible();
+                        //Para comer la pieza de la izquierda
+                        if(scene.board[this.tableroX-1][this.tableroY -1].pieza !== null){
+                            scene.board[this.tableroX-1][this.tableroY -1].colorPossible();
+                        }
+                        //Para comer la pieza de la derecha
+                        if(scene.board[this.tableroX-1][this.tableroY +1].pieza !== null){
+                            scene.board[this.tableroX-1][this.tableroY +1].colorPossible();
                         }
                     }
                 }
