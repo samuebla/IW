@@ -96,6 +96,14 @@
                 </div>
 
                 <script>
+                    function muestraMensaje(target, sender, textToSend) {
+                        target.innerHTML += `<div
+                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                            <p>`+ sender + `</p>
+                            <p>` + textToSend + `</p>
+                        </div>`;
+                    }
+
                     let inputMuyBonito = document.getElementById("sendMessage");
 
                     let sender = config.username;
@@ -110,16 +118,9 @@
                         go(inputMuyBonito.parentNode.action, 'POST', {
                             message: inputMuyBonito.value
                         })
-                            .then(d => {
-                                const html = `<div
-                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
-                            <p>`+ sender + `</p>
-                            <p>` + textToSend + `</p>
-                        </div>`;
-                                const target = document.querySelector("#chat");
-                                target.innerHTML += html;
-                            })
+                            .then(d => console.log(":-)"), d)
                             .catch(e => console.log(e))
+                    
                     }
                     // function sendMessage(message,sender){
                     //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
@@ -172,7 +173,16 @@
         </div>
     </main>
 
-    <th:block th:replace="fragments/footer.html :: footer" />
+    <script>
+        config.topicId = "[['/topic/' + ${partida.topicId}]]";
+    </script>
+    <th:block th:replace ="fragments/footer.html :: footer" />
+    <script>
+        ws.receive = (d) => {
+            const target = document.querySelector("#chat");
+            muestraMensaje(target, d.from, d.text);
+        }
+    </script>
 </body>
 
 </html>

@@ -36,7 +36,9 @@ public class Partida {
 	@Column(nullable = false)
 	int currentState;
 
-	String tablero;
+	public String topicId;
+
+	public String tablero;
 
 	@OneToMany
 	@JoinColumn(name = "partida_id")

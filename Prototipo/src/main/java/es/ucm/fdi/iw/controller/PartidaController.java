@@ -108,6 +108,7 @@ public class PartidaController {
 
         Partida p = new Partida();
         p.setCurrentState(0);
+        p.setTopicId(UserController.generateRandomBase64Token(6));
 
         Jugador j = new Jugador();
         j.setUser(u);
@@ -159,12 +160,12 @@ public class PartidaController {
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
-        System.out.println("HOLA ESTOY AKKA");
         Message newMsg = new Message();
         newMsg.setText(text.get("message").asText()); // {message: "patata"}
         newMsg.setPartida(p);
         newMsg.setSender(u);
-        System.out.println("HOLA ESTOY AKKA x2");
+        newMsg.setDateSent(LocalDateTime.now());
+        log.info("Recibido mensaje {} de {}", newMsg.getText(), newMsg.getSender().getUsername());
 
         p.getReceived().add(newMsg);
         entityManager.persist(newMsg);
@@ -174,9 +175,13 @@ public class PartidaController {
         model.addAttribute("messages", p.getReceived());
 
         // Meterlo en un topic
-        // Suscribirse al canal
-        // messagingTemplate.convertAndSend("/user/" + u.getUsername() +
-        // "/queue/updates", json);
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(newMsg.toTransfer()));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando mensaje!", jpe);
+        }
 
         System.out.println("HOLA ESTOY AKKA x3");
         // CAMBIAR
