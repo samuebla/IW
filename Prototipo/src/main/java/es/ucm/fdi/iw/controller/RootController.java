@@ -27,10 +27,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import es.ucm.fdi.iw.model.Denuncia;
-import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Message;
-import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 
 /**
@@ -47,8 +43,8 @@ public class RootController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/lobby")
     public String lobby(Model model) {

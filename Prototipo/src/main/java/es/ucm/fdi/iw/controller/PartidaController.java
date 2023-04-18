@@ -60,35 +60,34 @@ import es.ucm.fdi.iw.model.User;
 @RequestMapping("partida") // todas las urls de abajo empiezan por "partida"
 public class PartidaController {
 
-	private static final Logger log = LogManager.getLogger(PartidaController.class);
+    private static final Logger log = LogManager.getLogger(PartidaController.class);
 
-	@Autowired
-	private EntityManager entityManager;
+    @Autowired
+    private EntityManager entityManager;
 
-	@Autowired
-	private LocalData localData;
+    @Autowired
+    private LocalData localData;
 
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	/**
-	 * Exception to use when denying access to unauthorized users.
-	 * 
-	 * In general, admins are always authorized, but users cannot modify
-	 * each other's profiles.
-	 */
-	@ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Inicia sesión antes de jugar") // 403
-	public static class NoPuedesJugarException extends RuntimeException {
-	}
+    /**
+     * Exception to use when denying access to unauthorized users.
+     * 
+     * In general, admins are always authorized, but users cannot modify
+     * each other's profiles.
+     */
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Inicia sesión antes de jugar") // 403
+    public static class NoPuedesJugarException extends RuntimeException {
+    }
 
-	
-	/**
-	 * Landing page for a partida page
-	 */
-	@GetMapping("/{id}")
+    /**
+     * Landing page for a partida page
+     */
+    @GetMapping("/{id}")
     public String partida(@PathVariable long id, Model model, HttpSession session) {
         Partida p = entityManager.find(Partida.class, id);
         model.addAttribute("partida", p);
@@ -100,7 +99,7 @@ public class PartidaController {
         return "partida";
     }
 
-	private Jugador jugadorBasura(long id) {
+    private Jugador jugadorBasura(long id) {
         Jugador j = new Jugador();
         j.setUser(entityManager.find(User.class, id));
         return j;
@@ -119,11 +118,7 @@ public class PartidaController {
         Jugador j = new Jugador();
         j.setUser(u);
         p.getJugadores().add(j);
-        p.getJugadores().add(jugadorBasura(3));
-        // p.getJugadores().add(jugadorBasura(4));
-        // p.getJugadores().add(jugadorBasura(5));
-        for (Jugador o : p.getJugadores())
-            entityManager.persist(o);
+        entityManager.persist(j);
         entityManager.persist(p);
         entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
 
@@ -133,31 +128,31 @@ public class PartidaController {
 
         return "partida";
     } // normalmente, el flush se haría (automáticamente) aquí, al acabarse la
-    // transición
+      // transición
 
-	@Transactional
-	@PostMapping("/{id}")
-	public String setPartida(@PathVariable long id, Model model, HttpSession session, @RequestParam int tiempoTotal) {
-		User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
-		Partida p = entityManager.find(Partida.class, id);
-  
-		model.addAttribute("partida", p);
-		model.addAttribute("user", u);
-		// model.addAttribute("jugadores", p.getJugadores());
-  
-		model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
-  
-		if (u.getId() == p.getJugadores().get(0).getUser().getId()) {
-			// soy el jefe!
-			p.setTiempoTotal(tiempoTotal);
-		}
-  
-		model.addAttribute("messages", p.getReceived());
-  
-		return "partida";
-	}
+    @Transactional
+    @PostMapping("/{id}")
+    public String setPartida(@PathVariable long id, Model model, HttpSession session, @RequestParam int tiempoTotal) {
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
 
-	@Transactional
+        model.addAttribute("partida", p);
+        model.addAttribute("user", u);
+        // model.addAttribute("jugadores", p.getJugadores());
+
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        if (u.getId() == p.getJugadores().get(0).getUser().getId()) {
+            // soy el jefe!
+            p.setTiempoTotal(tiempoTotal);
+        }
+
+        model.addAttribute("messages", p.getReceived());
+
+        return "partida";
+    }
+
+    @Transactional
     @PostMapping("/{id}/mensaje")
     @ResponseBody
     public String sendMessage(@PathVariable long id, Model model, HttpSession session, @RequestBody JsonNode text) {
@@ -181,19 +176,20 @@ public class PartidaController {
         entityManager.persist(newMsg);
         entityManager.persist(p);
         entityManager.flush();
-        
+
         model.addAttribute("messages", p.getReceived());
 
-        //Meterlo en un topic
-        //Suscribirse al canal
-        //messagingTemplate.convertAndSend("/user/" + u.getUsername() + "/queue/updates", json);
+        // Meterlo en un topic
+        // Suscribirse al canal
+        // messagingTemplate.convertAndSend("/user/" + u.getUsername() +
+        // "/queue/updates", json);
 
         System.out.println("HOLA ESTOY AKKA x3");
-        //CAMBIAR
+        // CAMBIAR
         return "{}";
     }
 
-	@Transactional
+    @Transactional
     @PostMapping("/{id}/newuser")
     public String newUserToLobby(@PathVariable long id, Model model, HttpSession session) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
@@ -244,7 +240,7 @@ public class PartidaController {
         return "partida";
     }
 
-	@Transactional
+    @Transactional
     @PostMapping("/{id}/reportar")
     public String reportUser(@PathVariable long id, Model model, HttpSession session, @RequestParam long id_denunciado,
             @RequestParam long id_denunciante) {
