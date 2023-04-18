@@ -18,16 +18,7 @@
         <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
 
 
-            <div th:if="${partida != null}">
-                <!-- partida valida -->
-                <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
-                <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
-                    Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" />
-                    Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" />
-                    <button type="submit">Cambiar configuracion</button>
-                </form>
-
-            </div>
+            
             <div th:unless="${partida != null}">
                 <h1 th:text="'Partida Rara'">Partida 123</h1>
                 <form method="POST" th:action="@{/partida}">
@@ -141,12 +132,39 @@
             </div>
 
 
-            <!-- CHAT -->
-            <div style="box-sizing: border-box; border:5px solid #000; 
+            <!-- GAME -->
+            <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
+                Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
+            <div th:if="${partida.currentState == 1}" style="box-sizing: border-box; border:5px solid #000; 
                         border-radius: 10px; flex-basis: 80%;align-items: center;  ">
 
                 <canvas id="juego" style="margin: 0; padding: 0; max-width: 100%; max-height: 100%;"></canvas>
                 <script th:src="@{/js/game/game.js}" type="module"></script>
+
+            </div>
+
+            <div th:if="${partida.currentState == 0}" style="box-sizing: border-box; border:5px solid #000; 
+            border-radius: 10px; flex-basis: 80%;align-items: center; ">
+                <div th:if="${partida.currentState == 0}">
+                    <!-- partida valida -->
+                    <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
+                    <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
+                        Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" />
+                        Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" />
+                        <button type="submit">Cambiar configuracion</button>
+                    </form>
+
+                    <div th:unless="${jefe}">
+                        Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" readonly />
+                        Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" readonly />
+
+                    </div>
+
+                    <form th:action="@{/partida/{id}/listo(id=${partida.id})}" method="post">
+                        <button type="submit">LISTO</button>
+                    </form>
+                    
+                </div>
 
             </div>
 

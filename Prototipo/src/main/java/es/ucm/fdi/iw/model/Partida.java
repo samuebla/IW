@@ -34,7 +34,7 @@ public class Partida {
 	}
 
 	@Column(nullable = false)
-	State currentState;
+	int currentState;
 
 	String tablero;
 

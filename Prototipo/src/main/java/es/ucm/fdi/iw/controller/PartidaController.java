@@ -99,12 +99,6 @@ public class PartidaController {
         return "partida";
     }
 
-    private Jugador jugadorBasura(long id) {
-        Jugador j = new Jugador();
-        j.setUser(entityManager.find(User.class, id));
-        return j;
-    }
-
     @Transactional
     @PostMapping("")
     public String nuevaPartida(Model model, HttpSession session) {
@@ -113,7 +107,7 @@ public class PartidaController {
         model.addAttribute("user", u);
 
         Partida p = new Partida();
-        p.setCurrentState(Partida.State.Lobby);
+        p.setCurrentState(0);
 
         Jugador j = new Jugador();
         j.setUser(u);
@@ -187,6 +181,48 @@ public class PartidaController {
         System.out.println("HOLA ESTOY AKKA x3");
         // CAMBIAR
         return "{}";
+    }
+
+    @Transactional
+    @PostMapping("/{id}/listo")
+    public String listo(@PathVariable long id, Model model, HttpSession session) {
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+
+        model.addAttribute("partida", p);
+        model.addAttribute("user", u);
+        // model.addAttribute("jugadores", p.getJugadores());
+
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        int numPlayersReady = 0;
+        for (Jugador j : p.getJugadores()) {
+            if (j.isReady()) {
+                numPlayersReady++;
+            } else {
+                if (j.getUser().getId() == u.getId()) {
+                    j.setReady(true);
+                    numPlayersReady++;
+                }
+            }
+        }
+
+        if ((numPlayersReady == 4) && (p.getCurrentState() == 0)) {
+            p.setCurrentState(1);
+        }
+
+        entityManager.persist(p);
+        entityManager.flush();
+
+        model.addAttribute("messages", p.getReceived());
+
+        // Meterlo en un topic
+        // Suscribirse al canal
+        // messagingTemplate.convertAndSend("/user/" + u.getUsername() +
+        // "/queue/updates", json);
+
+        // CAMBIAR
+        return "partida";
     }
 
     @Transactional
