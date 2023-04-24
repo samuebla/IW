@@ -202,13 +202,14 @@ public class PartidaController {
 
         int numPlayersReady = 0;
         for (Jugador j : p.getJugadores()) {
-            if (j.isReady()) {
-                numPlayersReady++;
-            } else {
-                if (j.getUser().getId() == u.getId()) {
-                    j.setReady(true);
+            if (j.getUser().getId() == u.getId()){
+                j.setReady(!j.isReady());
+                if(j.isReady()){
                     numPlayersReady++;
                 }
+            }
+            else if (j.isReady()) {
+                numPlayersReady++;
             }
         }
 

@@ -27,15 +27,29 @@
                     <tbody>
                         <tr th:each="u: ${usuarios}" class="table-light">
                             <td>
-                                <a class="link" th:href="@{/admin/perfilusuario/{id}(id=${u.id})}">
+                                <a th:if="${currentUser.id!=u.id}" class="link"
+                                    th:href="@{/admin/perfilusuario/{id}(id=${u.id})}">
                                     <span th:text="${u.username}"></span>
                                 </a>
+                                <span th:unless="${currentUser.id!=u.id}" th:text="${u.username}"></span>
+
                             </td>
                             <td class="text-center">
-                                <span th:text="${#lists.size(u.denuncias)}"></span>
+                                <span th:if="${currentUser.id!=u.id}" th:text="${#lists.size(u.denuncias)}"></span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-danger" style="width:100%">Echar</button>
+
+
+                                <form method="POST" th:if="${currentUser.id!=u.id}"
+                                    th:action="@{/admin/listausuarios/echar}">
+                                    <input type="hidden" name="id_reported" th:value="${u.id}" />
+                                    <button type="submit" class="btn btn-danger" style="width:100%">Echar</button>
+                                </form>
+
+
+
+
+
                             </td>
                         </tr>
                     </tbody>
