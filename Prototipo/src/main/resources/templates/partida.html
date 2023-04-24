@@ -57,6 +57,9 @@
                             <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
                             <button type="submit"><img src="/img/redflag.png"></button>
                         </form>
+                        <img  th:if="${j.ready}"  src="/img/tickReady.png">
+                        <img  th:unless="${j.ready}"  src="/img/tickNotReady.png">
+
                     </div>
                 </div>
 
