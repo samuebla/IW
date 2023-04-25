@@ -16,196 +16,166 @@ export default class Pieza {
 
         // Hacemos la pieza interactiva
         this.sprite.on('pointerdown', (pointer) => {
+            // Si se está moviendo ya una pieza, pero se pulsa otra, cambia las casillas posibles y el pieceToMove
+            if (scene.players[scene.turn].movingPiece && this !== scene.players[scene.turn].pieceToMove) {
+                scene.players[scene.turn].movingPiece = false;
+                scene.board[this.tableroX][this.tableroY].quitarPossible();
+                scene.players[scene.turn].pieceToMove = null;
+            }
+            // Mover la pieza
             if (!scene.players[scene.turn].movingPiece) {
+                // Avisa de que el jugador va a mover una pieza y que es pieceToMove
                 scene.players[scene.turn].movingPiece = true;
                 scene.players[scene.turn].pieceToMove = this;
 
-                scene.board[this.tableroX][this.tableroY].pieza = null;
+                if (this.tipo >= 8) {
+                    // Si es una torre...
+                    if (this.tipo === 8 || this.tipo === 15)
+                        this.compruebaTorre();
 
-                //Si eres el equipo blanco
-                if (scene.turn === 0) {
-                    console.log(this.tipo);
-                    //Si es un peon...
-                    if (this.tipo < 8) {
-                        // Casilla arribIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
+                    //Si es un alfil...
+                    else if (this.tipo === 10 || this.tipo === 13)
+                        this.compruebaAlfil();
+
+                    // Si es un caballo
+                    else if (this.tipo === 9 || this.tipo === 14)
+                        this.compruebaCaballo();
+
+                    // Si es una reina...
+                    else if (this.tipo === 12)
+                        this.compruebaReina();
+
+                    // Si es el rey...
+                    else
+                        this.compruebaRey();
+                }
+                else {
+                    //Si eres el equipo blanco
+                    if (scene.turn === 0) {
+                        //Si es un peon...
+                        let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
+                        let arriba = scene.board[this.tableroX][this.tableroY - 1];
+                        let arribax2 = scene.board[this.tableroX][this.tableroY - 2];
+                        let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
+
                         // Se calculan las casillas a las que puede avanzar la pieza y se llama al tablero para que las cambie de color
                         // Además cada casilla tiene un booleano para saber si es válida o no, la gestión de mover la pieza se da en la clase casilla
-                        if (scene.board[this.tableroX][this.tableroY - 1] && scene.board[this.tableroX][this.tableroY - 1].pieza === null) {
+                        if (arriba && arriba.pieza === null) {
+                            // Se entra si la casilla existe y si está vacía
                             if (this.tableroY === 12) {
-                                scene.board[this.tableroX][this.tableroY - 1].colorPossible();
-                                if (scene.board[this.tableroX][this.tableroY - 2] && scene.board[this.tableroX][this.tableroY - 2].pieza === null)
-                                    scene.board[this.tableroX][this.tableroY - 2].colorPossible();
+                                // Se entra si es el primer movimiento del peón
+                                arriba.colorPossible();
+                                if (arribax2 && arribax2.pieza === null)
+                                    arribax2.colorPossible();
                             }
                             else {
-                                scene.board[this.tableroX][this.tableroY - 1].colorPossible();
+                                arriba.colorPossible();
                             }
                         }
                         //Para comer la pieza de la izquierda
-                        if (scene.board[this.tableroX - 1][this.tableroY - 1] && scene.board[this.tableroX - 1][this.tableroY - 1].pieza !== null) {
-                            if (scene.board[this.tableroX - 1][this.tableroY - 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX - 1][this.tableroY - 1].colorPossible();
+                        if (arribaIzq && arribaIzq.pieza !== null) {
+                            if (arribaIzq.pieza.equipo !== this.equipo)
+                                arribaIzq.colorPossible();
                         }
                         //Para comer la pieza de la derecha
-                        if (scene.board[this.tableroX + 1][this.tableroY - 1] && scene.board[this.tableroX + 1][this.tableroY - 1].pieza !== null) {
-                            if (scene.board[this.tableroX + 1][this.tableroY - 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX + 1][this.tableroY - 1].colorPossible();
+                        if (arribaDer && arribaDer.pieza !== null) {
+                            if (arribaDer.pieza.equipo !== this.equipo)
+                                arribaDer.colorPossible();
+
                         }
-                    }
-                    // Si es una torre...
-                    else if (this.tipo === 8 || this.tipo === 15) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
 
                     }
-                    //Si es un alfil...
-                    else if (this.tipo === 10 || this.tipo === 13) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+                    // Si eres el equipo rojo
+                    else if (scene.turn === 1) {
+                        //Si es un peon...
+                        let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
+                        let der = scene.board[this.tableroX + 1][this.tableroY];
+                        let derx2 = scene.board[this.tableroX + 2][this.tableroY];
+                        let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
 
-                    }
-                    // Si es una reina...
-                    //else if (this.tipo === )
-                }
-                // Si eres el equipo rojo
-                else if (scene.turn === 1) {
-                    //Si es un peon...
-                    if (this.tipo < 8) {
-                        if (scene.board[this.tableroX + 1][this.tableroY] && scene.board[this.tableroX + 1][this.tableroY].pieza === null) {
+                        if (der && der.pieza === null) {
                             if (this.tableroX === 1) {
-                                scene.board[this.tableroX + 1][this.tableroY].colorPossible();
-                                if (scene.board[this.tableroX + 2][this.tableroY] && scene.board[this.tableroX + 2][this.tableroY].pieza === null)
-                                    scene.board[this.tableroX + 2][this.tableroY].colorPossible();
+                                der.colorPossible();
+                                if (derx2 && derx2.pieza === null)
+                                    derx2.colorPossible();
                             }
                             else {
-                                scene.board[this.tableroX + 1][this.tableroY].colorPossible();
+                                der.colorPossible();
                             }
                         }
                         //Para comer la pieza de la izquierda
-                        if (scene.board[this.tableroX + 1][this.tableroY - 1] && scene.board[this.tableroX + 1][this.tableroY - 1].pieza !== null) {
-                            if (scene.board[this.tableroX + 1][this.tableroY - 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX + 1][this.tableroY - 1].colorPossible();
+                        if (arribaDer && arribaDer.pieza !== null) {
+                            if (arribaDer.pieza.equipo !== this.equipo)
+                                arribaDer.colorPossible();
                         }
                         //Para comer la pieza de la derecha
-                        if (scene.board[this.tableroX + 1][this.tableroY + 1] && scene.board[this.tableroX + 1][this.tableroY + 1].pieza !== null) {
-                            if (scene.board[this.tableroX + 1][this.tableroY + 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX + 1][this.tableroY + 1].colorPossible();
+                        if (abajoDer && abajoDer.pieza !== null) {
+                            if (abajoDer.pieza.equipo !== this.equipo)
+                                abajoDer.colorPossible();
                         }
-                    }
-                    // Si es una torre...
-                    else if (this.tipo === 8 || this.tipo === 15) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
 
                     }
-                    //Si es un alfil...
-                    else if (this.tipo === 10 || this.tipo === 13) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+                    // Si eres el equipo negro
+                    else if (scene.turn === 2) {
+                        //Si es un peon...
+                        let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
+                        let abajo = scene.board[this.tableroX][this.tableroY + 1];
+                        let abajox2 = scene.board[this.tableroX][this.tableroY + 2];
+                        let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
 
-                    }
-
-                }
-                // Si eres el equipo negro
-                else if (scene.turn === 2) {
-                    //Si es un peon...
-                    if (this.tipo < 8) {
-                        if (scene.board[this.tableroX][this.tableroY + 1] && scene.board[this.tableroX][this.tableroY + 1].pieza === null) {
+                        if (abajo && abajo.pieza === null) {
                             if (this.tableroY === 1) {
-                                scene.board[this.tableroX][this.tableroY + 1].colorPossible();
-                                if (scene.board[this.tableroX][this.tableroY + 2] && scene.board[this.tableroX][this.tableroY + 2].pieza === null)
-                                    scene.board[this.tableroX][this.tableroY + 2].colorPossible();
+                                abajo.colorPossible();
+                                if (abajox2 && abajox2.pieza === null)
+                                    abajox2.colorPossible();
                             }
                             else {
-                                scene.board[this.tableroX][this.tableroY + 1].colorPossible();
+                                abajo.colorPossible();
                             }
                         }
                         //Para comer la pieza de la izquierda
-                        if (scene.board[this.tableroX - 1][this.tableroY + 1] && scene.board[this.tableroX - 1][this.tableroY + 1].pieza !== null) {
-                            if (scene.board[this.tableroX - 1][this.tableroY + 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX - 1][this.tableroY + 1].colorPossible();
+                        if (abajoIzda && abajoIzda.pieza !== null) {
+                            if (abajoIzda.pieza.equipo !== this.equipo)
+                                abajoIzda.colorPossible();
                         }
                         //Para comer la pieza de la derecha
-                        if (scene.board[this.tableroX + 1][this.tableroY + 1] && scene.board[this.tableroX + 1][this.tableroY + 1].pieza !== null) {
-                            if (scene.board[this.tableroX + 1][this.tableroY + 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX + 1][this.tableroY + 1].colorPossible();
+                        if (abajoDer && abajoDer.pieza !== null) {
+                            if (abajoDer.pieza.equipo !== this.equipo)
+                                abajoDer.colorPossible();
                         }
-                    }
-                    // Si es una torre...
-                    else if (this.tipo === 8 || this.tipo === 15) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
 
                     }
-                    //Si es un alfil...
-                    else if (this.tipo === 10 || this.tipo === 13) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+                    // Si eres el equipo azul
+                    else if (scene.turn === 3) {
+                        //Si es un peon...
+                        let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
+                        let izda = scene.board[this.tableroX - 1][this.tableroY];
+                        let izdax2 = scene.board[this.tableroX - 2][this.tableroY];
+                        let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
 
-                    }
-
-                }
-                // Si eres el equipo azul
-                else if (scene.turn === 3) {
-                    //Si es un peon...
-                    if (this.tipo < 8) {
-                        if (scene.board[this.tableroX - 1][this.tableroY] && scene.board[this.tableroX - 1][this.tableroY].pieza === null) {
+                        if (izda && izda.pieza === null) {
                             if (this.tableroX === 12) {
-                                scene.board[this.tableroX - 1][this.tableroY].colorPossible();
-                                if (scene.board[this.tableroX - 2][this.tableroY] && scene.board[this.tableroX - 2][this.tableroY].pieza === null)
-                                    scene.board[this.tableroX - 2][this.tableroY].colorPossible();
+                                izda.colorPossible();
+                                if (izdax2 && izdax2.pieza === null)
+                                    izdax2.colorPossible();
                             }
                             else {
-                                scene.board[this.tableroX - 1][this.tableroY].colorPossible();
+                                izda.colorPossible();
                             }
                         }
                         //Para comer la pieza de la izquierda
-                        if (scene.board[this.tableroX - 1][this.tableroY - 1] && scene.board[this.tableroX - 1][this.tableroY - 1].pieza !== null) {
-                            if (scene.board[this.tableroX - 1][this.tableroY - 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX - 1][this.tableroY - 1].colorPossible();
+                        if (arribaIzq && arribaIzq.pieza !== null) {
+                            if (arribaIzq.pieza.equipo !== this.equipo)
+                                arribaIzq.colorPossible();
                         }
                         //Para comer la pieza de la derecha
-                        if (scene.board[this.tableroX - 1][this.tableroY + 1] && scene.board[this.tableroX - 1][this.tableroY + 1].pieza !== null) {
-                            if (scene.board[this.tableroX - 1][this.tableroY + 1].pieza.equipo !== this.equipo)
-                                scene.board[this.tableroX - 1][this.tableroY + 1].colorPossible();
+                        if (abajoIzda && abajoIzda.pieza !== null) {
+                            if (abajoIzda.pieza.equipo !== this.equipo)
+                                abajoIzda.colorPossible();
                         }
                     }
-                    // Si es una torre...
-                    else if (this.tipo === 8 || this.tipo === 15) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
-
-                    }
-                    //Si es un alfil...
-                    else if (this.tipo === 10 || this.tipo === 13) {
-                        // Calcula las 4 direcciones
-                        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
-                        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
-
-                    }
                 }
+
             }
 
         }).disableInteractive();
@@ -223,6 +193,55 @@ export default class Pieza {
         }).disableInteractive();
     }
 
+    compruebaRey() {
+        this.casillaUnica({ x: 0, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 0, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 1, y: 0 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -1, y: 0 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 1, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+    }
+
+    compruebaReina() {
+        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+    }
+
+    compruebaCaballo() {
+        this.casillaUnica({ x: 2, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 2, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -2, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -2, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 1, y: 2 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -1, y: 2 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: 1, y: -2 }, this.tableroX, this.tableroY);
+        this.casillaUnica({ x: -1, y: -2 }, this.tableroX, this.tableroY);
+    }
+
+    compruebaAlfil() {
+        // Calcula las 4 direcciones
+        this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 1, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
+    }
+
+    compruebaTorre() {
+        // Calcula las 4 direcciones
+        this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: 1, y: 0 }, this.tableroX, this.tableroY);
+        this.casillaRecursiva({ x: -1, y: 0 }, this.tableroX, this.tableroY);
+    }
+
     // Método que calcula las casillas posibles de la torre de manera recursiva
     casillaRecursiva(dir, x, y) {
         if (x + dir.x < 0 || x + dir.x > 13 || y + dir.y < 0 || y + dir.y > 13) return;
@@ -231,6 +250,20 @@ export default class Pieza {
             if (this.scene.board[x + dir.x][y + dir.y].pieza === null) {
                 this.scene.board[x + dir.x][y + dir.y].colorPossible();
                 this.casillaRecursiva(dir, x + dir.x, y + dir.y);
+            }
+            else if (this.scene.board[x + dir.x][y + dir.y].pieza.equipo !== this.equipo) {
+                this.scene.board[x + dir.x][y + dir.y].colorPossible();
+
+            }
+        }
+    }
+
+    casillaUnica(dir, x, y) {
+        if (x + dir.x < 0 || x + dir.x > 13 || y + dir.y < 0 || y + dir.y > 13) return;
+
+        if (this.scene.board[x + dir.x][y + dir.y]) {
+            if (this.scene.board[x + dir.x][y + dir.y].pieza === null) {
+                this.scene.board[x + dir.x][y + dir.y].colorPossible();
             }
             else if (this.scene.board[x + dir.x][y + dir.y].pieza.equipo !== this.equipo) {
                 this.scene.board[x + dir.x][y + dir.y].colorPossible();

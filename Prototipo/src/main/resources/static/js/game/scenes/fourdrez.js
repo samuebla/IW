@@ -44,16 +44,7 @@ export default class Fourdrez extends Phaser.Scene {
                 let sprite;
 
                 // El iterador i es el jugador, j las 16 piezas que se van a crear
-                if (i === 2) {
-                    // Calculamos la posición de la pieza en el tablero
-                    let x = (j % 8) + 3;
-                    let y = j < 8 ? 1 : 0;
-                    // Creamos nueva pieza y la metemos en el array de cada jugador
-                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite(offset + ((j % 8) * 18), 8 + (20 * (j < 8 ? 1 : 0)), "black_pieces", spriteMap[j]), j, i);
-                    // Le decimos a la casilla sobre la que está, que contiene esta pieza
-                    this.board[x][y].setPieza(this.players[i].piezas[j], x, y);
-                }
-                else if (i === 0) {
+                if (i === 0) {
                     let x = (j % 8) + 3;
                     let y = j < 8 ? 12 : 13;
                     this.players[i].piezas[j] = new Pieza(this, this.add.sprite(offset + ((j % 8) * 18), (256 - 28) + (20 * (j < 8 ? 0 : 1)), "white_pieces", spriteMap[j]), j, i);
@@ -63,6 +54,15 @@ export default class Fourdrez extends Phaser.Scene {
                     let x = (j < 8 ? 1 : 0);
                     let y = (j % 8) + 3;
                     this.players[i].piezas[j] = new Pieza(this, this.add.sprite(8 + (20 * (j < 8 ? 1 : 0)), offset + ((j % 8) * 18), "red_pieces", spriteMap[j]), j, i);
+                    this.board[x][y].setPieza(this.players[i].piezas[j], x, y);
+                }
+                else if (i === 2) {
+                    // Calculamos la posición de la pieza en el tablero
+                    let x = (j % 8) + 3;
+                    let y = j < 8 ? 1 : 0;
+                    // Creamos nueva pieza y la metemos en el array de cada jugador
+                    this.players[i].piezas[j] = new Pieza(this, this.add.sprite(offset + ((j % 8) * 18), 8 + (20 * (j < 8 ? 1 : 0)), "black_pieces", spriteMap[j]), j, i);
+                    // Le decimos a la casilla sobre la que está, que contiene esta pieza
                     this.board[x][y].setPieza(this.players[i].piezas[j], x, y);
                 }
                 else if (i === 3) {
