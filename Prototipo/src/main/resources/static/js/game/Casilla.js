@@ -42,6 +42,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                     else scene.turn++;
 
                     // Actualiza la posición lógica de la pieza dentro del tablero
+                    scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
                     this.pieza.tableroX = this.xTablero;
                     this.pieza.tableroY = this.yTablero;
 
@@ -49,18 +50,6 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                 }
             }
 
-        });
-
-        // Si pasa el ratón por encima se cambia el color
-        this.on('pointerover', (pointer) => {
-            if (scene.players[scene.turn].movingPiece) {
-                //this.fillColor = 0x6a6a6a;
-            }
-        });
-
-        // Cuando deja de estar el ratón vuelve al color original
-        this.on('pointerout', (pointer) => {
-            //this.fillColor = this.originalColor;
         });
     }
 
