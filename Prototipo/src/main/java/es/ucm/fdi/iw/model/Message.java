@@ -80,6 +80,6 @@ public class Message implements Transferable<Message.Transfer> {
 		return new Transfer(sender.getUsername(), partida.getId(),
 				DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
 				dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
-				text, "chat", id);
+				text, "CHAT", id);
 	}
 }

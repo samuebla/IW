@@ -48,8 +48,7 @@
                 <!-- AAA TODO CAMBIAR QUE NO PUEDAS REPORTARTE SI ERES EL MISMO USUARIO  -->
                 <div
                     style="flex: 1; width: 100%; box-sizing: border-box; border-radius: 10px; border: 5px solid #000; flex-basis: 25%;">
-                    <div id="listaJugadores"
-                        style="display: flex; justify-content: space-between; padding: 10px;">
+                    <div id="listaJugadores" style="display: flex; justify-content: space-between; padding: 10px;">
                     </div>
                 </div>
 
@@ -88,65 +87,6 @@
                     </form>
                 </div>
 
-                <script>
-                    function muestraMensaje(target, sender, textToSend) {
-                        target.innerHTML += `<div
-                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
-                            <p>`+ sender + `</p>
-                            <p>` + textToSend + `</p>
-                        </div>`;
-                    }
-
-                    let inputMuyBonito = document.getElementById("sendMessage");
-
-                    let sender = config.username;
-
-                    inputMuyBonito.parentNode.onsubmit = (e) => {
-                        e.preventDefault();
-
-                        let inputMuyBonito = document.getElementById("sendMessage");
-
-                        let textToSend = inputMuyBonito.value;
-
-                        go(inputMuyBonito.parentNode.action, 'POST', {
-                            message: inputMuyBonito.value
-                        })
-                            .then(d => console.log(":-)"), d)
-                            .catch(e => console.log(e))
-
-                    }
-
-                    function muestraJoin(target, player, playerId, urlDenuncia, ready) {
-                        const banderaEnorme =  `
-                            <form method="POST" action=${urlDenuncia}">
-                                <input type="hidden" name="id_denunciado" value="${playerId}" />
-                                <input type="hidden" name="id_denunciante" value="${session.u.id}" />
-                                <button type="submit"><img src="/img/redflag.png"></button>
-                            </form>`;
-                        const elemento =
-                            `<h5 data-id="${playerId}">${player}</h5> 
-                                ${playerId != session.u.id ? banderaEnorme : ''}
-                                <img src="${ready ? '/img/tickReady.png' : '/img/tickNotReady.png'}"/>
-                            </h5>`;
-                        const encontrado = false;
-                        for (let j of target.childNodes) {
-                            if (j.dataset.id == playerId) {
-                                encontrado = true;
-                                j.innerHTML = elemento;
-                                break;
-                            }
-                        }
-                        if ( ! encontrado) {
-                            target.append(elemento);
-                        }
-                    }
-
-                    // function sendMessage(message,sender){
-                    //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
-                    //     .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
-                    //     .catch(e=>console.log(e))
-                    // }
-                </script>
 
 
             </div>
@@ -181,12 +121,83 @@
                     </div>
 
                     <form th:action="@{/partida/{id}/listo(id=${partida.id})}" method="post">
-                        <button type="submit">LISTO</button>
+                        <button id="readyButton" type="submit">LISTO</button>
                     </form>
 
                 </div>
 
             </div>
+            <script>
+                function muestraMensaje(target, sender, textToSend) {
+                    target.innerHTML += `<div
+                        style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                        <p>`+ sender + `</p>
+                        <p>` + textToSend + `</p>
+                    </div>`;
+                }
+
+                let inputMuyBonito = document.getElementById("sendMessage");
+
+                let sender = config.username;
+
+                inputMuyBonito.parentNode.onsubmit = (e) => {
+                    e.preventDefault();
+
+                    let inputMuyBonito = document.getElementById("sendMessage");
+
+                    let textToSend = inputMuyBonito.value;
+
+                    go(inputMuyBonito.parentNode.action, 'POST', {
+                        message: inputMuyBonito.value
+                    })
+                        .then(d => console.log(":-)", d))
+                        .catch(e => console.log(e))
+
+                }
+
+                function muestraJoin(target, username, userId, urlDenuncia, ready) {
+                    const banderaEnorme = `
+                        <form method="POST" action="${urlDenuncia}">
+                            <input type="hidden" name="id_denunciado" value="${userId}" />
+                            <input type="hidden" name="id_denunciante" value="${config.userId}" />
+                            <button type="submit"><img src="/img/redflag.png"></button>
+                        </form>`;
+                    const elemento =
+                        `<a data-id="${userId}"><h5>${username}</h5> 
+                            ${userId != config.userId ? banderaEnorme : ''}
+                            <img src="${ready ? '/img/tickReady.png' : '/img/tickNotReady.png'}"/>
+                        </a>`;
+                    let encontrado = false;
+                    for (let j of target.childNodes) {
+                        if (j != undefined && j.dataset != undefined && j.dataset.id != undefined) {
+                            if (j.dataset.id == userId) {
+                                encontrado = true;
+                                j.innerHTML = elemento;
+                                break;
+                            }
+                        }
+                    }
+                    if (!encontrado) {
+                        target.innerHTML += elemento;
+                    }
+                }
+                let readyButton = document.getElementById("readyButton");
+
+                readyButton.parentNode.onsubmit = (e) => {
+                    e.preventDefault();
+
+                    go(readyButton.parentNode.action, 'POST', {
+                    })
+                        .then(d => console.log("ENVIA READY WUO", d))
+                        .catch(e => console.log(e))
+                }
+
+                // function sendMessage(message,sender){
+                //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
+                //     .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
+                //     .catch(e=>console.log(e))
+                // }
+            </script>
 
 
         </div>
@@ -202,10 +213,10 @@
                 const target = document.querySelector("#chat");
                 muestraMensaje(target, d.from, d.text);
             }
-            // else if (d.type === "JOIN") {
-            //     const target = document.querySelector("#listaJugadores");
-            //     muestraJoin(target, d.player, d.playerId, )
-            // }
+            else if (d.type === "JOIN") {
+                const target = document.querySelector("#listaJugadores");
+                muestraJoin(target, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready);
+            }
         }
     </script>
 </body>

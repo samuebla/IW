@@ -5,6 +5,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.SocketStructure.ReadyStructure;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +51,7 @@ import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
+
 
 /**
  * Partida management.
@@ -180,16 +182,15 @@ public class PartidaController {
         try {
             messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(newMsg.toTransfer()));
         } catch (JsonProcessingException jpe) {
-            log.warn("Error enviando mensaje!", jpe);
+            throw new RuntimeException("Error enviando mensaje!", jpe);
         }
 
-        System.out.println("HOLA ESTOY AKKA x3");
-        // CAMBIAR
         return "{}";
     }
 
     @Transactional
     @PostMapping("/{id}/listo")
+    @ResponseBody
     public String listo(@PathVariable long id, Model model, HttpSession session) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
@@ -200,10 +201,18 @@ public class PartidaController {
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
+        long playerId = 0;
+        boolean ready = false;
+
         int numPlayersReady = 0;
         for (Jugador j : p.getJugadores()) {
             if (j.getUser().getId() == u.getId()){
                 j.setReady(!j.isReady());
+
+                //Asignamos los valores para el ObjectMapping
+                playerId = j.getId();
+                ready = j.isReady();
+
                 if(j.isReady()){
                     numPlayersReady++;
                 }
@@ -220,6 +229,42 @@ public class PartidaController {
         entityManager.persist(p);
         entityManager.flush();
 
+        /*
+
+            Mapa java -> { clave1: valor1 }
+            Array/Lista java [ uno, dos, ]
+            booleano, string, int/long/double=>number            
+        
+            {
+                unaClave: true,
+                otraClave: 42
+            }
+
+            private static class BooleanoYEntero {
+                public boolean unaClave;
+                public int otraClave;
+            }
+
+            ObjectMapper om = new ObjectMapper();
+            om.serializa(new BooleanoYEntero(true, 42));
+
+
+        */
+
+        
+
+        ReadyStructure readyObject = new ReadyStructure("JOIN",u.getUsername(),u.getId(),p.getId(),ready);
+
+        // Meterlo en un topic
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyObject));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando ReadyStructure!", jpe);
+        }
+
+
         model.addAttribute("messages", p.getReceived());
 
         // Meterlo en un topic
@@ -228,7 +273,7 @@ public class PartidaController {
         // "/queue/updates", json);
 
         // CAMBIAR
-        return "partida";
+        return "{}";
     }
 
     @Transactional
