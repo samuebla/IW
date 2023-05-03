@@ -106,7 +106,6 @@ export default class Pieza {
                                     derx2.colorPossible();
                             }
                             else {
-                                console.log("deberia avanzar")
                                 der.colorPossible();
                             }
                         }

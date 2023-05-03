@@ -111,19 +111,19 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
     calculaPeon(){
         // Si es un peon blanco...
         if(this.pieza.equipo === 0 && this.pieza.tableroY === 0){
-            this.pieza.sprite.setTexture(this.scene.reinaSprite[0]);
+            this.pieza.sprite.setTexture("white_pieces", 4);
             this.pieza.tipo = 11;
         }
         else if(this.pieza.equipo === 1 && this.pieza.tableroX === 13){
-            this.pieza.sprite.setTexture(this.scene.reinaSprite[1]);
+            this.pieza.sprite.setTexture("red_pieces", 4);
             this.pieza.tipo = 11;
         }
         else if(this.pieza.equipo === 2 && this.pieza.tableroY === 13){
-            this.pieza.sprite.setTexture(this.scene.reinaSprite[2]);
+            this.pieza.sprite.setTexture("black_pieces", 4);
             this.pieza.tipo = 11;
         }
         else if(this.pieza.equipo === 3 && this.pieza.tableroX === 0){
-            this.pieza.sprite.setTexture(this.scene.reinaSprite[3]);
+            this.pieza.sprite.setTexture("blue_pieces", 4);
             this.pieza.tipo = 11;
         }
         
