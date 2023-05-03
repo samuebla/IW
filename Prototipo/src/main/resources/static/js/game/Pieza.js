@@ -42,7 +42,7 @@ export default class Pieza {
                         this.compruebaCaballo();
 
                     // Si es una reina...
-                    else if (this.tipo === 12)
+                    else if (this.tipo === 11)
                         this.compruebaReina();
 
                     // Si es el rey...
@@ -55,7 +55,10 @@ export default class Pieza {
                         //Si es un peon...
                         let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
                         let arriba = scene.board[this.tableroX][this.tableroY - 1];
-                        let arribax2 = scene.board[this.tableroX][this.tableroY - 2];
+                        let arribax2 = null;
+                        if(this.tableroY === 12){
+                            arribax2 = scene.board[this.tableroX][this.tableroY - 2];
+                        }
                         let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
 
                         // Se calculan las casillas a las que puede avanzar la pieza y se llama al tablero para que las cambie de color
@@ -90,7 +93,10 @@ export default class Pieza {
                         //Si es un peon...
                         let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
                         let der = scene.board[this.tableroX + 1][this.tableroY];
-                        let derx2 = scene.board[this.tableroX + 2][this.tableroY];
+                        let derx2 = null;
+                        if(this.tableroX === 1){
+                            derx2 = scene.board[this.tableroX + 2][this.tableroY];
+                        }
                         let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
 
                         if (der && der.pieza === null) {
@@ -100,6 +106,7 @@ export default class Pieza {
                                     derx2.colorPossible();
                             }
                             else {
+                                console.log("deberia avanzar")
                                 der.colorPossible();
                             }
                         }
@@ -120,7 +127,10 @@ export default class Pieza {
                         //Si es un peon...
                         let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
                         let abajo = scene.board[this.tableroX][this.tableroY + 1];
-                        let abajox2 = scene.board[this.tableroX][this.tableroY + 2];
+                        let abajox2 = null;
+                        if(this.tableroY === 1){
+                            abajox2 = scene.board[this.tableroX][this.tableroY + 2];
+                        }
                         let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
 
                         if (abajo && abajo.pieza === null) {
@@ -150,7 +160,10 @@ export default class Pieza {
                         //Si es un peon...
                         let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
                         let izda = scene.board[this.tableroX - 1][this.tableroY];
-                        let izdax2 = scene.board[this.tableroX - 2][this.tableroY];
+                        let izdax2 = null;
+                        if(this.tableroX === 12){
+                            izdax2 = scene.board[this.tableroX - 2][this.tableroY];
+                        }
                         let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
 
                         if (izda && izda.pieza === null) {

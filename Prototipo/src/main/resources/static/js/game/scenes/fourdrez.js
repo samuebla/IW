@@ -14,6 +14,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.board = new Array(14);
         this.turn = 0;
         this.equiposEliminados = [];
+        this.reinaSprite = [];
     }
 
     create() {
@@ -38,6 +39,12 @@ export default class Fourdrez extends Phaser.Scene {
 
         // Index de las piezas dentro del spriteMap (0 peon, 1 caballo, 2 torre, 3 alfil, 4 reina, 5 rey)
         const spriteMap = [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 3, 4, 5, 3, 1, 2];
+
+        this.reinaSprite[0] = this.add.sprite("white_pieces", spriteMap[11]);
+        this.reinaSprite[1] = this.add.sprite("red_pieces", spriteMap[11]);
+        this.reinaSprite[2] = this.add.sprite("black_pieces", spriteMap[11]);
+        this.reinaSprite[3] = this.add.sprite("blue_pieces", spriteMap[11]);
+
 
         for (let i = 0; i < nPlayers; i++) {
             this.players[i] = new Player(this);
