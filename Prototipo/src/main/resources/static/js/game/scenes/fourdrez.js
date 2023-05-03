@@ -13,6 +13,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.players = [];
         this.board = new Array(14);
         this.turn = 0;
+        this.equiposEliminados = [];
     }
 
     create() {

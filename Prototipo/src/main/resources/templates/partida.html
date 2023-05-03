@@ -95,7 +95,7 @@
             <!-- GAME -->
             <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
                 Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
-            <div th:if="${partida.currentState == 1}" style="box-sizing: border-box; border:5px solid #000; 
+            <div th:if="${partida.currentState == 0}" style="box-sizing: border-box; border:5px solid #000; 
                         border-radius: 10px; flex-basis: 80%;align-items: center;  ">
 
                 <canvas id="juego" style="margin: 0; padding: 0; max-width: 100%; max-height: 100%;"></canvas>

@@ -24,4 +24,11 @@ export default class Player {
                 i.sprite.disableInteractive();
         }
     }
+
+    eliminaPiezas(){
+        for (let i of this.piezas) {
+            i.sprite.destroy();
+            this.scene.board[i.tableroX][i.tableroY].pieza = null
+        }
+    }
 }

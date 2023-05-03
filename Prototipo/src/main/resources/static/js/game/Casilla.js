@@ -22,9 +22,16 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                 if (scene.players[scene.turn].movingPiece) {
                     scene.players[scene.turn].disablePieces();
                     if (this.pieza !== null) {
-                        // Si ya había una pieza se destruye y se coloca la nueva encima
-                        this.pieza.sprite.destroy();
-                        this.pieza = scene.players[scene.turn].pieceToMove;
+                        // Si es el rey
+                        if(this.pieza.tipo === 11){
+                            this.eliminaEquipo();
+                        }
+                        else{
+                            // Si ya había una pieza se destruye y se coloca la nueva encima
+                            this.pieza.sprite.destroy();
+                            this.pieza = scene.players[scene.turn].pieceToMove;
+                        }
+                        
                     }
                     else {
                         // Si no había otra pieza simplemente se coloca la nueva
@@ -39,7 +46,13 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                     this.quitarPossible();
                     // Cambio de turno
                     if (scene.turn + 1 > 3) scene.turn = 0;
-                    else scene.turn++;
+                        else scene.turn++;
+
+                    while(scene.equiposEliminados.includes(scene.turn)){
+                        if (scene.turn + 1 > 3) scene.turn = 0;
+                        else scene.turn++;
+                    }
+                    
 
                     // Actualiza la posición lógica de la pieza dentro del tablero
                     scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
@@ -81,5 +94,13 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                 }
             })
         });
+    }
+
+    eliminaEquipo(){
+        this.scene.equiposEliminados.push(this.pieza.equipo);
+        this.scene.players[this.pieza.equipo].eliminaPiezas();
+
+        // Se settea la nueva pieza
+        this.pieza = this.scene.players[this.scene.turn].pieceToMove;
     }
 }
