@@ -9,23 +9,31 @@
 
 <body class="d-flex flex-column h-100">
 
+    <!-- CABEZERA QUE VAMOS A CREAR PARA TODAS LAS PAGINAS -->
     <header th:fragment="nav">
         <nav class="navbar bg-dark" data-bs-theme="dark">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="d-flex">
+                    <!-- Si tienes tu sesion iniciada... (De user o admin) -->
                     <div th:if="${session.u != null}">
+                        <!-- Si eres admin mostramos su opcion de administrar -->
                         <div th:if="${session.u.hasRole('ADMIN')}">
                             <a class="nav-link" th:href="@{/admin/administrar}">Administrar</a>
                         </div>
+                        <!-- Si NO eres admin mostramos los Lobbyes -->
                         <div th:unless="${session.u.hasRole('ADMIN')}">
                             <form th:action="@{/probarlobbys}" method="get">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm">Lobbyes</button>
                             </form>
                         </div>
                     </div>
+
+                    <!-- Creo que no hace nada -->
                     <div th:unless="${session.u != null}">
                         <div></div>
                     </div>
+
+                    <!-- Titulo centrado del header -->
                     <div class="text-center">
                         <a class="navbar-brand" th:href="@{/}">
                             <img src="/img/logo.png" alt="Logo" width="30" height="30"
@@ -35,13 +43,16 @@
                     </div>
                 </div>
                 <div>
+                    <!-- Si NO has iniciado sesion mostramos el boton de login -->
                     <a class="nav-link active" th:unless="${session.u}" aria-current="page"
                         th:href="@{/login/}">login</a>
+                        <!-- Si has iniciado sesion mostramos la opcion de salir -->
                     <form th:if="${session.u}" th:action="@{/logout}" method="post">
                         <button type="submit" class="btn btn-outline-secondary btn-sm">logout</button>
                     </form>
                 </div>
             </div>
+            <!-- Seccion de abajo -->
             <div class="container-fluid d-flex justify-content-center">
                 <div>
                     <a class="nav-link" href="#" th:href="@{/}">¿Qué es?</a>
