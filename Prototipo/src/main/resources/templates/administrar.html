@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- Metadatos y enlaces a archivos (NO es el encabezado) -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,9 +10,9 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+
+    <!-- Cogemos el encabezado configurado ya en nav.html -->
     <header th:replace="fragments/nav.html :: nav"></header>
-
-
 
     <main class="flex-shrink-0">
         <div class="container">
@@ -23,6 +24,7 @@
         </div>
     </main>
 
+    <!-- Pie de pagina que se carga siempre de Footer.html -->
     <th:block th:replace="fragments/footer.html :: footer" />
 </body>
 

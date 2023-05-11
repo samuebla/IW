@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- Pagina Inicial (¿Que es el Fourdrez?) -->
+
+<!-- Metadatos y enlaces a archivos (NO es el encabezado) -->
+
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,7 +13,11 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+
+    <!-- Cogemos el encabezado configurado ya en nav.html -->
     <header th:replace="fragments/nav.html :: nav"></header>
+
+    <!-- El contenido principal de la pagina dentro del main -->
     <main class="flex-shrink-0" style="display:grid; gap:50px;">
         <div class="container blue-bg py-5" style="grid-row-start: 1; grid-row-end: 1;">
             <h1 class="text-center text-white">¿Qué es?</h1>
@@ -21,14 +29,12 @@
             </p>
         </div>
 
-        <div class="container-fluid d-flex justify-content-center" style="grid-row-start: 2; grid-row-end: 2;">
-            <div class="row">
-                <div class="col-md-6">
-                    <img src="/img/partida.png">
-                </div>
-            </div>
+        <!-- Imagen del gameplay centrada -->
+        <div class="container-fluid d-flex justify-content-center">
+            <img src="/img/partida.png">
         </div>
 
+        <!-- Texto final -->
         <div class="container blue-bg py-5" style="grid-row-start: 3; grid-row-end: 3;">
             <h1 class="text-center text-white">¡Disfruta de un ajedrez 4 veces más divertido!</h1>
             <p class="text-justify text-white mt-4">
@@ -38,8 +44,9 @@
             </p>
         </div>
 
-
     </main>
+
+    <!-- Pie de pagina que se carga siempre de Footer.html -->
     <th:block th:replace="fragments/footer.html :: footer" />
 </body>
 
