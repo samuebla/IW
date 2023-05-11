@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- ROOTCONTROLLER -->
+
+<!-- NO es el header -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,10 +12,13 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    <!-- Encabezado ya creado -->
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
         <div class="container">
+
+            <!-- Creamos el form con la accion de registrarse (Creada en el RootController) -->
             <form class="form-signin" method="post" th:action="@{/register}" style="margin: auto;
             max-width: 600px;
             padding: 20px;">
@@ -61,6 +67,7 @@
                     margin-bottom: 20px;
                     width: 100%;">
                 </p>
+                <!-- Con el boton envias la accion de registrarse (Creada en el RootController) -->
                 <button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #ffb5f9;
                 border: none;
                 border-radius: 100px;

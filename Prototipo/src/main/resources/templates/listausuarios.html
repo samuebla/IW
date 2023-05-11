@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- ESTO SE GESTIONA CON EL ADMIN CONTROLLER (Solo los admin pueden acceder a aqui) -->
+
+<!-- Metadatos y enlaces a archivos (NO es el encabezado) -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,6 +12,7 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    <!-- Cogemos el encabezado configurado ya en nav.html -->
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
@@ -16,40 +20,41 @@
             <h1 class="mt-5 text-center">Lista de usuarios</h1>
 
             <div class="table-responsive">
+                <!-- Creamos una tabla con todos los usuarios registrados -->
                 <table class="table table-bordered table-striped">
+                    <!-- Thead se suele usar para poner el contenido de la table (La info) -->
                     <thead>
                         <tr>
+                            <!-- Scope es para el ambito (col o row) -->
                             <th scope="col" class="text-center">Usuario</th>
                             <th scope="col" class="text-center">Informes recibidos</th>
                             <th scope="col" class="text-center">Acción</th>
                         </tr>
                     </thead>
+                    <!-- Tbody es para agrupar las filas  -->
                     <tbody>
+                        <!-- Por cada usuario... (Introducido con un Query en el AdminController) -->
                         <tr th:each="u: ${usuarios}" class="table-light">
                             <td>
+                                <!-- Si no soy yo...(El admin) creo el link para acceder a sus denuncias recibidas -->
                                 <a th:if="${currentUser.id!=u.id}" class="link"
                                     th:href="@{/admin/perfilusuario/{id}(id=${u.id})}">
                                     <span th:text="${u.username}"></span>
                                 </a>
+                                <!-- Si soy yo no creo ningún link a otra pagina (No tengo denuncias) -->
                                 <span th:unless="${currentUser.id!=u.id}" th:text="${u.username}"></span>
-
                             </td>
                             <td class="text-center">
+                                <!-- Si no soy yo muestro el numero de denuncias que tiene el usuario -->
                                 <span th:if="${currentUser.id!=u.id}" th:text="${#lists.size(u.denuncias)}"></span>
                             </td>
                             <td class="text-center">
-
-
+                                <!-- Si no soy yo, pongo el boton de Banear a el usuario -->
                                 <form method="POST" th:if="${currentUser.id!=u.id}"
                                     th:action="@{/admin/listausuarios/echar}">
                                     <input type="hidden" name="id_reported" th:value="${u.id}" />
                                     <button type="submit" class="btn btn-danger" style="width:100%">Echar</button>
                                 </form>
-
-
-
-
-
                             </td>
                         </tr>
                     </tbody>
@@ -58,6 +63,7 @@
         </div>
     </main>
 
+    <!-- Pie de pagina que se carga siempre de Footer.html -->
     <th:block th:replace="fragments/footer.html :: footer" />
 </body>
 

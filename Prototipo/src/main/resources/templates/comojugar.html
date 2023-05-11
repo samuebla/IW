@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- No es el encabezado -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,37 +10,34 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    <!-- Encabezado ya creado en nav.html -->
     <header th:replace="fragments/nav.html :: nav"></header>
 
-
-
     <main class="flex-shrink-0 d-flex justify-content-center" style="gap:50px;">
-        <div class="imagen blue-bg col-md-4" style="align-self: center;">
-            <img src="https://picsum.photos/200/500" class="img-fluid">
-        </div>
+        <!-- Una imagen a cada lado y el texto en medio -->
+        <img src="/img/tablero.png">
         <div class="container blue-bg col-md-4">
             <h1 class="mt-5 text-center">Cómo jugar</h1>
             <p style="text-align:justify; margin: 20px;">
                 El juego comienza con los jugadores sentados en las cuatro esquinas del tablero, con los reyes ubicados
-                en las esquinas opuestas. El jugador que comienza es elegido al azar.
-
+                en las esquinas opuestas. El jugador que comienza es elegido al azar.</p>
+            <p>
                 Cada jugador, por turno, debe mover una de sus piezas. Las piezas se mueven de acuerdo a las mismas
-                reglas que en el ajedrez de dos jugadores. El movimiento de las piezas es el siguiente:
-
-                El rey se mueve una casilla en cualquier dirección.
-                La reina se mueve en cualquier dirección, tanto en diagonal como en línea recta.
-                Los alfiles se mueven en diagonal.
-                Los caballos se mueven en forma de L.
-                Las torres se mueven en línea recta, tanto en horizontal como en vertical.
-                Los peones se mueven una casilla hacia adelante, o dos casillas hacia adelante en su primer movimiento.
-                Además, pueden capturar a otras piezas en diagonal.
+                reglas que en el ajedrez de dos jugadores. El movimiento de las piezas es el siguiente:</p>
+            <p>
+                El rey se mueve una casilla en cualquier dirección.<br>
+                La reina se mueve en cualquier dirección, tanto en diagonal como en línea recta.<br>
+                Los alfiles se mueven en diagonal.<br>
+                Los caballos se mueven en forma de L.<br>
+                Las torres se mueven en línea recta, tanto en horizontal como en vertical.<br>
+                Los peones se mueven una casilla hacia adelante, o dos casillas hacia adelante en su primer
+                movimiento.<br>
+                Además, pueden capturar a otras piezas en diagonal.<br>
                 El juego continúa hasta que uno de los reyes es capturado. El jugador que logra capturar al rey de más
-                de un oponente gana el juego.
+                de un oponente gana el juego.<br>
             </p>
         </div>
-        <div class="imagen blue-bg col-md-4" style="align-self: center;">
-            <img src="https://picsum.photos/200/500" class="img-fluid">
-        </div>
+        <img src="/img/tablero.png">
     </main>
 
     <th:block th:replace="fragments/footer.html :: footer" />
