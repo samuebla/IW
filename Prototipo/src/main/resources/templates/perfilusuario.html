@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
+<!-- Esto se maneja con el ADMINCONTROLLER -->
+
+<!-- NO es el header -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -28,8 +31,10 @@
                 </tr>
 
                 <tr>
+                    <!-- Por cada denuncia que tenga el usuario... -->
                     <td th:each="d,iter: ${user.denuncias}" style="border: 1px solid #dddddd;">
 
+                        <!-- Muestras el numero de denuncias -->
                         <h3 style="text-align: center;" th:text="${'Denuncia ' + iter.count}">X</h3>
 
 
@@ -37,8 +42,10 @@
                 </tr>
 
                 <tr>
+                    <!-- Por cada denuncia... -->
                     <td th:each="d: ${user.denuncias}" style="border: 1px solid #dddddd;">
 
+                        <!-- Muestras la persona que te ha denunciado -->
                         <div
                             style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
                             <p th:text="${'Denunciado por ' + d.denunciante.username}">X</p>
@@ -47,9 +54,11 @@
                     </td>
                 </tr>
                 <tr>
+                    <!-- Por cada denuncia... -->
                     <td th:each="d: ${user.denuncias}" style="border: 1px solid #dddddd;
                     text-align: left;
                     padding: 8px;  overflow-y: scroll;">
+                        <!-- Muestra la conversacion de la partida de todas las personas -->
                         <div th:each="m: ${d.partida.received}"
                             style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
                             <p th:text="${m.sender.username}"> </p>
