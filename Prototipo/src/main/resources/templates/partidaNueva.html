@@ -11,6 +11,9 @@
 
 <body class="d-flex flex-column h-100">
     <th:block th:replace="fragments/partidaPrefab :: partidaPrefab"></th:block>
+    <script>
+        window.location.href = "[['http://localhost:80/partida/' + ${partida.id}]]";
+    </script>
 </body>
 
 </html>

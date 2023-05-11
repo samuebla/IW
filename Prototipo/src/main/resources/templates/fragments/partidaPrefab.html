@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.1.3.css}">
+    <title>Fourdrez Lobby</title>
+    <script th:src="@{/js/game/phaser.min.js}"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <th:block th:fragment="partidaPrefab">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+
+
+    <main class="flex-shrink-0">
+        <div class="container" style="display: flex; margin-top: 60px; height: 600px;">
+
+
+
+            <div th:unless="${partida != null}">
+                <h1 th:text="'Partida Rara'">Partida 123</h1>
+                <form method="POST" th:action="@{/partida}">
+                    <button type="submit">Crear partida nueva</button>
+                </form>
+            </div>
+
+
+            <!-- Lista de usuarios en la lobby y chat -->
+            <div style="flex: 1; box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 20%; display: flex; flex-direction: column;">
+
+
+
+
+                <!-- <tr th:each="p: ${partidas.id.j}">
+                    <td>Lobby1</td>
+                    <td>
+                        <form th:action="@{/partida/{id}(id=${p.id})}" method="get">
+                            Partida <span th:text="${p.id}"></span>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
+                        </form>
+                    </td>
+                </tr> -->
+
+                <!-- Usuarios -->
+                <!-- AAA TODO CAMBIAR QUE NO PUEDAS REPORTARTE SI ERES EL MISMO USUARIO  -->
+                <div
+                    style="flex: 1; width: 100%; box-sizing: border-box; border-radius: 10px; border: 5px solid #000; flex-basis: 25%;">
+                    <div id="listaJugadores" style="display: flex; justify-content: space-between; padding: 10px;">
+                        <div th:each="j: ${partida.jugadores}" th:data-id="${j.user.id}">
+                            <h5 th:text="${j.user.username}">Usuario A</h5>
+                            <form method="POST" th:if="${j.user.id!=user.id}"
+                                th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                                <input type="hidden" name="id_denunciado" th:value="${j.user.id}" />
+                                <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
+                                <button type="submit"><img src="/img/redflag.png"></button>
+                            </form>
+                            <a th:if="${partida.currentState == 0}">
+                                <img th:if="${j.ready}" src="/img/tickReady.png">
+                                <img th:unless="${j.ready}" src="/img/tickNotReady.png"></a>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--CHAT-->
+                <!-- <div style="flex: 1;box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 80%; display: 
+                        flex; flex-direction: column; height: 100%;
+                        justify-content: flex-end; align-items: center;">
+
+
+                    <div th:each="m: ${messages}" style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center;
+                        padding: 10px;">
+                        <p th:text="${m.sender.username}"> </p>
+                        <p th:text="${m.text}">Texto de prueba</p>
+                    </div>
+
+                    <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
+                        <input type="text" name="text" placeholder="Escribe un mensaje..." style=" width: 100%; box-sizing: border-box; text-align: center;
+                        padding: 20px; border: 5px solid #000; border-radius: 10px; ">
+                    </form>
+                    
+                </div> -->
+
+                <div
+                    style="flex: 1; box-sizing: border-box; border: 5px solid #000; border-radius: 10px; flex-basis: 80%; display: flex; flex-direction: column; height: 70%;">
+                    <div style="overflow: auto;" id="chat">
+                        <div th:each="m: ${messages}"
+                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                            <p th:text="${m.sender.username}"> </p>
+                            <p th:text="${m.text}">Texto de prueba</p>
+                        </div>
+                    </div>
+                    <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
+                        <input type="text" id="sendMessage" name="text" placeholder="Escribe un mensaje..."
+                            style="width: 100%; box-sizing: border-box; text-align: center; padding: 20px; border: 5px solid #000; border-radius: 10px;">
+                    </form>
+                </div>
+
+
+
+            </div>
+
+
+            <!-- GAME -->
+            <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
+                Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
+            <div th:if="${partida.currentState == 1}" style="box-sizing: border-box; border:5px solid #000; 
+                        border-radius: 10px; flex-basis: 80%;align-items: center;  ">
+
+                <canvas id="juego" style="margin: 0; padding: 0; max-width: 100%; max-height: 100%;"></canvas>
+                <script th:src="@{/js/game/game.js}" type="module"></script>
+
+            </div>
+
+            <div th:if="${partida.currentState == 0}" style="box-sizing: border-box; border:5px solid #000; 
+            border-radius: 10px; flex-basis: 80%;align-items: center; ">
+                <div th:if="${partida.currentState == 0}">
+                    <!-- partida valida -->
+                    <h1 th:text="'Partida ' + ${partida.id}">Partida 123</h1>
+                    <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post">
+                        Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" />
+                        Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" />
+                        <button type="submit">Cambiar configuracion</button>
+                    </form>
+
+                    <div th:unless="${jefe}">
+                        Tiempo max <input name="tiempoTotal" th:value="${partida.tiempoTotal}" readonly />
+                        Incremento <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" readonly />
+
+                    </div>
+
+                    <form th:action="@{/partida/{id}/listo(id=${partida.id})}" method="post">
+                        <button id="readyButton" type="submit">LISTO</button>
+                    </form>
+
+                </div>
+
+            </div>
+            <script>
+                function muestraMensaje(target, sender, textToSend) {
+                    target.innerHTML += `<div
+                        style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                        <p>`+ sender + `</p>
+                        <p>` + textToSend + `</p>
+                    </div>`;
+                }
+
+                let inputMuyBonito = document.getElementById("sendMessage");
+
+                let sender = config.username;
+
+                inputMuyBonito.parentNode.onsubmit = (e) => {
+                    e.preventDefault();
+
+                    let inputMuyBonito = document.getElementById("sendMessage");
+
+                    let textToSend = inputMuyBonito.value;
+
+                    go(inputMuyBonito.parentNode.action, 'POST', {
+                        message: inputMuyBonito.value
+                    })
+                        .then(d => console.log(":-)", d))
+                        .catch(e => console.log(e))
+
+                }
+
+                function muestraJoin(target, username, userId, urlDenuncia, ready) {
+                    const banderaEnorme = `
+                        <form method="POST" action="${urlDenuncia}">
+                            <input type="hidden" name="id_denunciado" value="${userId}" />
+                            <input type="hidden" name="id_denunciante" value="${config.userId}" />
+                            <button type="submit"><img src="/img/redflag.png"></button>
+                        </form>`;
+                    const elemento =
+                        `<div data-id="${userId}"><h5>${username}</h5> 
+                            ${userId != config.userId ? banderaEnorme : ''}
+                            <img src="${ready ? '/img/tickReady.png' : '/img/tickNotReady.png'}"/>
+                        </div>`;
+                    let encontrado = false;
+                    for (let j of target.childNodes) {
+                        if (j != undefined && j.dataset != undefined && j.dataset.id != undefined) {
+                            if (j.dataset.id == userId) {
+                                encontrado = true;
+                                j.innerHTML = "";
+                                j.innerHTML = elemento;
+                                break;
+                            }
+                        }
+                    }
+                    if (!encontrado) {
+                        target.innerHTML += elemento;
+                    }
+                }
+                let readyButton = document.getElementById("readyButton");
+
+                readyButton.parentNode.onsubmit = (e) => {
+                    e.preventDefault();
+
+                    go(readyButton.parentNode.action, 'POST', {
+                    })
+                        .then(d => console.log("ENVIA READY WUO", d))
+                        .catch(e => console.log(e))
+                }
+
+                // function sendMessage(message,sender){
+                //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
+                //     .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
+                //     .catch(e=>console.log(e))
+                // }
+            </script>
+
+
+        </div>
+    </main>
+
+    <script>
+        config.topicId = "[['/topic/' + ${partida.topicId}]]";
+        
+        // go(enlace.action, 'GET', {})
+        //     .then(d => console.log("Movido a la pagina correspondiente", d))
+        //     .catch(e => console.log(e));
+        // muestraJoin(document.querySelector("#listaJugadores"), u.getUsername(), u.getId(), p.getId(), false);
+        
+    </script>
+    <th:block th:replace="fragments/footer.html :: footer" />
+    <script>
+        ws.receive = (d) => {
+            if (d.type === "CHAT") {
+                const target = document.querySelector("#chat");
+                muestraMensaje(target, d.from, d.text);
+            }
+            else if (d.type === "JOIN") {
+                const target = document.querySelector("#listaJugadores");
+                muestraJoin(target, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready);
+            }
+        }
+    </script>
+    </th:block>
+</body>
+
+</html>

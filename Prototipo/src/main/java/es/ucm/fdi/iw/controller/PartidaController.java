@@ -5,7 +5,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
-import es.ucm.fdi.iw.SocketStructure.ReadyStructure;
+import es.ucm.fdi.SocketStructure.ReadyStructure;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +52,6 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 
-
 /**
  * Partida management.
  *
@@ -98,6 +97,22 @@ public class PartidaController {
         model.addAttribute("user", u);
         model.addAttribute("messages", p.getReceived());
 
+        model.addAttribute("jugadores", p.getJugadores());
+
+        // TODO Cambiar false al jugador en cuestión
+        // ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(),
+        // u.getId(), p.getId(), false);
+
+        // // Meterlo en un topic
+        // // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        // ObjectMapper om = new ObjectMapper();
+        // try {
+        // messagingTemplate.convertAndSend("/topic/" + p.getTopicId(),
+        // om.writeValueAsString(readyObject));
+        // } catch (JsonProcessingException jpe) {
+        // log.warn("Error enviando ReadyStructure!", jpe);
+        // }
+
         return "partida";
     }
 
@@ -123,7 +138,23 @@ public class PartidaController {
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
         model.addAttribute("messages", p.getReceived());
 
-        return "partida";
+        model.addAttribute("jugadores", p.getJugadores());
+
+        // ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(),
+        // u.getId(), p.getId(), false);
+
+        // // Meterlo en un topic
+        // // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        // ObjectMapper om = new ObjectMapper();
+
+        // try {
+        // String newUserInformation = om.writeValueAsString(readyObject);
+        // model.addAttribute("newUserInformation", newUserInformation);
+        // } catch (JsonProcessingException jpe) {
+        // log.warn("Error enviando ReadyStructure!", jpe);
+        // }
+
+        return "partidaNueva";
     } // normalmente, el flush se haría (automáticamente) aquí, al acabarse la
       // transición
 
@@ -135,7 +166,7 @@ public class PartidaController {
 
         model.addAttribute("partida", p);
         model.addAttribute("user", u);
-        // model.addAttribute("jugadores", p.getJugadores());
+        model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -158,7 +189,7 @@ public class PartidaController {
 
         model.addAttribute("partida", p);
         model.addAttribute("user", u);
-        // model.addAttribute("jugadores", p.getJugadores());
+        model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -197,7 +228,7 @@ public class PartidaController {
 
         model.addAttribute("partida", p);
         model.addAttribute("user", u);
-        // model.addAttribute("jugadores", p.getJugadores());
+        model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -206,18 +237,17 @@ public class PartidaController {
 
         int numPlayersReady = 0;
         for (Jugador j : p.getJugadores()) {
-            if (j.getUser().getId() == u.getId()){
+            if (j.getUser().getId() == u.getId()) {
                 j.setReady(!j.isReady());
 
-                //Asignamos los valores para el ObjectMapping
+                // Asignamos los valores para el ObjectMapping
                 playerId = j.getId();
                 ready = j.isReady();
 
-                if(j.isReady()){
+                if (j.isReady()) {
                     numPlayersReady++;
                 }
-            }
-            else if (j.isReady()) {
+            } else if (j.isReady()) {
                 numPlayersReady++;
             }
         }
@@ -230,30 +260,28 @@ public class PartidaController {
         entityManager.flush();
 
         /*
+         * 
+         * Mapa java -> { clave1: valor1 }
+         * Array/Lista java [ uno, dos, ]
+         * booleano, string, int/long/double=>number
+         * 
+         * {
+         * unaClave: true,
+         * otraClave: 42
+         * }
+         * 
+         * private static class BooleanoYEntero {
+         * public boolean unaClave;
+         * public int otraClave;
+         * }
+         * 
+         * ObjectMapper om = new ObjectMapper();
+         * om.serializa(new BooleanoYEntero(true, 42));
+         * 
+         * 
+         */
 
-            Mapa java -> { clave1: valor1 }
-            Array/Lista java [ uno, dos, ]
-            booleano, string, int/long/double=>number            
-        
-            {
-                unaClave: true,
-                otraClave: 42
-            }
-
-            private static class BooleanoYEntero {
-                public boolean unaClave;
-                public int otraClave;
-            }
-
-            ObjectMapper om = new ObjectMapper();
-            om.serializa(new BooleanoYEntero(true, 42));
-
-
-        */
-
-        
-
-        ReadyStructure readyObject = new ReadyStructure("JOIN",u.getUsername(),u.getId(),p.getId(),ready);
+        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), ready);
 
         // Meterlo en un topic
         // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
@@ -263,7 +291,6 @@ public class PartidaController {
         } catch (JsonProcessingException jpe) {
             log.warn("Error enviando ReadyStructure!", jpe);
         }
-
 
         model.addAttribute("messages", p.getReceived());
 
@@ -313,7 +340,7 @@ public class PartidaController {
             entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
         }
 
-        // model.addAttribute("jugadores", p.getJugadores());
+        model.addAttribute("jugadores", p.getJugadores());
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -321,6 +348,17 @@ public class PartidaController {
         // // soy el jefe!
         // p.setTiempoTotal(tiempoTotal);
         // }
+
+        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), false);
+
+        // Meterlo en un topic
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyObject));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando ReadyStructure!", jpe);
+        }
 
         model.addAttribute("messages", p.getReceived());
 
