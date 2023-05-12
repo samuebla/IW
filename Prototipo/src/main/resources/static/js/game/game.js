@@ -1,5 +1,6 @@
 import boot from './scenes/boot.js';
 import fourdrez from './scenes/fourdrez.js';
+import final from './scenes/final.js';
 
 let config = {
     type: Phaser.CANVAS,
@@ -11,7 +12,7 @@ let config = {
         mode: Phaser.Scale.FIT,
     },
     pixelArt: true,
-    scene: [boot, fourdrez]
+    scene: [boot, fourdrez, final]
 };
 
 new Phaser.Game(config);
