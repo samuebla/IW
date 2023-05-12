@@ -11,6 +11,7 @@ export default class Fourdrez extends Phaser.Scene {
 
     preload() {
         this.players = [];
+        // El tablero es 14x14 aunque haya casillas que no puedan usarse
         this.board = new Array(14);
         this.turn = 0;
         this.equiposEliminados = [];
@@ -25,6 +26,7 @@ export default class Fourdrez extends Phaser.Scene {
         let y = 0;
         let size = this.sys.game.canvas.width;
 
+        //Iniciamos el tablero
         for (let i = 0; i < this.board.length; i++) {
             this.board[i] = new Array(14);
         }

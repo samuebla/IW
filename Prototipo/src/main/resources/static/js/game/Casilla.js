@@ -6,6 +6,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         super(scene, x, y, width, height, fillColor);
         scene.add.existing(this);
         this.setOrigin(0, 0);
+        //8 o 15 = Torre || 10 o 13 =  Alfil || 9 o 14 = Caballo || 11 = Reina || 12 = Rey;
         this.pieza = null;
         this.originalColor = fillColor;
 
@@ -114,14 +115,17 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
             this.pieza.sprite.setTexture("white_pieces", 4);
             this.pieza.tipo = 11;
         }
+        // Si es un peon rojo...
         else if(this.pieza.equipo === 1 && this.pieza.tableroX === 13){
             this.pieza.sprite.setTexture("red_pieces", 4);
             this.pieza.tipo = 11;
         }
+        // Si es un peon negro...
         else if(this.pieza.equipo === 2 && this.pieza.tableroY === 13){
             this.pieza.sprite.setTexture("black_pieces", 4);
             this.pieza.tipo = 11;
         }
+        // Si es un peon azul...
         else if(this.pieza.equipo === 3 && this.pieza.tableroX === 0){
             this.pieza.sprite.setTexture("blue_pieces", 4);
             this.pieza.tipo = 11;

@@ -28,6 +28,7 @@ export default class Pieza {
                 scene.players[scene.turn].movingPiece = true;
                 scene.players[scene.turn].pieceToMove = this;
 
+                //Si NO eres un peon
                 if (this.tipo >= 8) {
                     // Si es una torre...
                     if (this.tipo === 8 || this.tipo === 15)
@@ -49,26 +50,30 @@ export default class Pieza {
                     else
                         this.compruebaRey();
                 }
+                //Si eres cualquiera de los peones
                 else {
                     //Si eres el equipo blanco
                     if (scene.turn === 0) {
-                        //Si es un peon...
                         let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
                         let arriba = scene.board[this.tableroX][this.tableroY - 1];
                         let arribax2 = null;
-                        if(this.tableroY === 12){
+
+                        //Si no me he movido nunca todavia,...
+                        if (this.tableroY === 12) {
+                            //Me puedo desplazar dos casillas
                             arribax2 = scene.board[this.tableroX][this.tableroY - 2];
                         }
+
                         let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
 
                         // Se calculan las casillas a las que puede avanzar la pieza y se llama al tablero para que las cambie de color
                         // Además cada casilla tiene un booleano para saber si es válida o no, la gestión de mover la pieza se da en la clase casilla
                         if (arriba && arriba.pieza === null) {
-                            // Se entra si la casilla existe y si está vacía
+                            //Si no me he movido nunca todavia...
                             if (this.tableroY === 12) {
-                                // Se entra si es el primer movimiento del peón
                                 arriba.colorPossible();
                                 if (arribax2 && arribax2.pieza === null)
+                                    //Ponemos visible que puedas moverte dos casillas
                                     arribax2.colorPossible();
                             }
                             else {
@@ -94,7 +99,7 @@ export default class Pieza {
                         let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
                         let der = scene.board[this.tableroX + 1][this.tableroY];
                         let derx2 = null;
-                        if(this.tableroX === 1){
+                        if (this.tableroX === 1) {
                             derx2 = scene.board[this.tableroX + 2][this.tableroY];
                         }
                         let arribaDer = scene.board[this.tableroX + 1][this.tableroY - 1];
@@ -127,7 +132,7 @@ export default class Pieza {
                         let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
                         let abajo = scene.board[this.tableroX][this.tableroY + 1];
                         let abajox2 = null;
-                        if(this.tableroY === 1){
+                        if (this.tableroY === 1) {
                             abajox2 = scene.board[this.tableroX][this.tableroY + 2];
                         }
                         let abajoDer = scene.board[this.tableroX + 1][this.tableroY + 1];
@@ -160,7 +165,7 @@ export default class Pieza {
                         let arribaIzq = scene.board[this.tableroX - 1][this.tableroY - 1];
                         let izda = scene.board[this.tableroX - 1][this.tableroY];
                         let izdax2 = null;
-                        if(this.tableroX === 12){
+                        if (this.tableroX === 12) {
                             izdax2 = scene.board[this.tableroX - 2][this.tableroY];
                         }
                         let abajoIzda = scene.board[this.tableroX - 1][this.tableroY + 1];
@@ -187,9 +192,7 @@ export default class Pieza {
                         }
                     }
                 }
-
             }
-
         }).disableInteractive();
 
         // Si el jugador en su turno pasa el ratón sobre una de sus piezas se pone en grande 
@@ -205,6 +208,7 @@ export default class Pieza {
         }).disableInteractive();
     }
 
+    //Casillas unicas
     compruebaRey() {
         this.casillaUnica({ x: 0, y: 1 }, this.tableroX, this.tableroY);
         this.casillaUnica({ x: 0, y: -1 }, this.tableroX, this.tableroY);
@@ -216,6 +220,7 @@ export default class Pieza {
         this.casillaUnica({ x: -1, y: 1 }, this.tableroX, this.tableroY);
     }
 
+    //Recursivo
     compruebaReina() {
         this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
         this.casillaRecursiva({ x: 0, y: -1 }, this.tableroX, this.tableroY);
@@ -227,6 +232,7 @@ export default class Pieza {
         this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
     }
 
+    //Casillas unicas
     compruebaCaballo() {
         this.casillaUnica({ x: 2, y: 1 }, this.tableroX, this.tableroY);
         this.casillaUnica({ x: 2, y: -1 }, this.tableroX, this.tableroY);
@@ -238,6 +244,7 @@ export default class Pieza {
         this.casillaUnica({ x: -1, y: -2 }, this.tableroX, this.tableroY);
     }
 
+    //Recursivo
     compruebaAlfil() {
         // Calcula las 4 direcciones
         this.casillaRecursiva({ x: 1, y: 1 }, this.tableroX, this.tableroY);
@@ -246,6 +253,7 @@ export default class Pieza {
         this.casillaRecursiva({ x: -1, y: 1 }, this.tableroX, this.tableroY);
     }
 
+    //Recursivo
     compruebaTorre() {
         // Calcula las 4 direcciones
         this.casillaRecursiva({ x: 0, y: 1 }, this.tableroX, this.tableroY);
@@ -271,6 +279,7 @@ export default class Pieza {
     }
 
     casillaUnica(dir, x, y) {
+        //Delimitamos el rango del tablero
         if (x + dir.x < 0 || x + dir.x > 13 || y + dir.y < 0 || y + dir.y > 13) return;
 
         if (this.scene.board[x + dir.x][y + dir.y]) {

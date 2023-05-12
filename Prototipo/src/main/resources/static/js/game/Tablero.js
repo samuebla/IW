@@ -22,7 +22,7 @@ export default class Tablero {
         let white = 0xffffff;
 
 
-        // La parte del centro (El rectangulo)
+        // La parte del centro (Izquierda centro y derecha)
         for (let j = 0; j < this.columnas; j++) {
             this.changeColor(white, black);
             for (let i = 3; i < this.filas - 3; i++) {
