@@ -7,4 +7,11 @@
     background-color: #2196F3;
 }
 
-/* comojugar.html */
+.btn-pink {
+    background-color: #ffb5f9 !important;
+    color: black;
+}
+
+.btn-pink:hover {
+    background-color: #be7eb9 !important;
+}
