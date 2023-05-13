@@ -4,6 +4,7 @@
 <!-- ROOTCONTROLLER -->
 
 <!-- NO es el header -->
+
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -19,64 +20,31 @@
         <div class="container">
 
             <!-- Creamos el form con la accion de registrarse (Creada en el RootController) -->
-            <form class="form-signin" method="post" th:action="@{/register}" style="margin: auto;
-            max-width: 600px;
-            padding: 20px;">
-                <h2 class="form-signin-heading" style="text-align: center;">Regístrate</h2>
-                <p th:if="${#request.getQueryString() == 'error'}" class="error" style="color: red;
-                font-size: 14px;
-                margin-bottom: 10px;">
+            <form class="form-signin px-3 py-5 mx-auto" method="post" th:action="@{/register}"
+                style="max-width: 600px;">
+
+                <h2 class="form-signin-heading text-center">Regístrate</h2>
+                <p th:if="${#request.getQueryString() == 'error'}" class="error text-danger small mb-2">
                     Error en nombre de usuario o contraseña
                 </p>
                 <p>
-                    <label for="username" class="visually-hidden" style="display: block;
-                    font-weight: bold;
-                    margin-bottom: 5px;">Usuario</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario"
-                        required="required" style="border: 1px solid #ccc;
-                    border-radius: 100px;
-                    box-sizing: border-box;
-                    font-size: 16px;
-                    padding: 10px;
-                    margin-bottom: 20px;
-                    width: 100%;">
+                    <label for="username" class="form-label visually-hidden">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control rounded-pill mb-4"
+                        placeholder="Usuario" required="required">
                 </p>
                 <p>
-                    <label for="password" class="visually-hidden" style="display: block;
-                    font-weight: bold;
-                    margin-bottom: 5px;">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña"
-                        required="required" style="border: 1px solid #ccc;
-                    border-radius: 100px;
-                    box-sizing: border-box;
-                    font-size: 16px;
-                    padding: 10px;
-                    margin-bottom: 20px;
-                    width: 100%;">
+                    <label for="password" class="form-label visually-hidden">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control rounded-pill mb-4"
+                        placeholder="Contraseña" required="required">
                 </p>
                 <p>
-                    <label for="repeatpassword" class="visually-hidden" style="display: block;
-                    font-weight: bold;
-                    margin-bottom: 5px;">Repetir contraseña</label>
-                    <input type="password" id="repeatpassword" name="repeatpassword" class="form-control"
-                        placeholder="Repetir contraseña" required="required" style="border: 1px solid #ccc;
-                    border-radius: 100px;
-                    box-sizing: border-box;
-                    font-size: 16px;
-                    padding: 10px;
-                    margin-bottom: 20px;
-                    width: 100%;">
+                    <label for="repeatpassword" class="form-label visually-hidden">Repetir contraseña</label>
+                    <input type="password" id="repeatpassword" name="repeatpassword"
+                        class="form-control rounded-pill mb-4" placeholder="Repetir contraseña" required="required">
                 </p>
                 <!-- Con el boton envias la accion de registrarse (Creada en el RootController) -->
-                <button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #ffb5f9;
-                border: none;
-                border-radius: 100px;
-                color: black;
-                cursor: pointer;
-                font-size: 16px;
-                padding: 10px;
-                width: 100%;" onmouseover="this.style.backgroundColor='#be7eb9';"
-                    onmouseout="this.style.backgroundColor='#ffb5f9';">Regístrate</button>
+                <button class="btn btn-lg btn-pink btn-block rounded-pill mb-2 w-100" type="submit">Regístrate</button>
+
             </form>
 
             <!-- Con esto se asegura que la contraseña sea la misma en ambas cajas -->
