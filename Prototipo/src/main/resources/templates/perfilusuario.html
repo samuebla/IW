@@ -3,7 +3,6 @@
 
 <!-- Esto se maneja con el ADMINCONTROLLER -->
 
-<!-- NO es el header -->
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -15,52 +14,37 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5" style="text-align:center;" th:text="${'Perfil Usuario ' + user.username}">Perfil Usuario
+            <h1 class="mt-5 text-center" th:text="${'Perfil Usuario ' + user.username}">Perfil Usuario
             </h1>
 
-            <table style="border-collapse: collapse;
-            width: 100%;
-            max-width:1000px;
-            margin-left: auto;
-            margin-right: auto;">
+            <table class="table table-bordered w-100 mx-auto">
                 <tr>
-                    <th colspan="3" style="border: 1px solid #dddddd;
-                    text-align: center;
-                    padding: 8px;
-                    background-color: #ff7083; position: inherit;">Informes recibidos</th>
+                    <th colspan="3" class="text-center py-2 bg-pink">Informes recibidos</th>
                 </tr>
 
                 <tr>
                     <!-- Por cada denuncia que tenga el usuario... -->
-                    <td th:each="d,iter: ${user.denuncias}" style="border: 1px solid #dddddd;">
-
+                    <td th:each="d,iter: ${user.denuncias}">
                         <!-- Muestras el numero de denuncias -->
-                        <h3 style="text-align: center;" th:text="${'Denuncia ' + iter.count}">X</h3>
-
-
+                        <h3 class="text-center" th:text="${'Denuncia ' + iter.count}">X</h3>
                     </td>
                 </tr>
 
                 <tr>
                     <!-- Por cada denuncia... -->
-                    <td th:each="d: ${user.denuncias}" style="border: 1px solid #dddddd;">
-
+                    <td th:each="d: ${user.denuncias}">
                         <!-- Muestras la persona que te ha denunciado -->
-                        <div
-                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                        <div class="border border-5 rounded text-center p-2 mx-auto" style="width: 80%;">
                             <p th:text="${'Denunciado por ' + d.denunciante.username}">X</p>
                         </div>
-
                     </td>
                 </tr>
                 <tr>
                     <!-- Por cada denuncia... -->
-                    <td th:each="d: ${user.denuncias}" style="border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;  overflow-y: scroll;">
+                    <td th:each="d: ${user.denuncias}" class="p-2 overflow-auto">
                         <!-- Muestra la conversacion de la partida de todas las personas -->
-                        <div th:each="m: ${d.partida.received}"
-                            style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
+                        <div th:each="m: ${d.partida.received}" class="border border-5 rounded text-center p-2 mx-auto"
+                            style="width: 80%;">
                             <p th:text="${m.sender.username}"> </p>
                             <p th:text="${m.text}">Texto de prueba</p>
                         </div>
