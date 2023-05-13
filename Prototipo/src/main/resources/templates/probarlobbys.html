@@ -4,6 +4,7 @@
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.1.3.css}">
     <title>Fourdrez Probar Lobbies</title>
 </head>
 
@@ -13,21 +14,17 @@
     <main class="flex-shrink-0">
         <div class="container">
             <!-- TODO HACERLO ROJO -->
-            <h4 style="text-align:center;" th:if="${fullLobby}">El lobby al que has intentado entrar está lleno</h4>
-            <h1 class="mt-5" style="text-align:center;">Lobbies</h1>
+            <h4 class="text-center text-danger" th:if="${fullLobby}">El lobby al que has intentado entrar está lleno
+            </h4>
+            <h1 class="mt-5 text-center">Lobbies</h1>
 
-            <table style="border-collapse: collapse;
-            width: 100%;
-            max-width:1000px;
-            margin-left: auto;
-            margin-right: auto;">
+            <table class="table table-responsive mx-auto" style="max-width:1000px;">
                 <tr>
-                    
                     <th>Lobbies</th>
                     <th>Crear</th>
                     <th>Num. Jugadores</th>
                 </tr>
-                <tr style="background-color: #dddddd;">
+                <tr class="bg-light">
                     <td>Nueva partida</td>
                     <td>
                         <form th:action="@{/partida}" method="post">
@@ -44,7 +41,7 @@
                     </td>
                     <td>
                         <form th:action="@{/partida/{id}/newuser(id=${p.id})}" method="post">
-                           <span th:text="${#lists.size(p.jugadores) + '/4'}"> 0/0</span>
+                            <span th:text="${#lists.size(p.jugadores) + '/4'}"> 0/0</span>
                             <button type="submit" class="btn btn-outline-secondary btn-sm">Jugar</button>
                         </form>
                     </td>
