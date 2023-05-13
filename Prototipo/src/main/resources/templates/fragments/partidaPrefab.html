@@ -107,7 +107,7 @@
                     <script th:src="@{/js/game/game.js}" type="module"></script>
                 </div>
 
-                <div th:if="${partida.currentState == 0}"
+                <div th:if="${partida.currentState == 0}" id="chessGame"
                     class="border border-5 rounded d-flex flex-column align-items-center justify-content-center"
                     style="box-sizing: border-box; flex-basis: 80%;">
 
@@ -173,7 +173,8 @@
 
                     }
 
-                    function muestraJoin(target, username, userId, urlDenuncia, ready) {
+                    function muestraJoin(target, phaserTarget, username, userId, urlDenuncia, ready, startGame) {
+                        //Gestiona el boton de ready
                         const banderaEnorme = `
                         <form method="POST" action="${urlDenuncia}">
                             <input type="hidden" name="id_denunciado" value="${userId}" />
@@ -199,24 +200,36 @@
                         if (!encontrado) {
                             target.innerHTML += elemento;
                         }
-                    }
-                    let readyButton = document.getElementById("readyButton");
 
-                    readyButton.parentNode.onsubmit = (e) => {
-                        e.preventDefault();
+                        //Gestiona la vista del juego
+                        if (startGame) {
 
-                        go(readyButton.parentNode.action, 'POST', {
-                        })
-                            .then(d => console.log("ENVIA READY WUO", d))
-                            .catch(e => console.log(e))
-                    }
+                            const vistaJuego =
+                            `<div class="border border-5 rounded d-flex align-items-center"
+                            style="box-sizing: border-box; flex-basis: 80%;">
+                            <canvas id="juego" class="mx-auto" style="max-width: 100%; max-height: 100%;"></canvas>
+                            <script src="{/js/game/game.js}" type="module"><\/script>
+                            </div>`;
+                            phaserTarget.innerHTML = vistaJuego;
+                        }
+            }
+            let readyButton = document.getElementById("readyButton");
 
-                // function sendMessage(message,sender){
-                //     return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
-                //     .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
-                //     .catch(e=>console.log(e))
-                // }
-                </script>
+            readyButton.parentNode.onsubmit = (e) => {
+            e.preventDefault();
+
+            go(readyButton.parentNode.action, 'POST', {
+            })
+            .then(d => console.log("ENVIA READY WUO", d))
+            .catch(e => console.log(e))
+            }
+
+            // function sendMessage(message,sender){
+            // return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
+            // .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
+            // .catch(e=>console.log(e))
+            // }
+            </script>
 
 
             </div>
@@ -240,7 +253,8 @@
                 }
                 else if (d.type === "JOIN") {
                     const target = document.querySelector("#listaJugadores");
-                    muestraJoin(target, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready);
+                    const phaserTarget = document.querySelector('#chessGame');
+                    muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
                 }
             }
         </script>

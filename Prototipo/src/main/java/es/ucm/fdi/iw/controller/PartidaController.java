@@ -232,6 +232,8 @@ public class PartidaController {
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
+        boolean startGame = false;
+
         long playerId = 0;
         boolean ready = false;
 
@@ -253,8 +255,13 @@ public class PartidaController {
         }
 
         if ((numPlayersReady == 4) && (p.getCurrentState() == 0)) {
+            System.out.print("Empiezo");
             p.setCurrentState(1);
+            // Comenzamos la partida
+            startGame = true;
         }
+
+        System.out.print("Num jugadores" + numPlayersReady);
 
         entityManager.persist(p);
         entityManager.flush();
@@ -281,7 +288,8 @@ public class PartidaController {
          * 
          */
 
-        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), ready);
+        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), ready,
+                startGame);
 
         // Meterlo en un topic
         // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
@@ -349,7 +357,7 @@ public class PartidaController {
         // p.setTiempoTotal(tiempoTotal);
         // }
 
-        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), false);
+        ReadyStructure readyObject = new ReadyStructure("JOIN", u.getUsername(), u.getId(), p.getId(), false, false);
 
         // Meterlo en un topic
         // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
