@@ -98,6 +98,9 @@
                 </div>
 
 
+                <!-- Con esto accedemos al id de la partida desde el juego en javascript -->
+                <input th:value="${partida.id}" id="lobbyId" type="hidden"/>
+
                 <!-- GAME -->
                 <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
                 Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
@@ -255,6 +258,9 @@
                     const target = document.querySelector("#listaJugadores");
                     const phaserTarget = document.querySelector('#chessGame');
                     muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
+                }
+                else if (d.type === "MOVEPIECE") {
+
                 }
             }
         </script>

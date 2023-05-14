@@ -20,11 +20,11 @@ import lombok.Data;
 public class Jugador {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
-    @SequenceGenerator(name = "gen", sequenceName = "gen")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+	@SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
 
-	String team;
+	char team;
 
 	int contadorFiguras;
 

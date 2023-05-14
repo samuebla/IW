@@ -16,11 +16,27 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.xTablero = tabX;
         this.yTablero = tabY;
 
+        
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             // Comprueba si la casilla es válida para el movimiento
             if (this.possible) {
                 if (scene.players[scene.turn].movingPiece) {
+                    
+                    go("http://localhost/partida/"+ scene.lobbyId + "/pieceMoved", 'POST', {
+                        pieceTeam: scene.players[scene.turn].pieceToMove.equipo , 
+                        pieceType: scene.players[scene.turn].pieceToMove.tipo,
+                        //Posicion previa de la pieza
+                        boardX: scene.players[scene.turn].pieceToMove.tableroX,
+                        boardY: scene.players[scene.turn].pieceToMove.tableroY,
+                        //Posicion a la que quieres avanzar
+                        newBoardX: this.xTablero,
+                        newBoardY: this.yTablero
+                    })
+                    .then(d => console.log("Envio Pieza WEEEE", d))
+                    .catch(e => console.log(e))
+                    
+                    
                     scene.players[scene.turn].disablePieces();
                     if (this.pieza !== null) {
                         // Si es el rey

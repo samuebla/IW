@@ -53,6 +53,6 @@ public class Partida {
 	int incrementoTiempoPorTurno;
 
 	enum ColoresEquipos {
-		Rojo, Azul, Verde, Amarillo
+		Blanco, Rojo, Negro, Azul
 	}
 }

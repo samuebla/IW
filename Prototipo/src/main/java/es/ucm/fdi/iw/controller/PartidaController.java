@@ -5,6 +5,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.SocketStructure.GameStructure;
 import es.ucm.fdi.SocketStructure.ReadyStructure;
 
 import org.apache.logging.log4j.LogManager;
@@ -129,6 +130,8 @@ public class PartidaController {
 
         Jugador j = new Jugador();
         j.setUser(u);
+        // Jugador inicial, team 0
+        j.setTeam((char) 0);
         p.getJugadores().add(j);
         entityManager.persist(j);
         entityManager.persist(p);
@@ -342,6 +345,8 @@ public class PartidaController {
             // Te añade a la partida
             Jugador j = new Jugador();
             j.setUser(u);
+            j.setTeam((char) p.getJugadores().size());
+
             p.getJugadores().add(j);
             entityManager.persist(j);
             entityManager.persist(p);
@@ -409,4 +414,73 @@ public class PartidaController {
 
         return "partida";
     }
+
+    @Transactional
+    @PostMapping("/{id}/pieceMoved")
+    // En el return devuelve lo que ponga en el return directamente
+    @ResponseBody
+    public String movePiece(@PathVariable long id, Model model, HttpSession session, @RequestParam int pieceTeam,
+            @RequestParam int pieceType, @RequestParam int boardX, @RequestParam int boardY,
+            @RequestParam int newBoardX, @RequestParam int newBoardY) {
+
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+
+        model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
+
+        model.addAttribute("user", u);
+        model.addAttribute("partida", p);
+        model.addAttribute("jugadores", p.getJugadores());
+
+        model.addAttribute("messages", p.getReceived());
+
+        // Comprobamos si hay una pieza ahi
+        char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
+        // Si hay alguna pieza de algun equipo...
+        // e de Empty
+        if (teamPreviousPiece != 'e') {
+            boolean playerFound = false;
+            int count = 0;
+
+            // Buscamos el jugador de la pieza
+            while (count < p.getJugadores().size() && !playerFound) {
+
+                if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
+
+                    // Hemos encontrado al jugador
+                    playerFound = true;
+                    p.getJugadores().get(count)
+                            .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                }
+                count++;
+            }
+        }
+
+        // Movemos la pieza
+        char[] nuevoTablero = p.tablero.toCharArray();
+        // Primero Equipo y luego Tipo
+        nuevoTablero[(newBoardY * 14 + newBoardX) * 2] = (char) pieceTeam;
+        nuevoTablero[(newBoardY * 14 + newBoardX) * 2 + 1] = (char) pieceType;
+
+        // Eliminamos la pieza de su antigua posicion
+        nuevoTablero[(boardY * 14 + boardX) * 2] = 'e';
+        nuevoTablero[(boardY * 14 + boardX) * 2 + 1] = 'e';
+
+        // Y reescribimos la base de datos
+        p.tablero = new String(nuevoTablero);
+
+        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
+
+        // Meterlo en un topic
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando ReadyStructure!", jpe);
+        }
+
+        return "{}";
+    }
+
 }
