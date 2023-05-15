@@ -2,7 +2,7 @@ import boot from './scenes/boot.js';
 import fourdrez from './scenes/fourdrez.js';
 import final from './scenes/final.js';
 
-let config = {
+var configGame = {
     type: Phaser.CANVAS,
     canvas: document.getElementById("juego"),
     width: 256,
@@ -15,4 +15,4 @@ let config = {
     scene: [boot, fourdrez, final]
 };
 
-new Phaser.Game(config);
+new Phaser.Game(configGame);

@@ -60,9 +60,6 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                         this.pieza = scene.players[scene.turn].pieceToMove;
                     }
                     // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
-
-                    // Mover pieza para todos los jugadores
-                    this.moverPieza();
                 }
             }
 
@@ -134,7 +131,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
     moverPieza(){
         // Se mueve la pieza al centro de la casilla
         this.scene.players[this.scene.turn].pieceToMove.sprite.x = x + 8;
-        this.cene.players[this.scene.turn].pieceToMove.sprite.y = y + 8;
+        this.scene.players[this.scene.turn].pieceToMove.sprite.y = y + 8;
         this.scene.players[this.scene.turn].movingPiece = false;
 
         this.quitarPossible();
