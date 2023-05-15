@@ -20,8 +20,7 @@
         <div class="container">
 
             <!-- Creamos el form con la accion de registrarse (Creada en el RootController) -->
-            <form class="form-signin px-3 py-5 mx-auto" method="post" th:action="@{/register}"
-                style="max-width: 600px;">
+            <form class="form-signin px-3 py-5 mx-auto max-width-600p" method="post" th:action="@{/register}">
 
                 <h2 class="form-signin-heading text-center">Regístrate</h2>
                 <p th:if="${#request.getQueryString() == 'error'}" class="error text-danger small mb-2">

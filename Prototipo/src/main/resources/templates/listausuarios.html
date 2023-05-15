@@ -4,6 +4,7 @@
 <!-- ESTO SE GESTIONA CON EL ADMIN CONTROLLER (Solo los admin pueden acceder a aqui) -->
 
 <!-- Metadatos y enlaces a archivos (NO es el encabezado) -->
+
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -53,7 +54,7 @@
                                 <form method="POST" th:if="${currentUser.id!=u.id}"
                                     th:action="@{/admin/listausuarios/echar}">
                                     <input type="hidden" name="id_reported" th:value="${u.id}" />
-                                    <button type="submit" class="btn btn-danger" style="width:100%">Echar</button>
+                                    <button type="submit" class="btn btn-danger width-100">Echar</button>
                                 </form>
                             </td>
                         </tr>

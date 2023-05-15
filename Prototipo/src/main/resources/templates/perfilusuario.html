@@ -34,7 +34,7 @@
                     <!-- Por cada denuncia... -->
                     <td th:each="d: ${user.denuncias}">
                         <!-- Muestras la persona que te ha denunciado -->
-                        <div class="border border-5 rounded text-center p-2 mx-auto" style="width: 80%;">
+                        <div class="border border-5 rounded text-center p-2 mx-auto width-80">
                             <p th:text="${'Denunciado por ' + d.denunciante.username}">X</p>
                         </div>
                     </td>
@@ -43,8 +43,8 @@
                     <!-- Por cada denuncia... -->
                     <td th:each="d: ${user.denuncias}" class="p-2 overflow-auto">
                         <!-- Muestra la conversacion de la partida de todas las personas -->
-                        <div th:each="m: ${d.partida.received}" class="border border-5 rounded text-center p-2 mx-auto"
-                            style="width: 80%;">
+                        <div th:each="m: ${d.partida.received}"
+                            class="border border-5 rounded text-center p-2 mx-auto width-80">
                             <p th:text="${m.sender.username}"> </p>
                             <p th:text="${m.text}">Texto de prueba</p>
                         </div>

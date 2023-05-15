@@ -2,6 +2,7 @@
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
 <!-- No es el encabezado -->
+
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -13,12 +14,12 @@
     <!-- Encabezado ya creado en nav.html -->
     <header th:replace="fragments/nav.html :: nav"></header>
 
-    <main class="flex-shrink-0 d-flex justify-content-center" style="gap:50px;">
+    <main class="flex-shrink-0 d-flex justify-content-center gap-50">
         <!-- Una imagen a cada lado y el texto en medio -->
         <img src="/img/tablero.png">
         <div class="container blue-bg col-md-4">
             <h1 class="mt-5 text-center">Cómo jugar</h1>
-            <p style="text-align:justify; margin: 20px;">
+            <p class="ta-justify margin-20">
                 El juego comienza con los jugadores sentados en las cuatro esquinas del tablero, con los reyes ubicados
                 en las esquinas opuestas. El jugador que comienza es elegido al azar.</p>
             <p>
