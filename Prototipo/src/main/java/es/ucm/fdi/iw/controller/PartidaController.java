@@ -170,6 +170,7 @@ public class PartidaController {
         // Jugador inicial, team 0
         j.setTeam((char) 0);
         p.getJugadores().add(j);
+        p.setIdCurrentPlayerTurn(j.getId());
         entityManager.persist(j);
         entityManager.persist(p);
         entityManager.flush(); // sólo necesario porque queremos que el ID se genere antes de ir a la vista
@@ -481,10 +482,12 @@ public class PartidaController {
             }
         }
         
-        // Comprobamos si hay una pieza ahi
-        char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
-        // Solo permitimos que mueva la pieza si es su turno y si esa pieza es de su equipo
-        if (encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId() && teamPreviousPiece == jugadorPeticion.getTeam()){
+        
+        // Solo permitimos que mueva la pieza si ha comenzado la partida, es su turno y si esa pieza es de su equipo
+        if (p.getCurrentState() == 1 && encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId() && (char)pieceTeam == jugadorPeticion.getTeam()){
+            // Comprobamos si hay una pieza ahi
+            char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
+            
             // Si hay alguna pieza de algun equipo...
             // e de Empty
             if (teamPreviousPiece != 'e') {
@@ -517,6 +520,28 @@ public class PartidaController {
 
             // Y reescribimos la base de datos
             p.tablero = new String(nuevoTablero);
+
+            //Buscamos al siguiente jugador por orden
+            int nextPlayer = pieceTeam + 1;
+            boolean foundNextPlayer = false;
+            while(nextPlayer != pieceTeam && !foundNextPlayer){
+                if (nextPlayer == 4){
+                    nextPlayer = 0;
+                }
+                if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0){
+                    foundNextPlayer = true;
+                }else{
+                    nextPlayer++;
+                }
+            }
+
+            // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay mas jugadores
+            if (foundNextPlayer){
+                p.setIdCurrentPlayerTurn(p.getJugadores().get(nextPlayer).getId());
+            }else{
+                p.setCurrentState(2);
+            }
+            
 
             GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
 
