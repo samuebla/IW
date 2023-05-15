@@ -16,7 +16,7 @@
 
 
         <main class="flex-shrink-0">
-            <div class="container d-flex mt-5" style="height: 600px;">
+            <div class="container d-flex mt-5 h600">
 
 
 
@@ -29,7 +29,7 @@
 
 
                 <!-- Lista de usuarios en la lobby y chat -->
-                <div class="d-flex flex-column border border-5 rounded p-3 flex-grow-1 me-3" style="flex-basis: 20%;">
+                <div class="d-flex flex-column border border-5 rounded p-3 flex-grow-1 me-3 fb20">
 
 
                     <!-- <tr th:each="p: ${partidas.id.j}">
@@ -80,7 +80,7 @@
                     
                 </div> -->
 
-                    <div class="d-flex flex-column border border-5 rounded p-3" style="height: 70%;">
+                    <div class="d-flex flex-column border border-5 rounded p-3 h70p">
                         <div id="chat" class="overflow-auto mb-3">
                             <div th:each="m: ${messages}" class="border border-5 rounded text-center p-3">
                                 <p th:text="${m.sender.username}"> </p>
@@ -99,20 +99,19 @@
 
 
                 <!-- Con esto accedemos al id de la partida desde el juego en javascript -->
-                <input th:value="${partida.id}" id="lobbyId" type="hidden"/>
+                <input th:value="${partida.id}" id="lobbyId" type="hidden" />
 
                 <!-- GAME -->
                 <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
                 Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
-                <div th:if="${partida.currentState == 1}" class="border border-5 rounded d-flex align-items-center"
-                    style="box-sizing: border-box; flex-basis: 80%;">
-                    <canvas id="juego" class="mx-auto" style="max-width: 100%; max-height: 100%;"></canvas>
+                <div th:if="${partida.currentState == 1}"
+                    class="border border-5 rounded d-flex align-items-center border-box fb80">
+                    <canvas id="juego" class="mx-auto max-width-100 max-height-100"></canvas>
                     <script th:src="@{/js/game/game.js}" type="module"></script>
                 </div>
 
                 <div th:if="${partida.currentState == 0}" id="chessGame"
-                    class="border border-5 rounded d-flex flex-column align-items-center justify-content-center"
-                    style="box-sizing: border-box; flex-basis: 80%;">
+                    class="border border-5 rounded d-flex flex-column align-items-center justify-content-center border-box fb80">
 
                     <div th:if="${partida.currentState == 0}" class="text-center">
                         <!-- partida valida -->
@@ -208,31 +207,31 @@
                         if (startGame) {
 
                             const vistaJuego =
-                            `<div class="border border-5 rounded d-flex align-items-center"
+                                `<div class="border border-5 rounded d-flex align-items-center"
                             style="box-sizing: border-box; flex-basis: 80%;">
                             <canvas id="juego" class="mx-auto" style="max-width: 100%; max-height: 100%;"></canvas>
                             <script src="http://localhost/js/game/game.js" type="module"><\/script>
                             </div>`;
                             phaserTarget.innerHTML = vistaJuego;
                         }
-            }
-            let readyButton = document.getElementById("readyButton");
+                    }
+                    let readyButton = document.getElementById("readyButton");
 
-            readyButton.parentNode.onsubmit = (e) => {
-            e.preventDefault();
+                    readyButton.parentNode.onsubmit = (e) => {
+                        e.preventDefault();
 
-            go(readyButton.parentNode.action, 'POST', {
-            })
-            .then(d => console.log("ENVIA READY WUO", d))
-            .catch(e => console.log(e))
-            }
+                        go(readyButton.parentNode.action, 'POST', {
+                        })
+                            .then(d => console.log("ENVIA READY WUO", d))
+                            .catch(e => console.log(e))
+                    }
 
             // function sendMessage(message,sender){
             // return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
             // .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
             // .catch(e=>console.log(e))
             // }
-            </script>
+                </script>
 
 
             </div>
