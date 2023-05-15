@@ -49,8 +49,8 @@
                             <h5 th:text="${j.user.username}">Usuario A</h5>
                             <form method="POST" th:if="${j.user.id!=user.id}"
                                 th:action="@{/partida/{id}/reportar(id=${partida.id})}">
-                                <input type="hidden" name="id_denunciado" th:value="${j.user.id}" />
-                                <input type="hidden" name="id_denunciante" th:value="${session.u.id}" />
+                                <input type="hidden" name="idDenunciado" th:value="${j.user.id}" />
+                                <input type="hidden" name="idDenunciante" th:value="${session.u.id}" />
                                 <button type="submit" class="btn"><img src="/img/redflag.png"></button>
                             </form>
                             <a th:if="${partida.currentState == 0}">
@@ -180,8 +180,8 @@
                         //Gestiona el boton de ready
                         const banderaEnorme = `
                         <form method="POST" action="${urlDenuncia}">
-                            <input type="hidden" name="id_denunciado" value="${userId}" />
-                            <input type="hidden" name="id_denunciante" value="${config.userId}" />
+                            <input type="hidden" name="idDenunciado" value="${userId}" />
+                            <input type="hidden" name="idDenunciante" value="${config.userId}" />
                             <button type="submit"><img src="/img/redflag.png"></button>
                         </form>`;
                         const elemento =

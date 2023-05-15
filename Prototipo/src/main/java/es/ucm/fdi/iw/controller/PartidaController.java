@@ -417,8 +417,8 @@ public class PartidaController {
 
     @Transactional
     @PostMapping("/{id}/reportar")
-    public String reportUser(@PathVariable long id, Model model, HttpSession session, @RequestParam long id_denunciado,
-            @RequestParam long id_denunciante) {
+    public String reportUser(@PathVariable long id, Model model, HttpSession session, @RequestParam long idDenunciado,
+            @RequestParam long idDenunciante) {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
@@ -435,10 +435,10 @@ public class PartidaController {
         model.addAttribute("messages", p.getReceived());
 
         // Para evitar que no te denuncies a ti mismo?
-        if (id_denunciado != id_denunciante) {
+        if (idDenunciado != idDenunciante) {
             // Reportar al usuario indicado
-            User reportedUser = entityManager.find(User.class, id_denunciado);
-            User reportingUser = entityManager.find(User.class, id_denunciante);
+            User reportedUser = entityManager.find(User.class, idDenunciado);
+            User reportingUser = entityManager.find(User.class, idDenunciante);
             Denuncia newDenuncia = new Denuncia();
             newDenuncia.setPartida(p);
             newDenuncia.setDenunciado(reportedUser);
