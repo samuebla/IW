@@ -412,7 +412,7 @@ public class PartidaController {
 
         model.addAttribute("messages", p.getReceived());
 
-        return "partida";
+        return "partidaNueva";
     }
 
     @Transactional
@@ -471,50 +471,63 @@ public class PartidaController {
 
         model.addAttribute("messages", p.getReceived());
 
-        // Comprobamos si hay una pieza ahi
-        char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
-        // Si hay alguna pieza de algun equipo...
-        // e de Empty
-        if (teamPreviousPiece != 'e') {
-            boolean playerFound = false;
-            int count = 0;
-
-            // Buscamos el jugador de la pieza
-            while (count < p.getJugadores().size() && !playerFound) {
-
-                if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
-
-                    // Hemos encontrado al jugador
-                    playerFound = true;
-                    p.getJugadores().get(count)
-                            .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
-                }
-                count++;
+        // Buscamos al usuario que ha hecho la peticion como jugador en la partida
+        boolean encontradoJugador = false;
+        Jugador jugadorPeticion = null;
+        for (Jugador o : p.getJugadores()){
+            if (o.getUser().getId() == u.getId()){
+                encontradoJugador = true;
+                jugadorPeticion = o;
             }
         }
+        
+        // Comprobamos si hay una pieza ahi
+        char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
+        // Solo permitimos que mueva la pieza si es su turno y si esa pieza es de su equipo
+        if (encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId() && teamPreviousPiece == jugadorPeticion.getTeam()){
+            // Si hay alguna pieza de algun equipo...
+            // e de Empty
+            if (teamPreviousPiece != 'e') {
+                boolean playerFound = false;
+                int count = 0;
 
-        // Movemos la pieza
-        char[] nuevoTablero = p.tablero.toCharArray();
-        // Primero Equipo y luego Tipo
-        nuevoTablero[(newBoardY * 14 + newBoardX) * 2] = (char) pieceTeam;
-        nuevoTablero[(newBoardY * 14 + newBoardX) * 2 + 1] = (char) pieceType;
+                // Buscamos el jugador de la pieza
+                while (count < p.getJugadores().size() && !playerFound) {
 
-        // Eliminamos la pieza de su antigua posicion
-        nuevoTablero[(boardY * 14 + boardX) * 2] = 'e';
-        nuevoTablero[(boardY * 14 + boardX) * 2 + 1] = 'e';
+                    if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
 
-        // Y reescribimos la base de datos
-        p.tablero = new String(nuevoTablero);
+                        // Hemos encontrado al jugador
+                        playerFound = true;
+                        p.getJugadores().get(count)
+                                .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                    }
+                    count++;
+                }
+            }
 
-        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
+            // Movemos la pieza
+            char[] nuevoTablero = p.tablero.toCharArray();
+            // Primero Equipo y luego Tipo
+            nuevoTablero[(newBoardY * 14 + newBoardX) * 2] = (char) pieceTeam;
+            nuevoTablero[(newBoardY * 14 + newBoardX) * 2 + 1] = (char) pieceType;
 
-        // Meterlo en un topic
-        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
-        ObjectMapper om = new ObjectMapper();
-        try {
-            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
-        } catch (JsonProcessingException jpe) {
-            log.warn("Error enviando ReadyStructure!", jpe);
+            // Eliminamos la pieza de su antigua posicion
+            nuevoTablero[(boardY * 14 + boardX) * 2] = 'e';
+            nuevoTablero[(boardY * 14 + boardX) * 2 + 1] = 'e';
+
+            // Y reescribimos la base de datos
+            p.tablero = new String(nuevoTablero);
+
+            GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
+
+            // Meterlo en un topic
+            // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+            ObjectMapper om = new ObjectMapper();
+            try {
+                messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
+            } catch (JsonProcessingException jpe) {
+                log.warn("Error enviando ReadyStructure!", jpe);
+            }
         }
 
         return "{}";

@@ -40,6 +40,8 @@ public class Partida {
 
 	public String tablero;
 
+	public long idCurrentPlayerTurn;
+
 	@OneToMany
 	@JoinColumn(name = "partida_id")
 	List<Message> received = new ArrayList<>();
