@@ -5,8 +5,6 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
-import es.ucm.fdi.SocketStructure.GameStructure;
-import es.ucm.fdi.SocketStructure.ReadyStructure;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +51,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 
+
 /**
  * Partida management.
  *
@@ -61,6 +60,44 @@ import es.ucm.fdi.iw.model.User;
 @Controller
 @RequestMapping("partida") // todas las urls de abajo empiezan por "partida"
 public class PartidaController {
+
+
+    public static class GameStructure {
+        public String type;
+        public int pieceType;
+        public int pieceTeam;
+        public int newPositionX;
+        public int newPositionY;
+    
+        public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int newPositionXAux, int newPositionYAux) {
+            type = typeAux;
+            pieceType = pieceTypeAux;
+            pieceTeam = pieceTeamAux;
+            newPositionX = newPositionXAux;
+            newPositionY = newPositionYAux;
+        }
+    }
+
+    public static class ReadyStructure {
+        public String type;
+        public String username;
+        public long userId;
+        public long partidaId;
+        public boolean ready;
+        public boolean startGame;
+    
+        public ReadyStructure(String typeAux, String usernameAux, long playerIdAux, long partidaIdAux, boolean readyAux,
+                boolean startGameAux) {
+            type = typeAux;
+            username = usernameAux;
+            userId = playerIdAux;
+            partidaId = partidaIdAux;
+            ready = readyAux;
+            startGame = startGameAux;
+        }
+    }
+
+
 
     private static final Logger log = LogManager.getLogger(PartidaController.class);
 
