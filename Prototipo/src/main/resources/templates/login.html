@@ -16,8 +16,7 @@
   <main class="flex-shrink-0">
     <div class="container">
       <!-- Ponemos el form con la accion creada en el rootController -->
-      <form class="mx-auto my-4 py-3 px-5 bg-white rounded-3" style="max-width: 600px;" method="post"
-        th:action="@{/login}">
+      <form class="mx-auto my-4 py-3 px-5 bg-white rounded-3 max-width-600p" method="post" th:action="@{/login}">
         <h2 th:if="${success}" class="form-signin-heading text-center">Registro ok! Haz login abajo :-)</h2>
         <h2 th:unless="${success}" class="form-signin-heading text-center">Iniciar sesión</h2>
         <p th:if="${#request.getQueryString() == 'error'}" class="text-danger mb-2">

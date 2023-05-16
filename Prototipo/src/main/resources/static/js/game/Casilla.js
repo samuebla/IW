@@ -16,11 +16,28 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.xTablero = tabX;
         this.yTablero = tabY;
 
+        
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             // Comprueba si la casilla es válida para el movimiento
             if (this.possible) {
                 if (scene.players[scene.turn].movingPiece) {
+                    
+                    go("http://localhost/partida/"+ scene.lobbyId + "/pieceMoved", 'POST', {
+                        pieceTeam: scene.players[scene.turn].pieceToMove.equipo , 
+                        pieceType: scene.players[scene.turn].pieceToMove.tipo,
+                        //Posicion previa de la pieza
+                        boardX: scene.players[scene.turn].pieceToMove.tableroX,
+                        boardY: scene.players[scene.turn].pieceToMove.tableroY,
+                        //Posicion a la que quieres avanzar
+                        newBoardX: this.xTablero,
+                        newBoardY: this.yTablero
+                    })
+                    .then(d => console.log("Envio Pieza WEEEE", d))
+                    .catch(e => console.log(e))
+                    
+                    
+                    // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
                     scene.players[scene.turn].disablePieces();
                     if (this.pieza !== null) {
                         // Si es el rey
@@ -42,33 +59,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                         // Si no había otra pieza simplemente se coloca la nueva
                         this.pieza = scene.players[scene.turn].pieceToMove;
                     }
-
-                    // Se mueve la pieza al centro de la casilla
-                    scene.players[scene.turn].pieceToMove.sprite.x = x + 8;
-                    scene.players[scene.turn].pieceToMove.sprite.y = y + 8;
-                    scene.players[scene.turn].movingPiece = false;
-
-                    this.quitarPossible();
-                    // Cambio de turno
-                    if (scene.turn + 1 > 3) scene.turn = 0;
-                        else scene.turn++;
-
-                    while(scene.equiposEliminados.includes(scene.turn)){
-                        if (scene.turn + 1 > 3) scene.turn = 0;
-                        else scene.turn++;
-                    }
-                    
-
-                    // Actualiza la posición lógica de la pieza dentro del tablero
-                    scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
-                    this.pieza.tableroX = this.xTablero;
-                    this.pieza.tableroY = this.yTablero;
-
-                    if(this.pieza.tipo < 8){
-                        this.calculaPeon();
-                    }
-
-                    scene.players[scene.turn].interactPieces();
+                    // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
                 }
             }
 
@@ -135,5 +126,34 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
             this.pieza.tipo = 11;
         }
         
+    }
+
+    moverPieza(){
+        // Se mueve la pieza al centro de la casilla
+        this.scene.players[this.scene.turn].pieceToMove.sprite.x = x + 8;
+        this.scene.players[this.scene.turn].pieceToMove.sprite.y = y + 8;
+        this.scene.players[this.scene.turn].movingPiece = false;
+
+        this.quitarPossible();
+        // Cambio de turno
+        if (this.scene.turn + 1 > 3) this.scene.turn = 0;
+            else this.scene.turn++;
+
+        while(this.scene.equiposEliminados.includes(this.scene.turn)){
+            if (this.scene.turn + 1 > 3) this.scene.turn = 0;
+            else this.scene.turn++;
+        }
+        
+
+        // Actualiza la posición lógica de la pieza dentro del tablero
+        this.scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
+        this.pieza.tableroX = this.xTablero;
+        this.pieza.tableroY = this.yTablero;
+
+        if(this.pieza.tipo < 8){
+            this.calculaPeon();
+        }
+
+        this.scene.players[this.scene.turn].interactPieces();
     }
 }

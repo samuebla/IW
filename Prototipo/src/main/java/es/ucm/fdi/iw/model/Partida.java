@@ -40,6 +40,8 @@ public class Partida {
 
 	public String tablero;
 
+	public long idCurrentPlayerTurn;
+
 	@OneToMany
 	@JoinColumn(name = "partida_id")
 	List<Message> received = new ArrayList<>();
@@ -53,6 +55,6 @@ public class Partida {
 	int incrementoTiempoPorTurno;
 
 	enum ColoresEquipos {
-		Rojo, Azul, Verde, Amarillo
+		Blanco, Rojo, Negro, Azul
 	}
 }
