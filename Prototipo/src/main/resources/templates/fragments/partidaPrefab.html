@@ -47,8 +47,7 @@
                     <div class="d-flex justify-content-between border border-5 rounded p-3 mb-3" id="listaJugadores">
                         <div th:each="j: ${partida.jugadores}" th:data-id="${j.user.id}">
                             <h5 th:text="${j.user.username}">Usuario A</h5>
-                            <form method="POST" th:if="${j.user.id!=user.id}"
-                                th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                            <form method="POST" th:if="${j.user.id!=user.id}" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
                                 <input type="hidden" name="idDenunciado" th:value="${j.user.id}" />
                                 <input type="hidden" name="idDenunciante" th:value="${session.u.id}" />
                                 <button type="submit" class="btn"><img src="/img/redflag.png"></button>
@@ -88,8 +87,7 @@
                             </div>
                         </div>
                         <form method="POST" th:action="@{/partida/{id}/mensaje(id=${partida.id})}">
-                            <input type="text" id="sendMessage" name="text" placeholder="Escribe un mensaje..."
-                                class="w-100 text-center py-3 border border-5 rounded">
+                            <input type="text" id="sendMessage" name="text" placeholder="Escribe un mensaje..." class="w-100 text-center py-3 border border-5 rounded">
                         </form>
                     </div>
 
@@ -104,14 +102,12 @@
                 <!-- GAME -->
                 <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
                 Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
-                <div th:if="${partida.currentState == 1}"
-                    class="border border-5 rounded d-flex align-items-center border-box fb80">
+                <div th:if="${partida.currentState == 1}" class="border border-5 rounded d-flex align-items-center border-box fb80">
                     <canvas id="juego" class="mx-auto max-width-100 max-height-100"></canvas>
                     <script th:src="@{/js/game/game.js}" type="module"></script>
                 </div>
 
-                <div th:if="${partida.currentState == 0}" id="chessGame"
-                    class="border border-5 rounded d-flex flex-column align-items-center justify-content-center border-box fb80">
+                <div th:if="${partida.currentState == 0}" id="chessGame" class="border border-5 rounded d-flex flex-column align-items-center justify-content-center border-box fb80">
 
                     <div th:if="${partida.currentState == 0}" class="text-center">
                         <!-- partida valida -->
@@ -123,8 +119,7 @@
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Incremento</span>
-                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"
-                                    class="form-control">
+                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary">Cambiar configuracion</button>
                         </form>
@@ -132,13 +127,11 @@
                         <div th:unless="${jefe}">
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Tiempo max</span>
-                                <input name="tiempoTotal" th:value="${partida.tiempoTotal}" class="form-control"
-                                    readonly>
+                                <input name="tiempoTotal" th:value="${partida.tiempoTotal}" class="form-control" readonly>
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Incremento</span>
-                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"
-                                    class="form-control" readonly>
+                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}" class="form-control" readonly>
                             </div>
                         </div>
 
@@ -151,7 +144,7 @@
                     function muestraMensaje(target, sender, textToSend) {
                         target.innerHTML += `<div
                         style="border: 5px solid #000; width: 80%; border-radius: 10px; text-align: center; padding: 10px;">
-                        <p>`+ sender + `</p>
+                        <p>` + sender + `</p>
                         <p>` + textToSend + `</p>
                     </div>`;
                     }
@@ -168,8 +161,8 @@
                         let textToSend = inputMuyBonito.value;
 
                         go(inputMuyBonito.parentNode.action, 'POST', {
-                            message: inputMuyBonito.value
-                        })
+                                message: inputMuyBonito.value
+                            })
                             .then(d => console.log(":-)", d))
                             .catch(e => console.log(e))
 
@@ -208,29 +201,29 @@
 
                             const vistaJuego =
                                 `<div class="border border-5 rounded d-flex align-items-center"
-                            style="box-sizing: border-box; flex-basis: 80%;">
-                            <canvas id="juego" class="mx-auto" style="max-width: 100%; max-height: 100%;"></canvas>
-                            <script src="http://localhost/js/game/game.js" type="module"><\/script>
+                                    style="box-sizing: border-box; flex-basis: 80%;">
+                                    <canvas id="juego" class="mx-auto" style="max-width: 100%; max-height: 100%;"></canvas>
+                                    <script src="${config.rootUrl}/js/game/game.js" type="module"><\/script>
                             </div>`;
                             phaserTarget.innerHTML = vistaJuego;
                         }
                     }
                     let readyButton = document.getElementById("readyButton");
+                    if (readyButton) {
+                        readyButton.parentNode.onsubmit = (e) => {
+                            e.preventDefault();
 
-                    readyButton.parentNode.onsubmit = (e) => {
-                        e.preventDefault();
-
-                        go(readyButton.parentNode.action, 'POST', {
-                        })
-                            .then(d => console.log("ENVIA READY WUO", d))
-                            .catch(e => console.log(e))
+                            go(readyButton.parentNode.action, 'POST', {})
+                                .then(d => console.log("ENVIA READY WUO", d))
+                                .catch(e => console.log(e))
+                        }
                     }
 
-            // function sendMessage(message,sender){
-            // return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
-            // .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
-            // .catch(e=>console.log(e))
-            // }
+                    // function sendMessage(message,sender){
+                    // return go(config.rootUrl + "/partida/{id}/mensaje(id=${partida.id})",'POST',{message,sender})
+                    // .then(d=>console.log("SE HA ENVIADO EL MENSAJE"))
+                    // .catch(e=>console.log(e))
+                    // }
                 </script>
 
 
@@ -240,11 +233,10 @@
         <script>
             config.topicId = "[['/topic/' + ${partida.topicId}]]";
 
-        // go(enlace.action, 'GET', {})
-        //     .then(d => console.log("Movido a la pagina correspondiente", d))
-        //     .catch(e => console.log(e));
-        // muestraJoin(document.querySelector("#listaJugadores"), u.getUsername(), u.getId(), p.getId(), false);
-
+            // go(enlace.action, 'GET', {})
+            //     .then(d => console.log("Movido a la pagina correspondiente", d))
+            //     .catch(e => console.log(e));
+            // muestraJoin(document.querySelector("#listaJugadores"), u.getUsername(), u.getId(), p.getId(), false);
         </script>
         <th:block th:replace="fragments/footer.html :: footer" />
         <script>
@@ -252,13 +244,11 @@
                 if (d.type === "CHAT") {
                     const target = document.querySelector("#chat");
                     muestraMensaje(target, d.from, d.text);
-                }
-                else if (d.type === "JOIN") {
+                } else if (d.type === "JOIN") {
                     const target = document.querySelector("#listaJugadores");
                     const phaserTarget = document.querySelector('#chessGame');
                     muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
-                }
-                else if (d.type === "MOVEPIECE") {
+                } else if (d.type === "MOVEPIECE") {
 
                 }
             }
