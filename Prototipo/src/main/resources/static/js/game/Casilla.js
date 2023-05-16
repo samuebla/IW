@@ -16,46 +16,44 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.xTablero = tabX;
         this.yTablero = tabY;
 
-        
+
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             // Comprueba si la casilla es válida para el movimiento
             if (this.possible) {
                 if (scene.players[scene.turn].movingPiece) {
-                    
-                    go("http://localhost/partida/"+ scene.lobbyId + "/pieceMoved", 'POST', {
-                        pieceTeam: scene.players[scene.turn].pieceToMove.equipo , 
-                        pieceType: scene.players[scene.turn].pieceToMove.tipo,
-                        //Posicion previa de la pieza
-                        boardX: scene.players[scene.turn].pieceToMove.tableroX,
-                        boardY: scene.players[scene.turn].pieceToMove.tableroY,
-                        //Posicion a la que quieres avanzar
-                        newBoardX: this.xTablero,
-                        newBoardY: this.yTablero
-                    })
-                    .then(d => console.log("Envio Pieza WEEEE", d))
-                    .catch(e => console.log(e))
-                    
-                    
+
+                    go(config.rootUrl + "/" + scene.lobbyId + "/pieceMoved", 'POST', {
+                            pieceTeam: scene.players[scene.turn].pieceToMove.equipo,
+                            pieceType: scene.players[scene.turn].pieceToMove.tipo,
+                            //Posicion previa de la pieza
+                            boardX: scene.players[scene.turn].pieceToMove.tableroX,
+                            boardY: scene.players[scene.turn].pieceToMove.tableroY,
+                            //Posicion a la que quieres avanzar
+                            newBoardX: this.xTablero,
+                            newBoardY: this.yTablero
+                        })
+                        .then(d => console.log("Envio Pieza WEEEE", d))
+                        .catch(e => console.log(e))
+
+
                     // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
                     scene.players[scene.turn].disablePieces();
                     if (this.pieza !== null) {
                         // Si es el rey
-                        if(this.pieza.tipo === 12){
+                        if (this.pieza.tipo === 12) {
                             this.eliminaEquipo();
                             // Si solo queda un rey se lanza la pantalla final
-                            if(scene.equiposEliminados.length >= 3){
-                                this.scene.start("final", {won : true});
+                            if (scene.equiposEliminados.length >= 3) {
+                                this.scene.start("final", { won: true });
                             }
-                        }
-                        else{
+                        } else {
                             // Si ya había una pieza se destruye y se coloca la nueva encima
                             this.pieza.sprite.destroy();
                             this.pieza = scene.players[scene.turn].pieceToMove;
                         }
-                        
-                    }
-                    else {
+
+                    } else {
                         // Si no había otra pieza simplemente se coloca la nueva
                         this.pieza = scene.players[scene.turn].pieceToMove;
                     }
@@ -96,7 +94,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         });
     }
 
-    eliminaEquipo(){
+    eliminaEquipo() {
         this.scene.equiposEliminados.push(this.pieza.equipo);
         this.scene.players[this.pieza.equipo].eliminaPiezas();
 
@@ -104,31 +102,31 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.pieza = this.scene.players[this.scene.turn].pieceToMove;
     }
 
-    calculaPeon(){
+    calculaPeon() {
         // Si es un peon blanco...
-        if(this.pieza.equipo === 0 && this.pieza.tableroY === 0){
+        if (this.pieza.equipo === 0 && this.pieza.tableroY === 0) {
             this.pieza.sprite.setTexture("white_pieces", 4);
             this.pieza.tipo = 11;
         }
         // Si es un peon rojo...
-        else if(this.pieza.equipo === 1 && this.pieza.tableroX === 13){
+        else if (this.pieza.equipo === 1 && this.pieza.tableroX === 13) {
             this.pieza.sprite.setTexture("red_pieces", 4);
             this.pieza.tipo = 11;
         }
         // Si es un peon negro...
-        else if(this.pieza.equipo === 2 && this.pieza.tableroY === 13){
+        else if (this.pieza.equipo === 2 && this.pieza.tableroY === 13) {
             this.pieza.sprite.setTexture("black_pieces", 4);
             this.pieza.tipo = 11;
         }
         // Si es un peon azul...
-        else if(this.pieza.equipo === 3 && this.pieza.tableroX === 0){
+        else if (this.pieza.equipo === 3 && this.pieza.tableroX === 0) {
             this.pieza.sprite.setTexture("blue_pieces", 4);
             this.pieza.tipo = 11;
         }
-        
+
     }
 
-    moverPieza(){
+    moverPieza() {
         // Se mueve la pieza al centro de la casilla
         this.scene.players[this.scene.turn].pieceToMove.sprite.x = x + 8;
         this.scene.players[this.scene.turn].pieceToMove.sprite.y = y + 8;
@@ -137,20 +135,20 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.quitarPossible();
         // Cambio de turno
         if (this.scene.turn + 1 > 3) this.scene.turn = 0;
-            else this.scene.turn++;
+        else this.scene.turn++;
 
-        while(this.scene.equiposEliminados.includes(this.scene.turn)){
+        while (this.scene.equiposEliminados.includes(this.scene.turn)) {
             if (this.scene.turn + 1 > 3) this.scene.turn = 0;
             else this.scene.turn++;
         }
-        
+
 
         // Actualiza la posición lógica de la pieza dentro del tablero
         this.scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
         this.pieza.tableroX = this.xTablero;
         this.pieza.tableroY = this.yTablero;
 
-        if(this.pieza.tipo < 8){
+        if (this.pieza.tipo < 8) {
             this.calculaPeon();
         }
 

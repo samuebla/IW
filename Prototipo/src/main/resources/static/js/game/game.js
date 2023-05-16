@@ -15,9 +15,5 @@ var configGame = {
     scene: [boot, fourdrez, final]
 };
 
-<<<<<<< HEAD
 // cambio 1: hacer game visible
-const game = new Phaser.Game(config);
-=======
-new Phaser.Game(configGame);
->>>>>>> b312af85f4b5321d4edad77fe701ea9751cdd9bc
+config.game = new Phaser.Game(configGame);
