@@ -12,6 +12,9 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
 
         this.possible = false;
 
+        this.x = x;
+        this.y = y;
+
         // Posición lógica de la casilla dentro del tablero
         this.xTablero = tabX;
         this.yTablero = tabY;
@@ -22,8 +25,8 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
             // Comprueba si la casilla es válida para el movimiento
             if (this.possible) {
                 if (scene.players[scene.turn].movingPiece) {
-
-                    go(config.rootUrl + "/" + scene.lobbyId + "/pieceMoved", 'POST', {
+                    
+                    go(`${config.rootUrl}/partida/${scene.lobbyId}/pieceMoved`, 'POST', {
                             pieceTeam: scene.players[scene.turn].pieceToMove.equipo,
                             pieceType: scene.players[scene.turn].pieceToMove.tipo,
                             //Posicion previa de la pieza
@@ -34,7 +37,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                             newBoardY: this.yTablero
                         })
                         .then(d => console.log("Envio Pieza WEEEE", d))
-                        .catch(e => console.log(e))
+                        .catch(e => console.log(e, "CUIDAOOOOO"))
 
 
                     // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
@@ -58,6 +61,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                         this.pieza = scene.players[scene.turn].pieceToMove;
                     }
                     // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
+                    this.moverPieza();
                 }
             }
 
@@ -128,8 +132,8 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
 
     moverPieza() {
         // Se mueve la pieza al centro de la casilla
-        this.scene.players[this.scene.turn].pieceToMove.sprite.x = x + 8;
-        this.scene.players[this.scene.turn].pieceToMove.sprite.y = y + 8;
+        this.scene.players[this.scene.turn].pieceToMove.sprite.x = this.x + 8;
+        this.scene.players[this.scene.turn].pieceToMove.sprite.y = this.y + 8;
         this.scene.players[this.scene.turn].movingPiece = false;
 
         this.quitarPossible();

@@ -457,9 +457,14 @@ public class PartidaController {
     @PostMapping("/{id}/pieceMoved")
     // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
-    public String movePiece(@PathVariable long id, Model model, HttpSession session, @RequestParam int pieceTeam,
-            @RequestParam int pieceType, @RequestParam int boardX, @RequestParam int boardY,
-            @RequestParam int newBoardX, @RequestParam int newBoardY) {
+    public String movePiece(@PathVariable long id, Model model, HttpSession session, @RequestBody JsonNode data) {
+
+        int pieceTeam = data.get("pieceTeam").asInt();
+        int pieceType = data.get("pieceType").asInt();
+        int boardX= data.get("boardX").asInt();
+        int boardY= data.get("boardY").asInt();
+        int newBoardX= data.get("newBoardX").asInt();
+        int newBoardY= data.get("newBoardY").asInt();
 
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
@@ -544,7 +549,7 @@ public class PartidaController {
             
 
             GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
-
+            
             // Meterlo en un topic
             // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
             ObjectMapper om = new ObjectMapper();

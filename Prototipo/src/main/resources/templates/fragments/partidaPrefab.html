@@ -249,7 +249,8 @@
                     const phaserTarget = document.querySelector('#chessGame');
                     muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
                 } else if (d.type === "MOVEPIECE") {
-
+                    console.log("Se entra al movepiece");
+                    config.game.scene.scenes[1].movePiece();
                 }
             }
         </script>

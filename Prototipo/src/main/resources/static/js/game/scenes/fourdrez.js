@@ -85,4 +85,8 @@ export default class Fourdrez extends Phaser.Scene {
     update() {
 
     }
+
+    movePiece(){
+        this.board[0][3].colorPossible();
+    }
 }
