@@ -116,11 +116,7 @@
                 <input th:value="${partida.tableroTypes}" id="types" type="hidden" />
 
                 <!--Equipo que juega ahora-->
-                <span th:each="j: ${partida.jugadores}">
-                    <span th:if="${j.user.id==partida.idCurrentPlayerTurn}">
-                        <input th:value="${j.toInt()}" id="currentTurn" type="hidden" />
-                    </span>
-                </span>
+                <input th:value="${partida.turn}" id="turn" type="hidden" />
 
 
 

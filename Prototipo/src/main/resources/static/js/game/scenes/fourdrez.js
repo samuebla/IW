@@ -13,7 +13,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.players = [];
         // El tablero es 14x14 aunque haya casillas que no puedan usarse
         this.board = new Array(14);
-        this.turn = 0;
+        this.turn = (Number)(document.getElementById("turn").value);
         this.equiposEliminados = [];
         //Id del lobby al que juegas
         this.lobbyId = document.getElementById("lobbyId").value;
@@ -80,10 +80,9 @@ export default class Fourdrez extends Phaser.Scene {
                     this.board[x][y].setPieza(this.players[i].piezas[j], x, y);
                 }
             }
-    
-            this.players[this.turn].interactPieces();
-
         }
+
+        this.players[this.turn].interactPieces();
 
         if(this.gameStarted === "true"){
             // Poner todas las casillas con la pieza a null para colocar las nuevas

@@ -180,6 +180,8 @@ public class PartidaController {
 
         p.setGameStarted(false);
 
+        p.setTurn(0);
+
         char[] teams = new char[14 * 14];
         char[] types = new char[14 * 14];
 
@@ -592,24 +594,25 @@ public class PartidaController {
             p.setTableroTeams(new String(teams));
             p.setTableroTypes(new String(types));
 
-            // // Buscamos al siguiente jugador por orden
-            // int nextPlayer = pieceTeam + 1;
-            // boolean foundNextPlayer = false;
-            // while (nextPlayer != pieceTeam && !foundNextPlayer) {
-            //     if (nextPlayer == 4) {
-            //         nextPlayer = 0;
-            //     }
-            //     if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0) {
-            //         foundNextPlayer = true;
-            //     } else {
-            //         nextPlayer++;
-            //     }
-            // }
+            // Buscamos al siguiente jugador por orden
+            p.turn = pieceTeam + 1;
+            boolean foundNextPlayer = false;
+            while (p.turn != pieceTeam && !foundNextPlayer) {
+                if (p.turn == 4) {
+                    p.turn = 0;
+                }
+                // if (p.getJugadores().get(p.turn).getContadorFiguras() > 0) {
+                //     foundNextPlayer = true;
+                // } else {
+                //     p.turn++;
+                // }
+                foundNextPlayer = true;
+            }
 
-            // // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
-            // // mas jugadores
+            // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
+            // mas jugadores
             // if (foundNextPlayer) {
-            //     p.setIdCurrentPlayerTurn(p.getJugadores().get(nextPlayer).getId());
+            //     p.setIdCurrentPlayerTurn(p.getJugadores().get(p.turn).getId());
             // } else {
             //     p.setCurrentState(2);
             // }

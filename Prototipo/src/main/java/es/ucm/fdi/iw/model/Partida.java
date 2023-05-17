@@ -42,6 +42,8 @@ public class Partida {
 
 	public boolean gameStarted;
 
+	public int turn;
+
 	public long idCurrentPlayerTurn;
 
 	@OneToMany
