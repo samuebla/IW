@@ -25,43 +25,19 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
             // Comprueba si la casilla es válida para el movimiento
             if (this.possible) {
                 if (scene.players[scene.turn].movingPiece) {
-                    
+
                     go(`${config.rootUrl}/partida/${scene.lobbyId}/pieceMoved`, 'POST', {
-                            pieceTeam: scene.players[scene.turn].pieceToMove.equipo,
-                            pieceType: scene.players[scene.turn].pieceToMove.tipo,
-                            //Posicion previa de la pieza
-                            boardX: scene.players[scene.turn].pieceToMove.tableroX,
-                            boardY: scene.players[scene.turn].pieceToMove.tableroY,
-                            //Posicion a la que quieres avanzar
-                            newBoardX: this.xTablero,
-                            newBoardY: this.yTablero
-                        })
+                        pieceTeam: scene.players[scene.turn].pieceToMove.equipo,
+                        pieceType: scene.players[scene.turn].pieceToMove.tipo,
+                        //Posicion previa de la pieza
+                        boardX: scene.players[scene.turn].pieceToMove.tableroX,
+                        boardY: scene.players[scene.turn].pieceToMove.tableroY,
+                        //Posicion a la que quieres avanzar
+                        newBoardX: this.xTablero,
+                        newBoardY: this.yTablero
+                    })
                         .then(d => console.log("Envio Pieza WEEEE", d))
                         .catch(e => console.log(e, "CUIDAOOOOO"))
-
-
-                    // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
-                    scene.players[scene.turn].disablePieces();
-                    if (this.pieza !== null) {
-                        // Si es el rey
-                        if (this.pieza.tipo === 12) {
-                            this.eliminaEquipo();
-                            // Si solo queda un rey se lanza la pantalla final
-                            if (scene.equiposEliminados.length >= 3) {
-                                this.scene.start("final", { won: true });
-                            }
-                        } else {
-                            // Si ya había una pieza se destruye y se coloca la nueva encima
-                            this.pieza.sprite.destroy();
-                            this.pieza = scene.players[scene.turn].pieceToMove;
-                        }
-
-                    } else {
-                        // Si no había otra pieza simplemente se coloca la nueva
-                        this.pieza = scene.players[scene.turn].pieceToMove;
-                    }
-                    // TODO ESTO SE DEBERÁ HACER EN EL CONTROLADOR //
-                    this.moverPieza();
                 }
             }
 
@@ -135,6 +111,54 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.scene.players[this.scene.turn].pieceToMove.sprite.x = this.x + 8;
         this.scene.players[this.scene.turn].pieceToMove.sprite.y = this.y + 8;
         this.scene.players[this.scene.turn].movingPiece = false;
+
+        this.quitarPossible();
+        // Cambio de turno
+        if (this.scene.turn + 1 > 3) this.scene.turn = 0;
+        else this.scene.turn++;
+
+        while (this.scene.equiposEliminados.includes(this.scene.turn)) {
+            if (this.scene.turn + 1 > 3) this.scene.turn = 0;
+            else this.scene.turn++;
+        }
+
+
+        // Actualiza la posición lógica de la pieza dentro del tablero
+        this.scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
+        this.pieza.tableroX = this.xTablero;
+        this.pieza.tableroY = this.yTablero;
+
+        if (this.pieza.tipo < 8) {
+            this.calculaPeon();
+        }
+
+        this.scene.players[this.scene.turn].interactPieces();
+    }
+
+    movePieceTo(pieza) {
+        this.scene.players[this.scene.turn].disablePieces();
+        if (this.pieza !== null) {
+            // Si es el rey
+            if (this.pieza.tipo === 12) {
+                this.eliminaEquipo();
+                // Si solo queda un rey se lanza la pantalla final
+                if (this.scene.equiposEliminados.length >= 3) {
+                    this.scene.start("final", { won: true });
+                }
+            } else {
+                // Si ya había una pieza se destruye y se coloca la nueva encima
+                this.pieza.sprite.destroy();
+                this.pieza = pieza;
+            }
+
+        } else {
+            // Si no había otra pieza simplemente se coloca la nueva
+            this.pieza = pieza;
+        }
+
+        // Se mueve la pieza al centro de la casilla
+        this.pieza.sprite.x = this.x + 8;
+        this.pieza.sprite.y = this.y + 8;
 
         this.quitarPossible();
         // Cambio de turno

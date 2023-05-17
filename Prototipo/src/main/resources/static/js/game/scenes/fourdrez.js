@@ -86,7 +86,8 @@ export default class Fourdrez extends Phaser.Scene {
 
     }
 
-    movePiece(){
-        this.board[0][3].colorPossible();
+    movePiece(type, team, x, y, newX, newY){
+        this.board[x][y].pieza = null;
+        this.board[newX][newY].movePieceTo(this.players[team].piezas[type]);
     }
 }

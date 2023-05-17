@@ -66,13 +66,17 @@ public class PartidaController {
         public String type;
         public int pieceType;
         public int pieceTeam;
+        public int oldPositionX;
+        public int oldPositionY;
         public int newPositionX;
         public int newPositionY;
     
-        public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int newPositionXAux, int newPositionYAux) {
+        public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int oldPositionXAux, int oldPositionYAux, int newPositionXAux, int newPositionYAux) {
             type = typeAux;
             pieceType = pieceTypeAux;
             pieceTeam = pieceTeamAux;
+            oldPositionX = oldPositionXAux;
+            oldPositionY = oldPositionYAux;
             newPositionX = newPositionXAux;
             newPositionY = newPositionYAux;
         }
@@ -547,8 +551,8 @@ public class PartidaController {
                 p.setCurrentState(2);
             }
         }
-        
-        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
+
+        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, boardX, boardY, newBoardX, newBoardY);
         
         // Meterlo en un topic
         // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
