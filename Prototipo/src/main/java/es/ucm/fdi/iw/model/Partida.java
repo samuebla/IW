@@ -40,6 +40,8 @@ public class Partida {
 	public String tableroTeams;
 	public String tableroTypes;
 
+	public boolean gameStarted;
+
 	public long idCurrentPlayerTurn;
 
 	@OneToMany

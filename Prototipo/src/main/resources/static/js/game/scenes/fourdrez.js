@@ -18,6 +18,9 @@ export default class Fourdrez extends Phaser.Scene {
         //Id del lobby al que juegas
         this.lobbyId = document.getElementById("lobbyId").value;
         this.team = (Number)(document.getElementById("team").value);
+        this.tabTeams = document.getElementById("tabTeams").value;
+        this.tabTypes = document.getElementById("tabTypes").value;
+        this.gameStarted = document.getElementById("gameStarted").value;
     }
 
     create() {
@@ -77,9 +80,31 @@ export default class Fourdrez extends Phaser.Scene {
                     this.board[x][y].setPieza(this.players[i].piezas[j], x, y);
                 }
             }
+    
+            this.players[this.turn].interactPieces();
+
         }
 
-        this.players[this.turn].interactPieces();
+        if(this.gameStarted === "true"){
+            // Poner todas las casillas con la pieza a null para colocar las nuevas
+            this.board.forEach(element => {
+                element.forEach(element2 => {
+                    element2.pieza = null;
+                });
+            });
+
+            const arrayTeams = Array.from(this.tabTeams);
+            const arrayTypes = Array.from(this.tabTypes);
+            // Colocacion de las nuevas piezas
+            for(let i = 0; i < this.board.length; ++i){
+                for(let j = 0; j < this.board[i].length; ++j){
+                    if(arrayTeams[this.board.length * i + j] !== "e"){
+                        let auxType = arrayTypes[this.board.length * i + j].charCodeAt(0) - "f".charCodeAt(0);
+                        this.board[j][i].movePieceTo(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType]);
+                    }
+                }
+            }
+        }
 
     }
 

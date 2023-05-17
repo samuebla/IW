@@ -107,6 +107,9 @@
                         <input th:value="${j.toInt()}" id="team" type="hidden" />
                     </span>
                 </span>
+                <input th:value="${partida.tableroTeams}" id="tabTeams" type="hidden" />
+                <input th:value="${partida.tableroTypes}" id="tabTypes" type="hidden" />
+                <input th:value="${partida.gameStarted}" id="gameStarted" type="hidden" />
 
                 <!--Tablero en BD-->
                 <input th:value="${partida.tableroTeams}" id="teams" type="hidden" />

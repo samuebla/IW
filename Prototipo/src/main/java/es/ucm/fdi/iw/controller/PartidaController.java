@@ -178,6 +178,8 @@ public class PartidaController {
         p.setCurrentState(0);
         p.setTopicId(UserController.generateRandomBase64Token(6));
 
+        p.setGameStarted(false);
+
         char[] teams = new char[14 * 14];
         char[] types = new char[14 * 14];
 
@@ -519,7 +521,6 @@ public class PartidaController {
     // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
     public String movePiece(@PathVariable long id, Model model, HttpSession session, @RequestBody JsonNode data) {
-
         int pieceTeam = data.get("pieceTeam").asInt();
         int pieceType = data.get("pieceType").asInt();
         int boardX = data.get("boardX").asInt();
@@ -529,6 +530,10 @@ public class PartidaController {
 
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
+
+        if(!p.gameStarted){
+            p.setGameStarted(true);
+        }
 
         model.addAttribute("jefe", u.getId() == p.getJugadores().get(0).getUser().getId());
 
@@ -548,12 +553,9 @@ public class PartidaController {
             }
         }
 
-        // Solo permitimos que mueva la pieza si ha comenzado la partida, es su turno y
-        // si esa pieza es de su equipo
-        if (p.getCurrentState() == 1 && encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId()
-                && (char) pieceTeam == jugadorPeticion.getTeam()) {
+
             // Comprobamos si hay una pieza ahi
-            char teamPreviousPiece = p.tableroTeams.charAt((newBoardY * 14 + newBoardX) * 2);
+            char teamPreviousPiece = p.tableroTeams.charAt(newBoardY * 14 + newBoardX);
 
             // Si hay alguna pieza de algun equipo...
             // e de Empty
@@ -561,57 +563,57 @@ public class PartidaController {
                 boolean playerFound = false;
                 int count = 0;
 
-                // Buscamos el jugador de la pieza
-                while (count < p.getJugadores().size() && !playerFound) {
+                // // Buscamos el jugador de la pieza
+                // while (count < p.getJugadores().size() && !playerFound) {
 
-                    if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
+                //     if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
 
-                        // Hemos encontrado al jugador
-                        playerFound = true;
-                        p.getJugadores().get(count)
-                                .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
-                    }
-                    count++;
-                }
+                //         // Hemos encontrado al jugador
+                //         playerFound = true;
+                //         p.getJugadores().get(count)
+                //                 .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                //     }
+                //     count++;
+                // }
             }
 
             // Movemos la pieza
             char[] teams = p.tableroTeams.toCharArray();
-            char[] types = p.tableroTeams.toCharArray();
+            char[] types = p.tableroTypes.toCharArray();
             // Primero Equipo y luego Tipo
-            teams[(newBoardY * 14 + newBoardX) * 2] = (char) ('f' + pieceTeam);
-            types[(newBoardY * 14 + newBoardX) * 2] = (char) ('f' + pieceType);
+            teams[newBoardY * 14 + newBoardX] = (char) ('0' + pieceTeam);
+            types[newBoardY * 14 + newBoardX] = (char) ('f' + pieceType);
 
             // Eliminamos la pieza de su antigua posicion
-            teams[(boardY * 14 + boardX) * 2] = 'e';
-            types[(boardY * 14 + boardX) * 2] = 'e';
+            teams[boardY * 14 + boardX] = 'e';
+            types[boardY * 14 + boardX] = 'e';
 
             // Y reescribimos la base de datos
-            p.tableroTeams = new String(teams);
-            p.tableroTypes = new String(types);
+            p.setTableroTeams(new String(teams));
+            p.setTableroTypes(new String(types));
 
-            // Buscamos al siguiente jugador por orden
-            int nextPlayer = pieceTeam + 1;
-            boolean foundNextPlayer = false;
-            while (nextPlayer != pieceTeam && !foundNextPlayer) {
-                if (nextPlayer == 4) {
-                    nextPlayer = 0;
-                }
-                if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0) {
-                    foundNextPlayer = true;
-                } else {
-                    nextPlayer++;
-                }
-            }
+            // // Buscamos al siguiente jugador por orden
+            // int nextPlayer = pieceTeam + 1;
+            // boolean foundNextPlayer = false;
+            // while (nextPlayer != pieceTeam && !foundNextPlayer) {
+            //     if (nextPlayer == 4) {
+            //         nextPlayer = 0;
+            //     }
+            //     if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0) {
+            //         foundNextPlayer = true;
+            //     } else {
+            //         nextPlayer++;
+            //     }
+            // }
 
-            // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
-            // mas jugadores
-            if (foundNextPlayer) {
-                p.setIdCurrentPlayerTurn(p.getJugadores().get(nextPlayer).getId());
-            } else {
-                p.setCurrentState(2);
-            }
-        }
+            // // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
+            // // mas jugadores
+            // if (foundNextPlayer) {
+            //     p.setIdCurrentPlayerTurn(p.getJugadores().get(nextPlayer).getId());
+            // } else {
+            //     p.setCurrentState(2);
+            // }
+        
 
         GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, boardX, boardY, newBoardX,
                 newBoardY);
@@ -633,7 +635,7 @@ public class PartidaController {
     // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
     public String resetTablero(@PathVariable long id, Model model, HttpSession session) {
-        
+
 
         return "{}";
     }

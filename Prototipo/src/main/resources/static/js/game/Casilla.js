@@ -172,7 +172,9 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
 
 
         // Actualiza la posición lógica de la pieza dentro del tablero
-        this.scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
+        if( this.pieza.tableroX !== this.xTablero && this.pieza.tableroY !== this.yTablero)
+            this.scene.board[this.pieza.tableroX][this.pieza.tableroY].pieza = null;
+            
         this.pieza.tableroX = this.xTablero;
         this.pieza.tableroY = this.yTablero;
 
