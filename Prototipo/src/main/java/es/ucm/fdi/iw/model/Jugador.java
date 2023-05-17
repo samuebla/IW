@@ -39,4 +39,8 @@ public class Jugador {
 	int piezasComidas;
 
 	boolean ready;
+
+	public int toInt() {
+		return team;
+	}
 }

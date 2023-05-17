@@ -17,7 +17,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.equiposEliminados = [];
         //Id del lobby al que juegas
         this.lobbyId = document.getElementById("lobbyId").value;
-        this.team = document.getElementById("team").value;
+        this.team = (Number)(document.getElementById("team").value);
     }
 
     create() {
@@ -87,7 +87,7 @@ export default class Fourdrez extends Phaser.Scene {
 
     }
 
-    movePiece(type, team, x, y, newX, newY){
+    movePiece(type, team, x, y, newX, newY) {
         this.board[x][y].pieza = null;
         this.board[newX][newY].movePieceTo(this.players[team].piezas[type]);
     }
