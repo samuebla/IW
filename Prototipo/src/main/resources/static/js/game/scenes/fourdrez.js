@@ -17,6 +17,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.equiposEliminados = [];
         //Id del lobby al que juegas
         this.lobbyId = document.getElementById("lobbyId").value;
+        this.team = document.getElementById("team").value;
     }
 
     create() {

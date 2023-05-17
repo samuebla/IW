@@ -23,7 +23,7 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.setInteractive();
         this.on('pointerdown', (pointer) => {
             // Comprueba si la casilla es válida para el movimiento
-            if (this.possible) {
+            if (this.possible && scene.turn === this.scene.team) {
                 if (scene.players[scene.turn].movingPiece) {
 
                     go(`${config.rootUrl}/partida/${scene.lobbyId}/pieceMoved`, 'POST', {

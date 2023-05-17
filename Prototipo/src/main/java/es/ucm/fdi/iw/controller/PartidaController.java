@@ -81,6 +81,18 @@ public class PartidaController {
         }
     }
 
+    public static class ResetTableroStructure {
+        public String type;
+        public String tableroType;
+        public String tableroTeam;
+
+        public ResetTableroStructure(String typeAux, String tableroTypeAux, String tableroTeamAux) {
+            type = typeAux;
+            tableroType = tableroTypeAux;
+            tableroTeam = tableroTeamAux;
+        }
+    }
+
     public static class ReadyStructure {
         public String type;
         public String username;
@@ -615,5 +627,16 @@ public class PartidaController {
 
         return "{}";
     }
+
+    @Transactional
+    @PostMapping("/{id}/resetTablero")
+    // En el return devuelve lo que ponga en el return directamente
+    @ResponseBody
+    public String resetTablero(@PathVariable long id, Model model, HttpSession session) {
+        
+
+        return "{}";
+    }
+
 
 }

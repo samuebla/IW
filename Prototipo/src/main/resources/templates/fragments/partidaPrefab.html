@@ -98,6 +98,32 @@
 
                 <!-- Con esto accedemos al id de la partida desde el juego en javascript -->
                 <input th:value="${partida.id}" id="lobbyId" type="hidden" />
+                <div th:each="j: ${partida.jugadores}" th:data-id="${j.user.id}">
+
+                </div>
+                <input th:value="${user.id}" id="team" type="hidden"/>
+
+
+
+
+                <div class="d-flex justify-content-between border border-5 rounded p-3 mb-3" id="listaJugadores">
+                    <div th:each="j: ${partida.jugadores}" th:data-id="${j.user.id}">
+                        <h5 th:text="${j.user.username}">Usuario A</h5>
+                        <form method="POST" th:if="${j.user.id!=user.id}" th:action="@{/partida/{id}/reportar(id=${partida.id})}">
+                            <input type="hidden" name="idDenunciado" th:value="${j.user.id}" />
+                            <input type="hidden" name="idDenunciante" th:value="${session.u.id}" />
+                            <button type="submit" class="btn"><img src="/img/redflag.png"></button>
+                        </form>
+                        <a th:if="${partida.currentState == 0}">
+                            <img th:if="${j.ready}" src="/img/tickReady.png">
+                            <img th:unless="${j.ready}" src="/img/tickNotReady.png"></a>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
 
                 <!-- GAME -->
                 <!-- Poner th:if="${partida.currentState == 0}" si no quereis tener que poner todo el mundo en ready para que aparezca 
