@@ -95,15 +95,24 @@ export default class Fourdrez extends Phaser.Scene {
 
             const arrayTeams = Array.from(this.tabTeams);
             const arrayTypes = Array.from(this.tabTypes);
+            let spritesUsados = new Array();
             // Colocacion de las nuevas piezas
             for(let i = 0; i < this.board.length; ++i){
                 for(let j = 0; j < this.board[i].length; ++j){
                     if(arrayTeams[this.board.length * i + j] !== "e"){
                         let auxType = arrayTypes[this.board.length * i + j].charCodeAt(0) - "f".charCodeAt(0);
+                        spritesUsados.push(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType].sprite);
                         this.board[j][i].movePieceTo(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType]);
                     }
                 }
             }
+
+            // Los sprites que no se hayan usado es que estan muertos y se deben borrar
+            this.players.forEach(player => {
+                player.piezas.forEach(pieza =>{
+                    if(!spritesUsados.includes(pieza.sprite)) pieza.sprite.destroy();
+                });
+            });
         }
 
     }
