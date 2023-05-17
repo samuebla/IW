@@ -546,18 +546,17 @@ public class PartidaController {
             }else{
                 p.setCurrentState(2);
             }
-            
-
-            GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
-            
-            // Meterlo en un topic
-            // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
-            ObjectMapper om = new ObjectMapper();
-            try {
-                messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
-            } catch (JsonProcessingException jpe) {
-                log.warn("Error enviando ReadyStructure!", jpe);
-            }
+        }
+        
+        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, newBoardX, newBoardY);
+        
+        // Meterlo en un topic
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando ReadyStructure!", jpe);
         }
 
         return "{}";
