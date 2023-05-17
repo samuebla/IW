@@ -15,7 +15,6 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Una partida donde los jugadores juegan o una partida pasada
  *
@@ -38,7 +37,8 @@ public class Partida {
 
 	public String topicId;
 
-	public String tablero;
+	public String tableroTeams;
+	public String tableroTypes;
 
 	public long idCurrentPlayerTurn;
 

@@ -51,7 +51,6 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 
-
 /**
  * Partida management.
  *
@@ -61,7 +60,6 @@ import es.ucm.fdi.iw.model.User;
 @RequestMapping("partida") // todas las urls de abajo empiezan por "partida"
 public class PartidaController {
 
-
     public static class GameStructure {
         public String type;
         public int pieceType;
@@ -70,8 +68,9 @@ public class PartidaController {
         public int oldPositionY;
         public int newPositionX;
         public int newPositionY;
-    
-        public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int oldPositionXAux, int oldPositionYAux, int newPositionXAux, int newPositionYAux) {
+
+        public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int oldPositionXAux,
+                int oldPositionYAux, int newPositionXAux, int newPositionYAux) {
             type = typeAux;
             pieceType = pieceTypeAux;
             pieceTeam = pieceTeamAux;
@@ -89,7 +88,7 @@ public class PartidaController {
         public long partidaId;
         public boolean ready;
         public boolean startGame;
-    
+
         public ReadyStructure(String typeAux, String usernameAux, long playerIdAux, long partidaIdAux, boolean readyAux,
                 boolean startGameAux) {
             type = typeAux;
@@ -100,8 +99,6 @@ public class PartidaController {
             startGame = startGameAux;
         }
     }
-
-
 
     private static final Logger log = LogManager.getLogger(PartidaController.class);
 
@@ -168,6 +165,54 @@ public class PartidaController {
         Partida p = new Partida();
         p.setCurrentState(0);
         p.setTopicId(UserController.generateRandomBase64Token(6));
+
+        char[] teams = new char[14 * 14];
+        char[] types = new char[14 * 14];
+
+        // Rellenamos todo el tablero a vacío
+        for (int i = 0; i < 14 * 14; ++i) {
+            teams[i] = 'e';
+            types[i] = 'e';
+
+        }
+
+        for (int i = 0; i < 8; ++i) {
+            /// Equipo blanco ///
+            // Peones
+            teams[(14 * 12 + (i + 3))] = '0';
+            types[(14 * 12 + (i + 3))] = (char)('f' + i);
+            // Otras piezas
+            teams[(14 * 13 + (i + 3))] = '0';
+            types[(14 * 13 + (i + 3))] = (char)('f' + i + 8);
+
+            /// Equipo rojo ///
+            // Peones
+            teams[((14 * (i + 3)) + 1)] = '1';
+            types[((14 * (i + 3)) + 1)] = (char)('f' + i);
+            // Otras piezas
+            teams[(14 * (i + 3))] = '1';
+            types[(14 * (i + 3))] = (char)('f' + i + 8);
+
+            /// Equipo negro ///
+            // Peones
+            teams[(14 + (i + 3))] = '2';
+            types[(14 + (i + 3))] = (char)('f' + i);
+            // Otras piezas
+            teams[(i + 3)] = '2';
+            types[(i + 3)] = (char)('f' + i + 8);
+
+            /// Equipo azul ///
+            // Peones
+            teams[((14 * (i + 3)) + 12)] = '3';
+            types[((14 * (i + 3)) + 12)] = (char)('f' + i);
+            // Otras piezas
+            teams[((14 * (i + 3)) + 13)] = '3';
+            types[((14 * (i + 3)) + 13)] = (char)('f' + i + 8);
+        }
+
+        p.setTableroTeams(new String(teams));
+        p.setTableroTypes(new String(types));
+
 
         Jugador j = new Jugador();
         j.setUser(u);
@@ -465,10 +510,10 @@ public class PartidaController {
 
         int pieceTeam = data.get("pieceTeam").asInt();
         int pieceType = data.get("pieceType").asInt();
-        int boardX= data.get("boardX").asInt();
-        int boardY= data.get("boardY").asInt();
-        int newBoardX= data.get("newBoardX").asInt();
-        int newBoardY= data.get("newBoardY").asInt();
+        int boardX = data.get("boardX").asInt();
+        int boardY = data.get("boardY").asInt();
+        int newBoardX = data.get("newBoardX").asInt();
+        int newBoardY = data.get("newBoardY").asInt();
 
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
@@ -484,19 +529,20 @@ public class PartidaController {
         // Buscamos al usuario que ha hecho la peticion como jugador en la partida
         boolean encontradoJugador = false;
         Jugador jugadorPeticion = null;
-        for (Jugador o : p.getJugadores()){
-            if (o.getUser().getId() == u.getId()){
+        for (Jugador o : p.getJugadores()) {
+            if (o.getUser().getId() == u.getId()) {
                 encontradoJugador = true;
                 jugadorPeticion = o;
             }
         }
-        
-        
-        // Solo permitimos que mueva la pieza si ha comenzado la partida, es su turno y si esa pieza es de su equipo
-        if (p.getCurrentState() == 1 && encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId() && (char)pieceTeam == jugadorPeticion.getTeam()){
+
+        // Solo permitimos que mueva la pieza si ha comenzado la partida, es su turno y
+        // si esa pieza es de su equipo
+        if (p.getCurrentState() == 1 && encontradoJugador && p.getIdCurrentPlayerTurn() == jugadorPeticion.getId()
+                && (char) pieceTeam == jugadorPeticion.getTeam()) {
             // Comprobamos si hay una pieza ahi
-            char teamPreviousPiece = p.tablero.charAt((newBoardY * 14 + newBoardX) * 2);
-            
+            char teamPreviousPiece = p.tableroTeams.charAt((newBoardY * 14 + newBoardX) * 2);
+
             // Si hay alguna pieza de algun equipo...
             // e de Empty
             if (teamPreviousPiece != 'e') {
@@ -518,42 +564,46 @@ public class PartidaController {
             }
 
             // Movemos la pieza
-            char[] nuevoTablero = p.tablero.toCharArray();
+            char[] teams = p.tableroTeams.toCharArray();
+            char[] types = p.tableroTeams.toCharArray();
             // Primero Equipo y luego Tipo
-            nuevoTablero[(newBoardY * 14 + newBoardX) * 2] = (char) pieceTeam;
-            nuevoTablero[(newBoardY * 14 + newBoardX) * 2 + 1] = (char) pieceType;
+            teams[(newBoardY * 14 + newBoardX) * 2] = (char) ('f' + pieceTeam);
+            types[(newBoardY * 14 + newBoardX) * 2] = (char) ('f' + pieceType);
 
             // Eliminamos la pieza de su antigua posicion
-            nuevoTablero[(boardY * 14 + boardX) * 2] = 'e';
-            nuevoTablero[(boardY * 14 + boardX) * 2 + 1] = 'e';
+            teams[(boardY * 14 + boardX) * 2] = 'e';
+            types[(boardY * 14 + boardX) * 2] = 'e';
 
             // Y reescribimos la base de datos
-            p.tablero = new String(nuevoTablero);
+            p.tableroTeams = new String(teams);
+            p.tableroTypes = new String(types);
 
-            //Buscamos al siguiente jugador por orden
+            // Buscamos al siguiente jugador por orden
             int nextPlayer = pieceTeam + 1;
             boolean foundNextPlayer = false;
-            while(nextPlayer != pieceTeam && !foundNextPlayer){
-                if (nextPlayer == 4){
+            while (nextPlayer != pieceTeam && !foundNextPlayer) {
+                if (nextPlayer == 4) {
                     nextPlayer = 0;
                 }
-                if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0){
+                if (p.getJugadores().get(nextPlayer).getContadorFiguras() > 0) {
                     foundNextPlayer = true;
-                }else{
+                } else {
                     nextPlayer++;
                 }
             }
 
-            // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay mas jugadores
-            if (foundNextPlayer){
+            // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
+            // mas jugadores
+            if (foundNextPlayer) {
                 p.setIdCurrentPlayerTurn(p.getJugadores().get(nextPlayer).getId());
-            }else{
+            } else {
                 p.setCurrentState(2);
             }
         }
 
-        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, boardX, boardY, newBoardX, newBoardY);
-        
+        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, boardX, boardY, newBoardX,
+                newBoardY);
+
         // Meterlo en un topic
         // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
         ObjectMapper om = new ObjectMapper();
