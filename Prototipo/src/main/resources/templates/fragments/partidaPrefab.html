@@ -136,32 +136,6 @@
                     <div th:if="${partida.currentState == 0}" class="text-center">
                         <!-- partida valida -->
                         <h1 th:text="'Partida ' + ${partida.id}" class="mt-3">Partida 123</h1>
-                        <form th:if="${jefe}" th:action="@{/partida/{id}(id=${partida.id})}" method="post" class="mb-3">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Tiempo max</span>
-                                <input name="tiempoTotal" th:value="${partida.tiempoTotal}" class="form-control">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Incremento</span>
-                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"
-                                    class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Cambiar configuracion</button>
-                        </form>
-
-                        <div th:unless="${jefe}">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Tiempo max</span>
-                                <input name="tiempoTotal" th:value="${partida.tiempoTotal}" class="form-control"
-                                    readonly>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Incremento</span>
-                                <input name="incremento" th:value="${partida.incrementoTiempoPorTurno}"
-                                    class="form-control" readonly>
-                            </div>
-                        </div>
-
                         <form th:action="@{/partida/{id}/listo(id=${partida.id})}" method="post" class="mb-3">
                             <button id="readyButton" type="submit" class="btn btn-primary">LISTO</button>
                         </form>
