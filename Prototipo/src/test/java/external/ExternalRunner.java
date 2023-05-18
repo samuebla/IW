@@ -16,6 +16,6 @@ class ExternalRunner {
 
     @Karate.Test
     Karate testLobby() {
-        return Karate.run("lobbyTest").relativeTo(getClass());
+        return Karate.run("principal").relativeTo(getClass());
     }
 }
