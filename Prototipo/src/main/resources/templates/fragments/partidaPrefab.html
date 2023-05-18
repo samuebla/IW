@@ -104,7 +104,7 @@
                 <!--Tu equipo-->
                 <span th:each="j: ${partida.jugadores}">
                     <span th:if="${j.user.id==user.id}">
-                        <input th:value="${j.toInt()}" id="team" type="hidden" />
+                        <input th:value="${j.toChar()}" id="team" type="hidden" />
                     </span>
                 </span>
                 <input th:value="${partida.tableroTeams}" id="tabTeams" type="hidden" />

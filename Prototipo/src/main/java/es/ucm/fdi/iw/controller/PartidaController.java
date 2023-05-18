@@ -196,44 +196,45 @@ public class PartidaController {
             /// Equipo blanco ///
             // Peones
             teams[(14 * 12 + (i + 3))] = '0';
-            types[(14 * 12 + (i + 3))] = (char)('f' + i);
+            types[(14 * 12 + (i + 3))] = (char) ('f' + i);
             // Otras piezas
             teams[(14 * 13 + (i + 3))] = '0';
-            types[(14 * 13 + (i + 3))] = (char)('f' + i + 8);
+            types[(14 * 13 + (i + 3))] = (char) ('f' + i + 8);
 
             /// Equipo rojo ///
             // Peones
             teams[((14 * (i + 3)) + 1)] = '1';
-            types[((14 * (i + 3)) + 1)] = (char)('f' + i);
+            types[((14 * (i + 3)) + 1)] = (char) ('f' + i);
             // Otras piezas
             teams[(14 * (i + 3))] = '1';
-            types[(14 * (i + 3))] = (char)('f' + i + 8);
+            types[(14 * (i + 3))] = (char) ('f' + i + 8);
 
             /// Equipo negro ///
             // Peones
             teams[(14 + (i + 3))] = '2';
-            types[(14 + (i + 3))] = (char)('f' + i);
+            types[(14 + (i + 3))] = (char) ('f' + i);
             // Otras piezas
             teams[(i + 3)] = '2';
-            types[(i + 3)] = (char)('f' + i + 8);
+            types[(i + 3)] = (char) ('f' + i + 8);
 
             /// Equipo azul ///
             // Peones
             teams[((14 * (i + 3)) + 12)] = '3';
-            types[((14 * (i + 3)) + 12)] = (char)('f' + i);
+            types[((14 * (i + 3)) + 12)] = (char) ('f' + i);
             // Otras piezas
             teams[((14 * (i + 3)) + 13)] = '3';
-            types[((14 * (i + 3)) + 13)] = (char)('f' + i + 8);
+            types[((14 * (i + 3)) + 13)] = (char) ('f' + i + 8);
         }
 
         p.setTableroTeams(new String(teams));
         p.setTableroTypes(new String(types));
 
-
         Jugador j = new Jugador();
         j.setUser(u);
         // Jugador inicial, team 0
-        j.setTeam((char) 0);
+        j.setTeam('0');
+        j.setContadorFiguras(16);
+        j.setPiezasComidas(0);
         p.getJugadores().add(j);
         p.setIdCurrentPlayerTurn(j.getId());
         entityManager.persist(j);
@@ -448,7 +449,9 @@ public class PartidaController {
             // Te añade a la partida
             Jugador j = new Jugador();
             j.setUser(u);
-            j.setTeam((char) p.getJugadores().size());
+            j.setTeam((char) (p.getJugadores().size() + 48)); // 48 is 0 in ASCI
+            j.setContadorFiguras(16);
+            j.setPiezasComidas(0);
 
             p.getJugadores().add(j);
             entityManager.persist(j);
@@ -523,7 +526,7 @@ public class PartidaController {
     // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
     public String movePiece(@PathVariable long id, Model model, HttpSession session, @RequestBody JsonNode data) {
-        int pieceTeam = data.get("pieceTeam").asInt();
+        String pieceTeam = data.get("pieceTeam").asText();
         int pieceType = data.get("pieceType").asInt();
         int boardX = data.get("boardX").asInt();
         int boardY = data.get("boardY").asInt();
@@ -533,7 +536,7 @@ public class PartidaController {
         User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
         Partida p = entityManager.find(Partida.class, id);
 
-        if(!p.gameStarted){
+        if (!p.gameStarted) {
             p.setGameStarted(true);
         }
 
@@ -555,7 +558,7 @@ public class PartidaController {
             }
         }
 
-
+        if (encontradoJugador && jugadorPeticion.getTeam() == pieceTeam.charAt(0)) {
             // Comprobamos si hay una pieza ahi
             char teamPreviousPiece = p.tableroTeams.charAt(newBoardY * 14 + newBoardX);
 
@@ -565,25 +568,27 @@ public class PartidaController {
                 boolean playerFound = false;
                 int count = 0;
 
-                // // Buscamos el jugador de la pieza
-                // while (count < p.getJugadores().size() && !playerFound) {
+                // Buscamos el jugador de la pieza
+                while (count < p.getJugadores().size() && !playerFound) {
 
-                //     if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
+                    if (p.getJugadores().get(count).getTeam() == teamPreviousPiece) {
 
-                //         // Hemos encontrado al jugador
-                //         playerFound = true;
-                //         p.getJugadores().get(count)
-                //                 .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
-                //     }
-                //     count++;
-                // }
+                        // Hemos encontrado al jugador
+                        playerFound = true;
+                        p.getJugadores().get(count)
+                                .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                        jugadorPeticion.setPiezasComidas(jugadorPeticion.getPiezasComidas() + 1);
+                    }
+                    System.out.println(p.getJugadores().get(count).getTeam() + " != " + teamPreviousPiece);
+                    count++;
+                }
             }
 
             // Movemos la pieza
             char[] teams = p.tableroTeams.toCharArray();
             char[] types = p.tableroTypes.toCharArray();
             // Primero Equipo y luego Tipo
-            teams[newBoardY * 14 + newBoardX] = (char) ('0' + pieceTeam);
+            teams[newBoardY * 14 + newBoardX] = pieceTeam.charAt(0);
             types[newBoardY * 14 + newBoardX] = (char) ('f' + pieceType);
 
             // Eliminamos la pieza de su antigua posicion
@@ -595,39 +600,43 @@ public class PartidaController {
             p.setTableroTypes(new String(types));
 
             // Buscamos al siguiente jugador por orden
-            p.turn = pieceTeam + 1;
+            p.turn = (int) (pieceTeam.charAt(0)) - 48 + 1;
             boolean foundNextPlayer = false;
-            while (p.turn != pieceTeam && !foundNextPlayer) {
+            while (p.turn != (int) (pieceTeam.charAt(0)) - 48 && !foundNextPlayer) {
                 if (p.turn == 4) {
                     p.turn = 0;
                 }
-                // if (p.getJugadores().get(p.turn).getContadorFiguras() > 0) {
-                //     foundNextPlayer = true;
-                // } else {
-                //     p.turn++;
-                // }
+                if (p.getJugadores().get(p.turn).getContadorFiguras() > 0) {
+                    foundNextPlayer = true;
+                } else {
+                    p.turn++;
+                }
                 foundNextPlayer = true;
             }
 
             // Cambiamos el turno al siguiente jugador o finalizamos la partida si no hay
             // mas jugadores
-            // if (foundNextPlayer) {
-            //     p.setIdCurrentPlayerTurn(p.getJugadores().get(p.turn).getId());
-            // } else {
-            //     p.setCurrentState(2);
-            // }
-        
+            if (foundNextPlayer) {
+                p.setIdCurrentPlayerTurn(p.getJugadores().get(p.turn).getId());
+            } else {
+                p.setCurrentState(2);
+            }
 
-        GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, pieceTeam, boardX, boardY, newBoardX,
-                newBoardY);
+            GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, (int) (pieceTeam.charAt(0)) - 48,
+                    boardX,
+                    boardY, newBoardX,
+                    newBoardY);
 
-        // Meterlo en un topic
-        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
-        ObjectMapper om = new ObjectMapper();
-        try {
-            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
-        } catch (JsonProcessingException jpe) {
-            log.warn("Error enviando ReadyStructure!", jpe);
+            // Meterlo en un topic
+            // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+            ObjectMapper om = new ObjectMapper();
+            try {
+                messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(readyPiece));
+            } catch (JsonProcessingException jpe) {
+                log.warn("Error enviando ReadyStructure!", jpe);
+            }
+        } else {
+            System.out.println("No puedo hacer el movimiento");
         }
 
         return "{}";
@@ -639,9 +648,7 @@ public class PartidaController {
     @ResponseBody
     public String resetTablero(@PathVariable long id, Model model, HttpSession session) {
 
-
         return "{}";
     }
-
 
 }

@@ -40,7 +40,7 @@ public class Jugador {
 
 	boolean ready;
 
-	public int toInt() {
+	public char toChar() {
 		return team;
 	}
 }

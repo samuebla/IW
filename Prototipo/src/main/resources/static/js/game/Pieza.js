@@ -16,7 +16,7 @@ export default class Pieza {
 
         // Hacemos la pieza interactiva
         this.sprite.on('pointerdown', (pointer) => {
-            if(scene.turn === this.scene.team){
+            if(scene.turn === ((Number)(this.scene.team))){
                 // Si se está moviendo ya una pieza, pero se pulsa otra, cambia las casillas posibles y el pieceToMove
                 if (scene.players[scene.turn].movingPiece && this !== scene.players[scene.turn].pieceToMove) {
                     scene.players[scene.turn].movingPiece = false;
@@ -199,7 +199,7 @@ export default class Pieza {
 
         // Si el jugador en su turno pasa el ratón sobre una de sus piezas se pone en grande 
         this.sprite.on('pointerover', (pointer) => {
-            if(scene.turn === this.scene.team){
+            if(scene.turn === ((Number)(this.scene.team))){
                 this.sprite.setScale(1.5);
                 this.sprite.setDepth(1);
             }
