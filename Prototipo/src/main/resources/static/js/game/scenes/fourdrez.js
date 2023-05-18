@@ -142,7 +142,7 @@ export default class Fourdrez extends Phaser.Scene {
             this.players[this.turn].interactPieces();
     }
 
-    cheatsButton(wonBool){
-        this.scene.start("final", { won: wonBool === "true" });
+    cheatsButton(id){
+        this.scene.start("final", { won: id === (Number)(document.getElementById("id").value) });
     }
 }

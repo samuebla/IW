@@ -114,6 +114,16 @@ public class PartidaController {
         }
     }
 
+    public static class FinalStructure {
+        public String type;
+        public long userId;
+
+        public FinalStructure(String typeAux, long playerIdAux) {
+            type = typeAux;
+            userId = playerIdAux;
+        }
+    }
+
     private static final Logger log = LogManager.getLogger(PartidaController.class);
 
     @Autowired
@@ -666,10 +676,25 @@ public class PartidaController {
     }
 
     @Transactional
-    @PostMapping("/{id}/resetTablero")
+    @PostMapping("/{id}/ganar")
     // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
-    public String resetTablero(@PathVariable long id, Model model, HttpSession session) {
+    public String ganarPartida(@PathVariable long id, Model model, HttpSession session) {
+
+        User u = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Partida p = entityManager.find(Partida.class, id);
+
+        FinalStructure endGame = new FinalStructure("FINAL", u.getId());
+
+            // Meterlo en un topic
+            // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+            ObjectMapper om = new ObjectMapper();
+            try {
+                messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(endGame));
+            } catch (JsonProcessingException jpe) {
+                log.warn("Error enviando FinalStructure!", jpe);
+            }
+
 
         return "{}";
     }

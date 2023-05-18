@@ -105,6 +105,7 @@
                 <span th:each="j: ${partida.jugadores}">
                     <span th:if="${j.user.id==user.id}">
                         <input th:value="${j.toChar()}" id="team" type="hidden" />
+                        <input th:value="${j.user.id}" id="id" type="hidden" />
                     </span>
                 </span>
                 <input th:value="${partida.tableroTeams}" id="tabTeams" type="hidden" />
@@ -167,9 +168,11 @@
                     </div>
                 </div>
 
-                <!-- <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post" class="mb-3">
-                    <button type="submit" class="btn btn-primary">LISTO</button>
-                </form> -->
+                <div th:if="${partida.currentState == 1}" class="text-center">
+                    <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post" class="mb-3">
+                        <button type="submit" class="btn btn-primary">GANAR YA</button>
+                    </form>
+                </div>
 
                 <script>
                     function muestraMensaje(target, sender, textToSend) {
@@ -281,6 +284,9 @@
                     muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
                 } else if (d.type === "MOVEPIECE") {
                     config.game.scene.scenes[1].movePiece(d.pieceType, d.pieceTeam, d.oldPositionX, d.oldPositionY, d.newPositionX, d.newPositionY, d.newTurn);
+                }
+                else if (d.type === "FINAL") {
+                    config.game.scene.scenes[1].cheatsButton(d.userId);
                 }
             }
         </script>
