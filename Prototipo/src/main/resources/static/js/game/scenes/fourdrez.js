@@ -85,35 +85,7 @@ export default class Fourdrez extends Phaser.Scene {
         this.players[this.turn].interactPieces();
 
         if(this.gameStarted === "true"){
-            // Poner todas las casillas con la pieza a null para colocar las nuevas
-            this.board.forEach(element => {
-                element.forEach(element2 => {
-                    element2.pieza = null;
-                });
-            });
-
-            const arrayTeams = Array.from(this.tabTeams);
-            const arrayTypes = Array.from(this.tabTypes);
-            let spritesUsados = new Array();
-            // Colocacion de las nuevas piezas
-            for(let i = 0; i < this.board.length; ++i){
-                for(let j = 0; j < this.board[i].length; ++j){
-                    if(arrayTeams[this.board.length * i + j] !== "e"){
-                        let auxType = arrayTypes[this.board.length * i + j].charCodeAt(0) - "f".charCodeAt(0);
-                        spritesUsados.push(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType].sprite);
-                        this.board[j][i].movePieceTo(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType]);
-                    }
-                }
-            }
-
-            this.turn = (Number)(document.getElementById("turn").value);
-
-            // Los sprites que no se hayan usado es que estan muertos y se deben borrar
-            this.players.forEach(player => {
-                player.piezas.forEach(pieza =>{
-                    if(!spritesUsados.includes(pieza.sprite)) pieza.sprite.destroy();
-                });
-            });
+            this.resetTablero();
         }
 
     }
@@ -125,5 +97,37 @@ export default class Fourdrez extends Phaser.Scene {
     movePiece(type, team, x, y, newX, newY) {
         this.board[x][y].pieza = null;
         this.board[newX][newY].movePieceTo(this.players[team].piezas[type]);
+    }
+
+    resetTablero(){
+        // Poner todas las casillas con la pieza a null para colocar las nuevas
+        this.board.forEach(element => {
+            element.forEach(element2 => {
+                element2.pieza = null;
+            });
+        });
+
+        const arrayTeams = Array.from(this.tabTeams);
+        const arrayTypes = Array.from(this.tabTypes);
+        let spritesUsados = new Array();
+        // Colocacion de las nuevas piezas
+        for(let i = 0; i < this.board.length; ++i){
+            for(let j = 0; j < this.board[i].length; ++j){
+                if(arrayTeams[this.board.length * i + j] !== "e"){
+                    let auxType = arrayTypes[this.board.length * i + j].charCodeAt(0) - "f".charCodeAt(0);
+                    spritesUsados.push(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType].sprite);
+                    this.board[j][i].movePieceTo(this.players[(Number)(arrayTeams[this.board.length * i + j])].piezas[auxType]);
+                }
+            }
+        }
+
+        this.turn = (Number)(document.getElementById("turn").value);
+
+        // Los sprites que no se hayan usado es que estan muertos y se deben borrar
+        this.players.forEach(player => {
+            player.piezas.forEach(pieza =>{
+                if(!spritesUsados.includes(pieza.sprite)) pieza.sprite.destroy();
+            });
+        });
     }
 }
