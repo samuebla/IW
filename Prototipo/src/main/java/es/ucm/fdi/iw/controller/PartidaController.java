@@ -561,6 +561,7 @@ public class PartidaController {
         if (encontradoJugador && jugadorPeticion.getTeam() == pieceTeam.charAt(0)) {
             // Comprobamos si hay una pieza ahi
             char teamPreviousPiece = p.tableroTeams.charAt(newBoardY * 14 + newBoardX);
+            char typePreviousPiece = p.tableroTypes.charAt(newBoardY * 14 + newBoardX);
 
             // Si hay alguna pieza de algun equipo...
             // e de Empty
@@ -575,8 +576,15 @@ public class PartidaController {
 
                         // Hemos encontrado al jugador
                         playerFound = true;
-                        p.getJugadores().get(count)
-                                .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                        // Si muere el rey, entonces el jugador pierde
+                        if (typePreviousPiece == (char) 12) {
+                            p.getJugadores().get(count)
+                                    .setContadorFiguras(0);
+                        } else {
+                            p.getJugadores().get(count)
+                                    .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
+                        }
+
                         jugadorPeticion.setPiezasComidas(jugadorPeticion.getPiezasComidas() + 1);
                     }
                     System.out.println(p.getJugadores().get(count).getTeam() + " != " + teamPreviousPiece);
