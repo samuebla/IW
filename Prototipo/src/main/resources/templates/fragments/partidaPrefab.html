@@ -16,7 +16,21 @@
 
 
         <main class="flex-shrink-0">
-            <div class="container d-flex mt-5 h600">
+
+            <div class="container d-flex mt-5">
+                <div th:if="${partida.currentState == 1}" class="text-center me-3">
+                    <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post">
+                        <button id="ganarButton" type="submit" class="btn btn-primary">GANAR YA</button>
+                    </form>
+                </div>
+
+                <div th:if="${partida.currentState == 1}" class="text-center">
+                    <h1 id="isYourTurn">¡Es tu turno!</h1>
+                </div>
+            </div>
+
+
+            <div class="container d-flex mt-4 h600">
 
 
 
@@ -126,7 +140,7 @@
                 Tambien comentar el div de justo debajo para que no aparezcan los ajustes -->
                 <div th:if="${partida.currentState == 1}"
                     class="border border-5 rounded d-flex align-items-center border-box fb80">
-                    <canvas id="juego" class="mx-auto max-width-100 max-height-100"></canvas>
+                    <canvas id="juego" class="mx-auto max-width-100 max-height-100 w600"></canvas>
                     <script th:src="@{/js/game/game.js}" type="module"></script>
                 </div>
 
@@ -142,15 +156,6 @@
                     </div>
                 </div>
 
-                <div th:if="${partida.currentState == 1}" class="text-center">
-                    <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post" class="mb-3">
-                        <button id="ganarButton" type="submit" class="btn btn-primary">GANAR YA</button>
-                    </form>
-                </div>
-
-                <div th:if="${partida.currentState == 1}" class="text-center">
-                    <h1 id="isYourTurn">¡Es tu turno!</h1>
-                </div>
 
                 <script>
                     function muestraMensaje(target, sender, textToSend) {

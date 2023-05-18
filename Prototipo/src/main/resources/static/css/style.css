@@ -21,7 +21,11 @@
 }
 
 .h600 {
-    height: 600px;
+    height: 600px !important;
+}
+
+.w600 {
+    width: 600px !important;
 }
 
 .fb20 {
