@@ -106,6 +106,8 @@ export default class Fourdrez extends Phaser.Scene {
                 }
             }
 
+            this.turn = (Number)(document.getElementById("turn").value);
+
             // Los sprites que no se hayan usado es que estan muertos y se deben borrar
             this.players.forEach(player => {
                 player.piezas.forEach(pieza =>{

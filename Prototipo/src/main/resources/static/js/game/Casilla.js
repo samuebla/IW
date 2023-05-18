@@ -160,7 +160,9 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.pieza.sprite.x = this.x + 8;
         this.pieza.sprite.y = this.y + 8;
 
+        this.scene.players[this.scene.turn].movingPiece = false;
         this.quitarPossible();
+        
         // Cambio de turno
         if (this.scene.turn + 1 > 3) this.scene.turn = 0;
         else this.scene.turn++;
