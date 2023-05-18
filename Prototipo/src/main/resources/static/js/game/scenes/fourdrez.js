@@ -131,7 +131,10 @@ export default class Fourdrez extends Phaser.Scene {
         // Los sprites que no se hayan usado es que estan muertos y se deben borrar
         this.players.forEach(player => {
             player.piezas.forEach(pieza =>{
-                if(!spritesUsados.includes(pieza.sprite)) pieza.sprite.destroy();
+                if(!spritesUsados.includes(pieza.sprite)){
+                    pieza.sprite.destroy();
+                    pieza.dead = true;  
+                } 
             });
         });
 

@@ -142,12 +142,17 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
                 this.eliminaEquipo();
                 this.pieza = pieza;
                 // Si solo queda un rey se lanza la pantalla final
-                if (this.scene.equiposEliminados.length >= 3) {
+                let eliminated = 0;
+                for(let i = 0; i < this.scene.players.length; ++i){
+                    if(this.scene.players[i].piezas[12].dead) eliminated++;
+                }
+                if (eliminated >= 3 && this.pieza.equipo === (Number)(this.scene.team)) {
                     this.scene.scene.start("final", { won: true });
                 }
             } else {
                 // Si ya había una pieza se destruye y se coloca la nueva encima
                 this.pieza.sprite.destroy();
+                this.pieza.dead = true;
                 this.pieza = pieza;
             }
 

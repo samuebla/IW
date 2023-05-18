@@ -33,6 +33,7 @@ export default class Player {
             //Eliminamos su sprite
             i.sprite.destroy();
             //Y ponemos la pieza del tablero a null para que pierda toda la info
+            i.dead = true;
             this.scene.board[i.tableroX][i.tableroY].pieza = null
         }
     }

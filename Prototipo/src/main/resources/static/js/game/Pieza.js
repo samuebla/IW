@@ -13,6 +13,7 @@ export default class Pieza {
 
         this.sprite = s;
         this.sprite.setInteractive();
+        this.dead = false;
 
         // Hacemos la pieza interactiva
         this.sprite.on('pointerdown', (pointer) => {
