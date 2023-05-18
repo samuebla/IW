@@ -170,8 +170,12 @@
 
                 <div th:if="${partida.currentState == 1}" class="text-center">
                     <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post" class="mb-3">
-                        <button type="submit" class="btn btn-primary">GANAR YA</button>
+                        <button id="ganarButton" type="submit" class="btn btn-primary">GANAR YA</button>
                     </form>
+                </div>
+
+                <div th:if="${partida.currentState == 1}" class="text-center">
+                    <h1 id="isYourTurn">¡Es tu turno!</h1>
                 </div>
 
                 <script>
@@ -240,6 +244,7 @@
                                     <script src="${config.rootUrl}/js/game/game.js" type="module"><\/script>
                             </div>`;
                             phaserTarget.innerHTML = vistaJuego;
+                            location.reload();
                         }
                     }
                     let readyButton = document.getElementById("readyButton");
@@ -248,6 +253,16 @@
                             e.preventDefault();
 
                             go(readyButton.parentNode.action, 'POST', {})
+                                .then(d => console.log("ENVIA READY WUO", d))
+                                .catch(e => console.log(e))
+                        }
+                    }
+                    let ganarButton = document.getElementById("ganarButton");
+                    if (ganarButton) {
+                        ganarButton.parentNode.onsubmit = (e) => {
+                            e.preventDefault();
+
+                            go(ganarButton.parentNode.action, 'POST', {})
                                 .then(d => console.log("ENVIA READY WUO", d))
                                 .catch(e => console.log(e))
                         }

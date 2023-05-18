@@ -21,6 +21,8 @@ export default class Fourdrez extends Phaser.Scene {
         this.tabTeams = document.getElementById("tabTeams").value;
         this.tabTypes = document.getElementById("tabTypes").value;
         this.gameStarted = document.getElementById("gameStarted").value;
+
+        this.isYourTurn = document.getElementById("isYourTurn");
     }
 
     create() {
@@ -82,8 +84,11 @@ export default class Fourdrez extends Phaser.Scene {
             }
         }
 
-        if(this.turn === (Number)(this.team))
+        if(this.turn === (Number)(this.team)){
             this.players[this.turn].interactPieces();
+            this.isYourTurn.innerHTML = "¡Es tu turno!";
+        }
+        else this.isYourTurn.innerHTML = "No es tu turno :c";
 
         if(this.gameStarted === "true"){
             this.resetTablero();
@@ -100,8 +105,11 @@ export default class Fourdrez extends Phaser.Scene {
         this.board[newX][newY].movePieceTo(this.players[team].piezas[type]);
         this.players[this.turn].disablePieces();
         this.turn = turn;
-        if(this.turn === (Number)(this.team))
+        if(this.turn === (Number)(this.team)){
             this.players[this.turn].interactPieces();
+            this.isYourTurn.innerHTML = "¡Es tu turno!";
+        }
+        else this.isYourTurn.innerHTML = "No es tu turno :c";
     }
 
     resetTablero(){

@@ -595,15 +595,15 @@ public class PartidaController {
                             char[] teams = p.tableroTeams.toCharArray();
                             char[] types = p.tableroTypes.toCharArray();
 
-                            for(int i = 0; i < teams.length; ++i){
-                                if(teams[i] == teamPreviousPiece){
+                            for (int i = 0; i < teams.length; ++i) {
+                                if (teams[i] == teamPreviousPiece) {
                                     teams[i] = 'e';
                                     types[i] = 'e';
                                 }
                             }
                             p.setTableroTeams(new String(teams));
                             p.setTableroTypes(new String(types));
-                            
+
                         } else {
                             p.getJugadores().get(count)
                                     .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
@@ -677,7 +677,6 @@ public class PartidaController {
 
     @Transactional
     @PostMapping("/{id}/ganar")
-    // En el return devuelve lo que ponga en el return directamente
     @ResponseBody
     public String ganarPartida(@PathVariable long id, Model model, HttpSession session) {
 
@@ -686,15 +685,14 @@ public class PartidaController {
 
         FinalStructure endGame = new FinalStructure("FINAL", u.getId());
 
-            // Meterlo en un topic
-            // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
-            ObjectMapper om = new ObjectMapper();
-            try {
-                messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(endGame));
-            } catch (JsonProcessingException jpe) {
-                log.warn("Error enviando FinalStructure!", jpe);
-            }
-
+        // Meterlo en un topic
+        // Suscribirse al canal <-- esto lo hace el cliente, no el controlador
+        ObjectMapper om = new ObjectMapper();
+        try {
+            messagingTemplate.convertAndSend("/topic/" + p.getTopicId(), om.writeValueAsString(endGame));
+        } catch (JsonProcessingException jpe) {
+            log.warn("Error enviando FinalStructure!", jpe);
+        }
 
         return "{}";
     }
