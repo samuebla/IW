@@ -68,9 +68,10 @@ public class PartidaController {
         public int oldPositionY;
         public int newPositionX;
         public int newPositionY;
+        public int newTurn;
 
         public GameStructure(String typeAux, int pieceTypeAux, int pieceTeamAux, int oldPositionXAux,
-                int oldPositionYAux, int newPositionXAux, int newPositionYAux) {
+                int oldPositionYAux, int newPositionXAux, int newPositionYAux, int newTurnAux) {
             type = typeAux;
             pieceType = pieceTypeAux;
             pieceTeam = pieceTeamAux;
@@ -78,6 +79,7 @@ public class PartidaController {
             oldPositionY = oldPositionYAux;
             newPositionX = newPositionXAux;
             newPositionY = newPositionYAux;
+            newTurn = newTurnAux;
         }
     }
 
@@ -577,9 +579,21 @@ public class PartidaController {
                         // Hemos encontrado al jugador
                         playerFound = true;
                         // Si muere el rey, entonces el jugador pierde
-                        if (typePreviousPiece == (char) 12) {
+                        if (typePreviousPiece == (char) (12 + 'f')) {
                             p.getJugadores().get(count)
                                     .setContadorFiguras(0);
+                            char[] teams = p.tableroTeams.toCharArray();
+                            char[] types = p.tableroTypes.toCharArray();
+
+                            for(int i = 0; i < teams.length; ++i){
+                                if(teams[i] == teamPreviousPiece){
+                                    teams[i] = 'e';
+                                    types[i] = 'e';
+                                }
+                            }
+                            p.setTableroTeams(new String(teams));
+                            p.setTableroTypes(new String(types));
+                            
                         } else {
                             p.getJugadores().get(count)
                                     .setContadorFiguras(p.getJugadores().get(count).getContadorFiguras() - 1);
@@ -633,7 +647,8 @@ public class PartidaController {
             GameStructure readyPiece = new GameStructure("MOVEPIECE", pieceType, (int) (pieceTeam.charAt(0)) - 48,
                     boardX,
                     boardY, newBoardX,
-                    newBoardY);
+                    newBoardY,
+                    p.turn);
 
             // Meterlo en un topic
             // Suscribirse al canal <-- esto lo hace el cliente, no el controlador

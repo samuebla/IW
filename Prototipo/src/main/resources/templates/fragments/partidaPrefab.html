@@ -166,6 +166,11 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- <form th:action="@{/partida/{id}/ganar(id=${partida.id})}" method="post" class="mb-3">
+                    <button type="submit" class="btn btn-primary">LISTO</button>
+                </form> -->
+
                 <script>
                     function muestraMensaje(target, sender, textToSend) {
                         target.innerHTML += `<div
@@ -275,7 +280,7 @@
                     const phaserTarget = document.querySelector('#chessGame');
                     muestraJoin(target, phaserTarget, d.username, d.userId, "localhost/partida/" + d.partidaId + "/reportar", d.ready, d.startGame);
                 } else if (d.type === "MOVEPIECE") {
-                    config.game.scene.scenes[1].movePiece(d.pieceType, d.pieceTeam, d.oldPositionX, d.oldPositionY, d.newPositionX, d.newPositionY);
+                    config.game.scene.scenes[1].movePiece(d.pieceType, d.pieceTeam, d.oldPositionX, d.oldPositionY, d.newPositionX, d.newPositionY, d.newTurn);
                 }
             }
         </script>

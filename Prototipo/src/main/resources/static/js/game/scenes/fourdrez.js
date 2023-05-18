@@ -82,7 +82,8 @@ export default class Fourdrez extends Phaser.Scene {
             }
         }
 
-        this.players[this.turn].interactPieces();
+        if(this.turn === (Number)(this.team))
+            this.players[this.turn].interactPieces();
 
         if(this.gameStarted === "true"){
             this.resetTablero();
@@ -94,9 +95,13 @@ export default class Fourdrez extends Phaser.Scene {
 
     }
 
-    movePiece(type, team, x, y, newX, newY) {
+    movePiece(type, team, x, y, newX, newY, turn) {
         this.board[x][y].pieza = null;
         this.board[newX][newY].movePieceTo(this.players[team].piezas[type]);
+        this.players[this.turn].disablePieces();
+        this.turn = turn;
+        if(this.turn === (Number)(this.team))
+            this.players[this.turn].interactPieces();
     }
 
     resetTablero(){
@@ -129,5 +134,12 @@ export default class Fourdrez extends Phaser.Scene {
                 if(!spritesUsados.includes(pieza.sprite)) pieza.sprite.destroy();
             });
         });
+
+        if(this.turn === (Number)(this.team))
+            this.players[this.turn].interactPieces();
+    }
+
+    cheatsButton(wonBool){
+        this.scene.start("final", { won: wonBool === "true" });
     }
 }

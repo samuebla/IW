@@ -78,8 +78,6 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         this.scene.equiposEliminados.push(this.pieza.equipo);
         this.scene.players[this.pieza.equipo].eliminaPiezas();
 
-        // Se settea la nueva pieza
-        this.pieza = this.scene.players[this.scene.turn].pieceToMove;
     }
 
     calculaPeon() {
@@ -131,16 +129,14 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         if (this.pieza.tipo < 8) {
             this.calculaPeon();
         }
-
-        this.scene.players[this.scene.turn].interactPieces();
     }
 
     movePieceTo(pieza) {
-        this.scene.players[this.scene.turn].disablePieces();
         if (this.pieza !== null) {
             // Si es el rey
             if (this.pieza.tipo === 12) {
                 this.eliminaEquipo();
+                this.pieza = pieza;
                 // Si solo queda un rey se lanza la pantalla final
                 if (this.scene.equiposEliminados.length >= 3) {
                     this.scene.start("final", { won: true });
@@ -162,15 +158,6 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
 
         this.scene.players[this.scene.turn].movingPiece = false;
         this.quitarPossible();
-        
-        // Cambio de turno
-        if (this.scene.turn + 1 > 3) this.scene.turn = 0;
-        else this.scene.turn++;
-
-        while (this.scene.equiposEliminados.includes(this.scene.turn)) {
-            if (this.scene.turn + 1 > 3) this.scene.turn = 0;
-            else this.scene.turn++;
-        }
 
 
         // Actualiza la posición lógica de la pieza dentro del tablero
@@ -183,7 +170,5 @@ export default class Casilla extends Phaser.GameObjects.Rectangle {
         if (this.pieza.tipo < 8) {
             this.calculaPeon();
         }
-
-        this.scene.players[this.scene.turn].interactPieces();
     }
 }
