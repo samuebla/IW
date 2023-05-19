@@ -23,7 +23,7 @@ Feature: login en servidor
     Given driver baseUrl + '/login'
     And input('#username', 'b')
     And input('#password', 'aa')
-    When submit().click(".form-signin button")
+    When click("button[type=submit]")
     Then waitForUrl(baseUrl)
 
   @login_c
@@ -31,22 +31,30 @@ Feature: login en servidor
     Given driver baseUrl + '/login'
     And input('#username', 'c')
     And input('#password', 'aa')
-    When submit().click(".form-signin button")
+    When click("button[type=submit]")
     Then waitForUrl(baseUrl)
 
-  @login_a
-  Scenario: login correcto como a
+  @login_d
+  Scenario: login correcto como d
     Given driver baseUrl + '/login'
-    And input('#username', 'a')
+    And input('#username', 'd')
     And input('#password', 'aa')
-    When submit().click(".form-signin button")
+    When click("button[type=submit]")
+    Then waitForUrl(baseUrl)
+
+  @login_e
+  Scenario: login correcto como e
+    Given driver baseUrl + '/login'
+    And input('#username', 'e')
+    And input('#password', 'aa')
+    When click("button[type=submit]")
     Then waitForUrl(baseUrl)
 
   Scenario: logout after login
     Given driver baseUrl + '/login'
     And input('#username', 'a')
     And input('#password', 'aa')
-    When submit().click(".form-signin button")
+    When click("button[type=submit]")
     Then waitForUrl(baseUrl)
     When submit().click("{button}logout")
     Then waitForUrl(baseUrl + '/login')

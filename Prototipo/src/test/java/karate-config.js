@@ -24,7 +24,8 @@ function fn() {
         // executable: '/usr/bin/chromium-browser',
         executable: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
         showDriverLog: true,
-        port: 8080
+        port: 8080,
+        addOptions: ['--remote-allow-origins=*']
     })
 
     if (env == 'dev') {
